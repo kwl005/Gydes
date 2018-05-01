@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Gyde</string>
+    <string name="title_activity_card_ioexample">CardIOExample</string>
 </resources>

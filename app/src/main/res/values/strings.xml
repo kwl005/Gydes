@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">Gyde</string>
+    <string name="app_name">Guide Your Day of Exploration</string>
     <string name="title_activity_card_ioexample">CardIOExample</string>
+    <string name="facebook_application_id" translatable="false">161908287977418</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb161908287977418</string>
 </resources>

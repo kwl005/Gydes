@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CardIOExample"></activity>
+        <activity android:name=".HomeActivity"></activity>
     </application>
 
 </manifest>

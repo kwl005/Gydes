@@ -66,10 +66,9 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if(resultCode == RESULT_OK) {
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 startActivity(new Intent(MainActivity.this, HomeActivity.class));
             } else {
-                // Check error code
+                System.err.print("There is an error when trying to sign in: " + resultCode);
             }
         }
     }

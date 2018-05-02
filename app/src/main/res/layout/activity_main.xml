@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="gydes.gyde.MainActivity">
 
-    <Button
-        android:id="@+id/cardIOPage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CardIO"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="404dp" />
-</android.support.constraint.ConstraintLayout>
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="240dp"
+        android:layout_height="65dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/login_button" />
+
+    <!--<Button-->
+        <!--android:id="@+id/cardIOPage"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="CardIO"-->
+        <!--tools:layout_editor_absoluteX="148dp"-->
+        <!--tools:layout_editor_absoluteY="404dp" />-->
+</RelativeLayout>

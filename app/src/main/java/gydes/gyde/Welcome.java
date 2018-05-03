@@ -34,5 +34,7 @@ public class Welcome extends AppCompatActivity {
                 }
             }
         };
+
+        timer.start();
     }
 }

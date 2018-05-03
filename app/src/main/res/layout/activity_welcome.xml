@@ -4,26 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/welcome_bg"
     tools:context=".Welcome">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="239dp"
         android:layout_height="338dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        android:src="@drawable/gyde_logo"
-        android:id="@+id/imageView" />
+        android:src="@drawable/gyde_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="86dp"
+        android:layout_marginBottom="97dp"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/guide_your_day_of_exploration"
         android:textAlignment="center"
+        android:textColor="@color/gydeYellow"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:textColor="@color/gydeYellow" />

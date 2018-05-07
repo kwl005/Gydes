@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "333357156543",
+    "firebase_url": "https://gyde-f18fa.firebaseio.com",
+    "project_id": "gyde-f18fa",
+    "storage_bucket": "gyde-f18fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333357156543:android:01f5a7978e5fc6d7",
+        "android_client_info": {
+          "package_name": "gydes.gyde"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333357156543-77k57b3ihom5vt6b3d2vcc28ecut40b3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gydes.gyde",
+            "certificate_hash": "bcaa8d76cd793dd0a7bae65fdaa0a7b181f807c7"
+          }
+        },
+        {
+          "client_id": "333357156543-l15g5nbmqab9ttn0f2jfh2h2g2hpv7im.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYJh3tgN00EPu2pue8RNVFX2cMVTJ83dw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333357156543-l15g5nbmqab9ttn0f2jfh2h2g2hpv7im.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Guide Your Day of Exploration</string>
+    <string name="app_name">Gyde</string>
     <string name="title_activity_card_ioexample">CardIOExample</string>
     <string name="facebook_application_id" translatable="false">161908287977418</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb161908287977418</string>
@@ -7,4 +7,6 @@
     <string name="firebase_locations_path" translatable="false">locations</string>
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
     <string name="title_activity_maps">Map</string>
+    <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
+    <string name="todo">TODO</string>
 </resources>

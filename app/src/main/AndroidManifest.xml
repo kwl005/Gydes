@@ -28,7 +28,10 @@
 
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps"/>
+
+        <activity
+            android:name=".MainActivity"/>
     </application>
 
 </manifest>

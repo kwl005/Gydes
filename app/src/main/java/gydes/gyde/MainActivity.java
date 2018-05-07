@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private Button cardIOButton;
+    // private Button cardIOButton;
     private static final int RC_SIGN_IN = 123;
     private SignInButton loginButton;
     private List<AuthUI.IdpConfig> providers = Arrays.asList(

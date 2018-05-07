@@ -1,34 +1,54 @@
 package gydes.gyde;
 
-import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
-/**
- * Created by kelvinlui1 on 5/1/18.
- */
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class HomeActivity extends AppCompatActivity {
+import java.util.HashMap;
 
+public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private GoogleMap mMap;
+    private HashMap<String, Marker> mMarkers = new HashMap<>();
     private static final int PERMISSIONS_REQUEST = 1;
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         // Check GPS is enabled
         LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
         if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(this, "Please enable location service", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Please enable location service", Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -37,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (permission == PackageManager.PERMISSION_GRANTED) {
-            startTrackerService();
+            startTrackerService();  // If user has not permit location tracking, ask again.
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -47,7 +67,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void startTrackerService() {
         startService(new Intent(this, TrackerService.class));
-        finish();
     }
 
     @Override
@@ -58,5 +77,77 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMaxZoomPreference(16);
+        subscribeToUpdates();
+
+//        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private void subscribeToUpdates() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(getString(R.string.firebase_locations_path));
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                System.out.println("child did add.");
+                setMarker(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                setMarker(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "Failed to read value.");
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setMarker(DataSnapshot dataSnapshot) {
+        // When a location update is received, update the markers
+        String key = dataSnapshot.getKey();
+        HashMap<String, Object> value = (HashMap<String, Object>)dataSnapshot.getValue();
+        double latitude = Double.parseDouble(value.get("latitude").toString());
+        double longitude = Double.parseDouble(value.get("longitude").toString());
+        LatLng location = new LatLng(latitude, longitude);
+        if(!mMarkers.containsKey(key)) {
+            mMarkers.put(key, mMap.addMarker(new MarkerOptions().title(key).position(location)));
+        } else {
+            mMarkers.get(key).setPosition(location);
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(Marker marker : mMarkers.values()) {
+            builder.include(marker.getPosition());
+        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
     }
 }

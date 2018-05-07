@@ -33,10 +33,13 @@ dependencies {
     implementation 'io.card:android-sdk:5.5.0'
     implementation 'com.stripe:stripe-android:6.1.2'
     implementation 'com.google.firebase:firebase-core:15.0.0'
+    implementation 'com.google.firebase:firebase-iid:15.0.0'
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     implementation 'com.google.firebase:firebase-database:15.0.0'
+    implementation 'com.google.android.gms:play-services-measurement-base:15.0.0'
     implementation 'com.google.android.gms:play-services-location:15.0.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.0'
+    implementation 'com.google.android.gms:play-services-maps:15.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:3.2.2'
     implementation 'com.facebook.android:facebook-android-sdk:4.27.0'
 }

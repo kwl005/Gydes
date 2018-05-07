@@ -1,4 +1,5 @@
 package gydes.gyde;
+// AIzaSyA73WX6XLPj53q3BFh269gy_odVKIUoagA
 
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,12 +8,9 @@ import android.content.Intent;
 import android.view.View;
 import android.view.View.*;
 
-import com.facebook.login.widget.LoginButton;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.SignInButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;

@@ -6,4 +6,5 @@
     <string name="transport_id" translatable="false">123</string>
     <string name="firebase_locations_path" translatable="false">locations</string>
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

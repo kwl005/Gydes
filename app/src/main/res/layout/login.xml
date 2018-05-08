@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gydes.gyde.MainActivity">
+    tools:context="gydes.gyde.Login">
 
     <com.google.android.gms.common.SignInButton
         android:layout_width="240dp"

@@ -15,7 +15,7 @@ import com.google.android.gms.common.SignInButton;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     // private Button cardIOButton;
     private static final int RC_SIGN_IN = 123;
@@ -41,19 +41,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
 
         loginButton = (SignInButton) findViewById(R.id.login_button);
         loginButton.setOnClickListener(loginListener);
 
-//        cardIOButton = (Button) findViewById(R.id.cardIOPage);
-//        cardIOButton.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                Intent intent = new Intent(MainActivity.this, CardIOExample.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     @Override
@@ -64,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if(resultCode == RESULT_OK) {
-                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                startActivity(new Intent(Login.this, HomeActivity.class));
             } else {
                 System.err.print("There is an error when trying to sign in: " + resultCode);
             }

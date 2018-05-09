@@ -24,7 +24,7 @@ public class Login extends AppCompatActivity {
             new AuthUI.IdpConfig.EmailBuilder().build()
     );
 
-     // Listener for login button
+     // Listener for activity_login button
     private OnClickListener loginListener = new OnClickListener() {
          @Override
          public void onClick(View view) {
@@ -41,7 +41,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         loginButton = (SignInButton) findViewById(R.id.login_button);
         loginButton.setOnClickListener(loginListener);

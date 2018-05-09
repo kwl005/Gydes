@@ -1,9 +1,12 @@
-# Gydes-FrontEnd
-Gydes project's front-end
+# Gydes
+Gydes project
 
 ## Dependencies
 - [x] Card.io added to build.gradle
 - [x] Stripe added to build.gradle
+
+## Links
+[Firebase console](https://console.firebase.google.com/u/0/project/gyde-f18fa/authentication/users)
 
 ## FAQ
 #### How to enable camera in Android Simulator?

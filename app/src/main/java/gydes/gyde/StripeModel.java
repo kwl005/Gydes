@@ -91,6 +91,7 @@ public class StripeModel {
                         cardWithToken.setExpiryMonth(card.getExpiryMonth());
                         cardWithToken.setExpiryYear(card.getExpiryYear());
                         cardWithToken.setStripeToken(token.getId());
+                        cardWithToken.setCardType(token.getCard().getBrand());
                         cards.add(cardWithToken);
                         databaseRef.child("cards").setValue(cards); // Push to firebase
                         // charge(token); // For testing

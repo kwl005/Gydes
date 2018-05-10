@@ -11,6 +11,7 @@ public class SimpleCard {
     private int expiryYear;
     private String cvv;
     private String stripeToken;
+    private String cardType;
     public SimpleCard() {}
 
     private static final int CARD_NUM_LEN_MIN = 13;
@@ -66,10 +67,15 @@ public class SimpleCard {
         return true;
     }
 
+    public void setCardType(String type) {
+        cardType = type;
+    }
+
     public String getCardNumber() { return cardNumber; }
     public String getLast4() { return last4; }
     public int getExpiryMonth() { return expiryMonth; }
     public int getExpiryYear() { return expiryYear; }
     public String getCVV() { return cvv; }
     public String getStripeToken() { return stripeToken; }
+    public String getCardType() { return cardType; }
 }

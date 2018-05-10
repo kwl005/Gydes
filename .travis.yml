@@ -32,7 +32,7 @@ before_install:
     - adb shell input keyevent 82 &
 
 script:
-    - ./gradlew build connectedCheck
+    - ./gradlew connectedAndroidTest
 
 before_cache:
  -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -42,3 +42,4 @@ cache:
   directories:
     -$HOME/.gradle/caches/
     -$HOME/.gradle/wrapper/
+    -$HOME/.android/build-cache

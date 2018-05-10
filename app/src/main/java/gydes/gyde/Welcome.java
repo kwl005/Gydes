@@ -25,7 +25,7 @@ public class Welcome extends AppCompatActivity {
 
                 try {
                     sleep(5000);
-                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                    Intent intent = new Intent(getApplicationContext(), HelloWorldActivity.class);
                     startActivity(intent);
                     finish();
                     super.run();

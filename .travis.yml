@@ -27,7 +27,7 @@ before_install:
     - yes | sdkmanager "platforms;android-27"
 
 script:
-    - ./gradlew assembleObaGoogleDebug assembleObaAmazonDebug -PdisablePreDex
+    - ./gradlew build connectedCheck
 
 before_cache:
  -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

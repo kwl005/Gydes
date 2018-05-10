@@ -31,7 +31,8 @@
             android:label="@string/title_activity_maps"/>
 
         <activity
-            android:name=".Login"/>
+            android:name=".Login"
+            android:theme="@style/Gyde"/>
     </application>
 
 </manifest>

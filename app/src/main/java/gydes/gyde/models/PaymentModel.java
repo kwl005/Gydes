@@ -101,6 +101,8 @@ public class PaymentModel {
         Long expiryYear = (Long) cardObj.child("expiryYear").getValue();
         card.setExpiryMonth(expiryMonth.intValue());
         card.setExpiryYear(expiryYear.intValue());
+
+        card.setStripeToken((String) cardObj.child("stripeToken").getValue());
         return card;
     }
 

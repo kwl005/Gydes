@@ -78,4 +78,14 @@ public class SimpleCard {
     public String getCVV() { return cvv; }
     public String getStripeToken() { return stripeToken; }
     public String getCardType() { return cardType; }
+
+    @Override
+    public String toString() {
+        String st = last4 + ", ";
+        st += Integer.toString(expiryMonth) + "/";
+        st += Integer.toString(expiryYear) + ", ";
+        st += cvv + ", ";
+        st += cardType;
+        return st;
+    }
 }

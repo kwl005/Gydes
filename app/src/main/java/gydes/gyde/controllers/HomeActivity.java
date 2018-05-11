@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+
+import gydes.gyde.R;
 
 public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -101,11 +102,10 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void subscribeToUpdates() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(getString(R.string.firebase_locations_path));
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(getString(R.string.firebase_user_locations_path));
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println("child did add.");
                 setMarker(dataSnapshot);
             }
 
@@ -116,7 +116,7 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                mMarkers.remove(dataSnapshot.getKey());
             }
 
             @Override

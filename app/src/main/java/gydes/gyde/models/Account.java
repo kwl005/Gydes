@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.models;
 
 import java.util.ArrayList;
 

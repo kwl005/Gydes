@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 
 import android.Manifest;
 import android.app.PendingIntent;
@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import gydes.gyde.R;
 
 /**
  * Created by kelvinlui1 on 5/1/18.
@@ -54,13 +56,11 @@ public class TrackerService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert(currentUser != null);
-
-        buildNotification();
+//        buildNotification();
         requestLocationUpdates();
     }
 
+    // TODO
     private void buildNotification() {
         String stop = "stop";
         registerReceiver(stopReceiver, new IntentFilter(stop));
@@ -79,16 +79,18 @@ public class TrackerService extends Service {
 
     private void requestLocationUpdates() {
         LocationRequest request = new LocationRequest();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         request.setInterval(10000);
         request.setFastestInterval(5000);
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
-        final String path = getString(R.string.firebase_locations_path) + "/" + getString(R.string.transport_id);
+        final String path = getString(R.string.firebase_user_locations_path) + "/" + uid;
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if(permission == PackageManager.PERMISSION_GRANTED) {
             // Request location updates and when an update is
             // received, store the location in Firebase
+            Log.d(TAG, "requestLocationUpdates: Permission is granted.");
             client.requestLocationUpdates(request, new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {

@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.models;
 
 public class Tour {
     String name;

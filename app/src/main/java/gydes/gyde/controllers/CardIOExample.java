@@ -1,10 +1,11 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
 
+import gydes.gyde.R;
 import io.card.payment.CardIOActivity;
 import io.card.payment.CardType;
 import io.card.payment.CreditCard;

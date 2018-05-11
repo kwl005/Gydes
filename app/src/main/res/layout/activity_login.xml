@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gydeYellow"
-    tools:context="gydes.gyde.Login">
+    tools:context="gydes.gyde.controllers.Login">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/login_button"

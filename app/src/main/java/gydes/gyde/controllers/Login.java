@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 // AIzaSyA73WX6XLPj53q3BFh269gy_odVKIUoagA
 
 import android.os.PersistableBundle;
@@ -14,6 +14,8 @@ import com.google.android.gms.common.SignInButton;
 
 import java.util.Arrays;
 import java.util.List;
+
+import gydes.gyde.R;
 
 public class Login extends AppCompatActivity {
 
@@ -56,7 +58,7 @@ public class Login extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if(resultCode == RESULT_OK) {
-                startActivity(new Intent(Login.this, HomeActivity.class));
+                startActivity(new Intent(Login.this, PaymentActivity.class));
             } else {
                 System.err.print("There is an error when trying to sign in: " + resultCode);
             }

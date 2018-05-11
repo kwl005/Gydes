@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
 
+import gydes.gyde.R;
+import gydes.gyde.models.SimpleCard;
+import gydes.gyde.models.StripeModel;
 import io.card.payment.CardIOActivity;
-import io.card.payment.CardType;
 import io.card.payment.CreditCard;
 
 /**
@@ -47,7 +49,7 @@ public class PaymentActivity extends AppCompatActivity {
                 newCard.setExpiryMonth(scanResult.expiryMonth);
                 newCard.setExpiryYear(scanResult.expiryYear);
                 newCard.setCVV(scanResult.cvv);
-                boolean isAdded = stripeModel.addCard(newCard);
+                boolean isAdded = stripeModel.addCard(newCard); // TODO: use callback
                 if (!isAdded) {
                     // TODO: Card not added
                 }

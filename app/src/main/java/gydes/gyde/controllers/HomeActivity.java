@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 
 import android.Manifest;
 import android.content.Intent;
@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+
+import gydes.gyde.R;
 
 public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
 

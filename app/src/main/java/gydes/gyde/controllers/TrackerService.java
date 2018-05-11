@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.controllers;
 
 import android.Manifest;
 import android.app.PendingIntent;
@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import gydes.gyde.R;
 
 /**
  * Created by kelvinlui1 on 5/1/18.

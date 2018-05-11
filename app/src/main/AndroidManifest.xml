@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Welcome"
+        <activity android:name=".controllers.Welcome"
             android:theme="@style/Gyde">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,19 +20,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PaymentActivity" />
-        <activity android:name=".CardIOExample" />
+        <activity android:name=".controllers.PaymentActivity" />
+        <activity android:name=".controllers.CardIOExample" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA73WX6XLPj53q3BFh269gy_odVKIUoagA" />
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".controllers.HomeActivity"
             android:label="@string/title_activity_maps"/>
 
         <activity
-            android:name=".Login"
+            android:name=".controllers.Login"
             android:theme="@style/Gyde"/>
     </application>
 

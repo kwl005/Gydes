@@ -1,4 +1,4 @@
-package gydes.gyde;
+package gydes.gyde.models;
 
 /**
  * Created by rix on 5/10/18.

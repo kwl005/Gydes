@@ -210,14 +210,12 @@ public class PaymentModel {
         customerParams.put("source", token.getId());
         try {
             Customer newCustomer = Customer.create(customerParams);
-            System.out.println("Customer created");
             // Create charge
             Map<String, Object> chargeMap = new HashMap<String, Object>();
             chargeMap.put("amount", 100); // $1, it's in cent
             chargeMap.put("currency", "usd");
             chargeMap.put("customer", newCustomer.getId());
             Charge charge = Charge.create(chargeMap);
-            System.out.println(charge);
         } catch (Exception e) {
             e.printStackTrace();
         }

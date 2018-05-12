@@ -1,13 +1,24 @@
 package gydes.gyde.controllers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.Image;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import gydes.gyde.R;
@@ -22,16 +33,74 @@ import io.card.payment.CreditCard;
 
 public class PaymentActivity extends AppCompatActivity implements PaymentModel.PaymentModelCallback {
 
+    private class CardListAdapter extends ArrayAdapter<SimpleCard> {
+        private Context context;
+
+        @SuppressLint("ResourceType")
+        public CardListAdapter(Context context, int resource, ArrayList<SimpleCard> cards) {
+            super(context, resource, cards);
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                convertView = layoutInflater.inflate(R.layout.card_item, parent, false);
+            }
+
+            SimpleCard card = getItem(position);
+            if (card != null) {
+                ImageView brandImg = (ImageView) convertView.findViewById(R.id.cardBrand);
+                TextView last4Text = (TextView) convertView.findViewById(R.id.cardLast4);
+                TextView expiryText = (TextView) convertView.findViewById(R.id.cardExpiry);
+
+                int brand = R.drawable.cio_ic_visa; // Default as Visa
+                switch (card.getCardType()) {
+                    case "Visa":
+                        brand = R.drawable.cio_ic_visa;
+                        break;
+                    case "Mastercard":
+                        brand = R.drawable.cio_ic_mastercard;
+                        break;
+                    case "American Express":
+                        brand = R.drawable.cio_ic_amex;
+                        break;
+                    case "Discover":
+                        brand = R.drawable.cio_ic_discover;
+                        break;
+                    case "JCB":
+                        brand = R.drawable.cio_ic_jcb;
+                        break;
+                }
+
+                brandImg.setImageResource(brand);
+                last4Text.setText(card.getFormattedCardNumber());
+                expiryText.setText(card.getFormattedExpiry());
+            }
+            System.out.println(convertView.toString());
+            return convertView;
+        }
+    }
+
     private int SCAN_REQUEST_CODE = 1337; // Or any other unique integer
     private PaymentModel paymentModel;
+    private ListView cardListView;
+    private ArrayList<SimpleCard> cardList;
+    private CardListAdapter cardListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        cardListView = (ListView) findViewById(R.id.cardList);
         paymentModel = new PaymentModel(this);
+        cardList = new ArrayList<SimpleCard>();
+
+        // TODO: Research on thread problem
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        this.cardListAdapter = new CardListAdapter(this, R.id.cardList, cardList);
+        cardListView.setAdapter(this.cardListAdapter);
     }
 
     public void onAddCardPress(View v) {
@@ -84,9 +153,10 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
     }
 
     @Override
-    public void onCardData(List<SimpleCard> cards) {
-        // TODO: Show cards on screen
-        System.out.println(cards.toString());
+    public void onCardData(ArrayList<SimpleCard> cards) {
+        this.cardList = cards;
+        this.cardListAdapter = new CardListAdapter(this, R.id.cardList, cardList);
+        cardListView.setAdapter(this.cardListAdapter); // TODO: reuse old objects to reduce runtime
     }
 
     private void makeToast(String msg) {

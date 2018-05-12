@@ -84,8 +84,15 @@ public class SimpleCard {
         String st = last4 + ", ";
         st += Integer.toString(expiryMonth) + "/";
         st += Integer.toString(expiryYear) + ", ";
-        st += cvv + ", ";
         st += cardType;
         return st;
+    }
+
+    public String getFormattedExpiry() {
+        return Integer.toString(expiryMonth) + "/" + Integer.toString(expiryYear).substring(2, 4);
+    }
+
+    public String getFormattedCardNumber() {
+        return "**** **** **** " + last4;
     }
 }

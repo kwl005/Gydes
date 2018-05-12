@@ -20,7 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ExpandableListView
+    <ListView
+        android:id="@+id/cardList"
         android:layout_width="368dp"
         android:layout_height="417dp"
         android:layout_marginEnd="8dp"

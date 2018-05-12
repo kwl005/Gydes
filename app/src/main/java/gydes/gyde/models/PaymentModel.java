@@ -31,7 +31,7 @@ public class PaymentModel {
     public interface PaymentModelCallback {
         void onError(int errorCode);
         void onSuccess(int successCode);
-        void onCardData(List<SimpleCard> cards);
+        void onCardData(ArrayList<SimpleCard> cards);
     }
     private final static String STRIPE_PRIVATE_API_KEY = "sk_test_ZbL5ejRj63bOCU1mUbVZBdiL";
     private final static String STRIPE_PUBLIC_API_KEY = "pk_test_6mUSZUJf0upFQzlocgvyQknF";
@@ -52,7 +52,7 @@ public class PaymentModel {
     private FirebaseUser currentUser;
     private String dataPath;
     private DatabaseReference databaseRef;
-    private List<SimpleCard> cards;
+    private ArrayList<SimpleCard> cards;
     private Context context;
     private Activity activity;
     private Customer customer;

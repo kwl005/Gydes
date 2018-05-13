@@ -31,6 +31,7 @@ import gydes.gyde.R;
 
 public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    public static DatabaseReference currentUserRef;
     private GoogleMap mMap;
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private static final int PERMISSIONS_REQUEST = 1;

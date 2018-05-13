@@ -10,6 +10,7 @@ import android.view.View.*;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 import java.util.List;
 import gydes.gyde.R;
+import gydes.gyde.models.*;
 
 public class Login extends AppCompatActivity {
 
@@ -79,9 +81,10 @@ public class Login extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild(currentUser.getUid())) {
-                    DatabaseReference currentUserRef = usersRef.child(currentUser.getUid());
-                    currentUserRef.child("displayName").setValue(currentUser.getDisplayName());
-                    currentUserRef.child("email").setValue(currentUser.getEmail());
+                    HomeActivity.currentUserRef = usersRef.child(currentUser.getUid());
+                    Task<Void> accountTask = HomeActivity.currentUserRef.child("account").setValue(new Account(
+                            currentUser.getUid(), currentUser.getDisplayName(),
+                            currentUser.getEmail()));
                 }
             }
 

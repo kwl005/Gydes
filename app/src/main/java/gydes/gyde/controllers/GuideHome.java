@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,17 +31,24 @@ import java.util.HashMap;
 
 import gydes.gyde.R;
 
-public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
+public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private static final int PERMISSIONS_REQUEST = 1;
-    private static final String TAG = HomeActivity.class.getSimpleName();
+    private static final String TAG = GuideHome.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_guide_home);
+
+        Button myToursButton = findViewById(R.id.tours_button);
+        myToursButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(GuideHome.this, MyTours.class));
+            }
+        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

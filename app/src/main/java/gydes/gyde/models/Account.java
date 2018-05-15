@@ -6,18 +6,21 @@ public class Account {
     private String id;
     private String displayName;
     private String email;
+    private boolean isGuide;
     private Traveler t;
     private Guide g;
 
     public Account() {
         t = new Traveler();
         g = new Guide();
+        isGuide = false;
     }
 
     public Account(String uid, String dName, String eMail) {
         id = uid;
         displayName = dName;
         email = eMail;
+        isGuide = false;
         t = new Traveler();
         g = new Guide();
     }
@@ -50,6 +53,8 @@ public class Account {
     public void setDisplayName(String dName) { displayName = dName; }
     public String getEmail() { return email; }
     public void setEmail(String mail) { email = mail; }
+    public boolean getIsGuide() { return isGuide; }
+    public void setIsGuide(boolean isG) { isGuide = isG;}
 
     private class Traveler {
         private ArrayList<String> tourIDs;

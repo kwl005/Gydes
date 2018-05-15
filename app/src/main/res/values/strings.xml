@@ -10,4 +10,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_guide_home">GuideHome</string>
+    <string name="title_activity_design_tour">DesignTour</string>
+    <string name="title_activity_my_tours">MyTours</string>
 </resources>

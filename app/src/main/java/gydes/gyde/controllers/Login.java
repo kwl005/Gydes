@@ -27,6 +27,8 @@ import gydes.gyde.models.*;
 
 public class Login extends AppCompatActivity {
 
+    public static DatabaseReference currentUserRef;
+    public static boolean isGuide;
     private static String TAG = Login.class.getSimpleName();
     private static final int RC_SIGN_IN = 123;
     private SignInButton loginButton;
@@ -67,7 +69,12 @@ public class Login extends AppCompatActivity {
 
             if(resultCode == RESULT_OK) {
                 initializeNewUserInstance();
-                startActivity(new Intent(Login.this, HomeActivity.class));
+                if(!isGuide) {
+                    startActivity(new Intent(Login.this, HomeActivity.class));
+                }
+                else {
+                    startActivity(new Intent(Login.this, GuideHome.class));
+                }
             } else {
                 Log.d(TAG, "onActivityResult: result code " + resultCode);
             }
@@ -81,11 +88,24 @@ public class Login extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild(currentUser.getUid())) {
-                    HomeActivity.currentUserRef = usersRef.child(currentUser.getUid());
-                    Task<Void> accountTask = HomeActivity.currentUserRef.child("account").setValue(new Account(
+                    Login.currentUserRef = usersRef.child(currentUser.getUid());
+                    Task<Void> accountTask = currentUserRef.child("account").setValue(new Account(
                             currentUser.getUid(), currentUser.getDisplayName(),
                             currentUser.getEmail()));
+                    isGuide = false;
                 }
+
+                Login.currentUserRef = usersRef.child(currentUser.getUid());
+                Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Login.isGuide = dataSnapshot.getValue(Account.class).getIsGuide();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, "Login.java: Error accessing isGuide upon login");
+                    }
+                });
             }
 
             @Override

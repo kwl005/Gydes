@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controllers.Welcome"
+        <activity
+            android:name=".controllers.Welcome"
             android:theme="@style/Gyde">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +29,27 @@
 
         <activity
             android:name=".controllers.HomeActivity"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".controllers.Login"
-            android:theme="@style/Gyde"/>
+            android:theme="@style/Gyde" />
+
         <service
             android:name=".controllers.TrackerService"
             android:enabled="true"
-            android:exported="true">
-        </service>
-    </application>
+            android:exported="true" />
 
+        <activity
+            android:name=".controllers.GuideHome"
+            android:label="@string/title_activity_guide_home" />
+        <activity
+            android:name=".controllers.DesignTour"
+            android:label="@string/title_activity_design_tour"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controllers.MyTours"
+            android:label="@string/title_activity_my_tours"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
 
 </manifest>

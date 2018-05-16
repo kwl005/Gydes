@@ -174,7 +174,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/design_tour_cancel_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="tags_text" />
+        app:layout_constraintTop_toBottomOf="@+id/tags_text" />
 
     <Button
         android:id="@+id/design_tour_cancel_button"

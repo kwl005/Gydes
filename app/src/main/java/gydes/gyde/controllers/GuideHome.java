@@ -52,7 +52,7 @@ public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.location_map);
         mapFragment.getMapAsync(this);
 
         // Check GPS is enabled

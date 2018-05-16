@@ -6,10 +6,21 @@
     <string name="transport_id" translatable="false">123</string>
     <string name="firebase_user_locations_path" translatable="false">locations/users</string>
     <string name="firebase_users_path" translatable="false">users</string>
+    <string name="firebase_tours_path" translatable="false">tours</string>
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
     <string name="title_activity_maps">Map</string>
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
     <string name="todo">TODO</string>
+    <string name="name_txt">Name:</string>
+    <string name="stops_txt">Stops:</string>
+    <string name="duration_txt">Duration:</string>
+    <string name="transport_txt">Transport:</string>
+    <string name="walk_txt">Walk</string>
+    <string name="drive_txt">Drive</string>
+    <string name="capacity_txt">Capacity:</string>
+    <string name="tags_txt">Tags:</string>
+    <string name="save_txt">Save</string>
+    <string name="cancel_txt">Cancel</string>
     <string name="title_activity_guide_home">GuideHome</string>
     <string name="title_activity_design_tour">DesignTour</string>
     <string name="title_activity_my_tours">MyTours</string>

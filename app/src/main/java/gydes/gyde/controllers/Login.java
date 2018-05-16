@@ -103,7 +103,7 @@ public class Login extends AppCompatActivity {
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.d(TAG, "Login.java: Error accessing isGuide upon login");
+                        Log.d("Data Access", "Login.java: Error accessing isGuide upon login");
                     }
                 });
             }

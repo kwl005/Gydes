@@ -1,25 +1,21 @@
 package gydes.gyde.controllers;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.Image;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.DragEvent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import gydes.gyde.R;
 import gydes.gyde.models.SimpleCard;
@@ -33,25 +29,47 @@ import io.card.payment.CreditCard;
 
 public class PaymentActivity extends AppCompatActivity implements PaymentModel.PaymentModelCallback {
 
-    private class CardListAdapter extends ArrayAdapter<SimpleCard> {
-        private Context context;
-
-        @SuppressLint("ResourceType")
-        public CardListAdapter(Context context, int resource, ArrayList<SimpleCard> cards) {
-            super(context, resource, cards);
+    private class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHolder> {
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public ImageView brandImg;
+            public TextView last4Text;
+            public TextView expiryText;
+            public ViewHolder(View itemView) {
+                super(itemView);
+                brandImg = (ImageView) itemView.findViewById(R.id.cardBrand);
+                last4Text = (TextView) itemView.findViewById(R.id.cardLast4);
+                expiryText = (TextView) itemView.findViewById(R.id.cardExpiry);
+            }
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                convertView = layoutInflater.inflate(R.layout.card_item, parent, false);
-            }
+        private ArrayList<SimpleCard> cards;
 
-            SimpleCard card = getItem(position);
+        public CardListAdapter(ArrayList<SimpleCard> cards) {
+            this.cards = cards;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            Context context = parent.getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+
+            // Inflate the custom layout
+            View contactView = inflater.inflate(R.layout.card_item, parent, false);
+
+            // Return a new holder instance
+            ViewHolder viewHolder = new ViewHolder(contactView);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull CardListAdapter.ViewHolder holder, int position) {
+
+            SimpleCard card = cards.get(position);
             if (card != null) {
-                ImageView brandImg = (ImageView) convertView.findViewById(R.id.cardBrand);
-                TextView last4Text = (TextView) convertView.findViewById(R.id.cardLast4);
-                TextView expiryText = (TextView) convertView.findViewById(R.id.cardExpiry);
+                ImageView brandImg = (ImageView) holder.brandImg;
+                TextView last4Text = (TextView) holder.last4Text;
+                TextView expiryText = (TextView) holder.expiryText;
 
                 int brand = R.drawable.cio_ic_visa; // Default as Visa
                 switch (card.getCardType()) {
@@ -76,14 +94,17 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
                 last4Text.setText(card.getFormattedCardNumber());
                 expiryText.setText(card.getFormattedExpiry());
             }
-            System.out.println(convertView.toString());
-            return convertView;
+        }
+
+        @Override
+        public int getItemCount() {
+            return cards.size();
         }
     }
 
     private int SCAN_REQUEST_CODE = 1337; // Or any other unique integer
     private PaymentModel paymentModel;
-    private ListView cardListView;
+    private RecyclerView cardListView;
     private ArrayList<SimpleCard> cardList;
     private CardListAdapter cardListAdapter;
 
@@ -91,7 +112,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-        cardListView = (ListView) findViewById(R.id.cardList);
+        cardListView = (RecyclerView) findViewById(R.id.cardList);
         paymentModel = new PaymentModel(this);
         cardList = new ArrayList<SimpleCard>();
 
@@ -99,8 +120,12 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        this.cardListAdapter = new CardListAdapter(this, R.id.cardList, cardList);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        cardListView.setLayoutManager(llm);
+        this.cardListAdapter = new CardListAdapter(cardList);
         cardListView.setAdapter(this.cardListAdapter);
+
     }
 
     public void onAddCardPress(View v) {
@@ -154,9 +179,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
 
     @Override
     public void onCardData(ArrayList<SimpleCard> cards) {
-        this.cardList = cards;
-        this.cardListAdapter = new CardListAdapter(this, R.id.cardList, cardList);
-        cardListView.setAdapter(this.cardListAdapter); // TODO: reuse old objects to reduce runtime
+        this.cardList.clear();
+        this.cardList.addAll(cards);
+        this.cardListAdapter.notifyItemInserted(cards.size() - 1);
     }
 
     private void makeToast(String msg) {

@@ -28,7 +28,7 @@ import gydes.gyde.models.Tour;
 
 public class DesignTour extends AppCompatActivity {
 
-    private static String tourID = "00000000";
+    private static final String formatStr = "%08d";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,25 +40,42 @@ public class DesignTour extends AppCompatActivity {
             public void onClick(View v) {
                 final Account[] a = new Account[1];
                 Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        a[0] = dataSnapshot.getValue(Account.class);
-                        String id = a[0].getId();
-                        String name = ((EditText) findViewById(R.id.name_box)).getText().toString();
-                        String stops = ((EditText) findViewById(R.id.stops_box)).getText().toString();
-                        int duration = Integer.parseInt(((EditText) findViewById(R.id.duration_box)).getText().toString());
-                        boolean walking = !((ToggleButton) findViewById(R.id.transport_button)).isChecked();
-                        int capacity = Integer.parseInt(((EditText) findViewById(R.id.capacity_box)).getText().toString());
-                        String tags = ((EditText) findViewById(R.id.tags_box)).getText().toString();
-                        Tour t = new Tour(name, duration, stops, walking, capacity, tags, tourID, id);
 
+                        a[0] = dataSnapshot.getValue(Account.class);
                         final DatabaseReference toursRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_tours_path));
-                        toursRef.child(tourID).setValue(t);
-                        a[0].gAddNewTourID(tourID);
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("account", a[0]);
-                        Login.currentUserRef.updateChildren(map);
-                        finish();
+                        final DatabaseReference idRef = toursRef.child("lastID");
+                        idRef.addListenerForSingleValueEvent((new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String name = ((EditText) findViewById(R.id.name_box)).getText().toString();
+                                String stops = ((EditText) findViewById(R.id.stops_box)).getText().toString();
+                                int duration = Integer.parseInt(((EditText) findViewById(R.id.duration_box)).getText().toString());
+                                boolean walking = !((ToggleButton) findViewById(R.id.transport_button)).isChecked();
+                                int capacity = Integer.parseInt(((EditText) findViewById(R.id.capacity_box)).getText().toString());
+                                String tags = ((EditText) findViewById(R.id.tags_box)).getText().toString();
+                                int lastID = Integer.parseInt((String)dataSnapshot.getValue());
+                                lastID++;
+                                String tourID = String.format(formatStr, lastID);
+                                String creatorID = a[0].getId();
+                                Tour t = new Tour(name, duration, stops, walking, capacity, tags, tourID, creatorID);
+                                toursRef.child(tourID).setValue(t);
+                                a[0].gAddNewTourID(tourID);
+                                Map<String, Object> map = new HashMap<String, Object>();
+                                map.put("account", a[0]);
+                                Login.currentUserRef.updateChildren(map);
+                                idRef.setValue(tourID);
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d("DesignTour", "DesignTour.java: error accessing tourID");
+                            }
+                        }));
                     }
 
                     @Override

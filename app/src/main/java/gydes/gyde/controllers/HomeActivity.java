@@ -6,9 +6,9 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,8 +29,7 @@ import java.util.HashMap;
 
 import gydes.gyde.R;
 
-public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
-
+public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private static final int PERMISSIONS_REQUEST = 1;
@@ -40,6 +39,8 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        NavigationDrawerBuilder.build(this, savedInstanceState);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

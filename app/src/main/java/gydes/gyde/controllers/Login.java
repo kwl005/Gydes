@@ -36,19 +36,19 @@ public class Login extends AppCompatActivity {
             new AuthUI.IdpConfig.EmailBuilder().build()
     );
 
-     // Listener for activity_login button
+    // Listener for activity_login button
     private OnClickListener loginListener = new OnClickListener() {
-         @Override
-         public void onClick(View view) {
-             startActivityForResult(
-                     AuthUI.getInstance()
-                             .createSignInIntentBuilder()
-                             .setAvailableProviders(providers)
-                             .build(),
-                     RC_SIGN_IN
-             );
-         }
-     };
+        @Override
+        public void onClick(View view) {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN
+            );
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +69,8 @@ public class Login extends AppCompatActivity {
 
             if(resultCode == RESULT_OK) {
                 initializeNewUserInstance();
-                if(!isGuide) {
-                    startActivity(new Intent(Login.this, HomeActivity.class));
-                }
-                else {
-                    startActivity(new Intent(Login.this, GuideHome.class));
-                }
+                
+                startActivity(new Intent(Login.this, HomeActivity.class));
             } else {
                 Log.d(TAG, "onActivityResult: result code " + resultCode);
             }

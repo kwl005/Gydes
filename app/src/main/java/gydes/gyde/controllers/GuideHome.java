@@ -12,6 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,10 +28,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import gydes.gyde.R;
+import gydes.gyde.models.Account;
+import gydes.gyde.models.Tour;
 
 public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
 
@@ -47,6 +53,33 @@ public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
         myToursButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(GuideHome.this, MyTours.class));
+            }
+        });
+
+        Switch modeToggle = findViewById(R.id.g_to_t_switch);
+        modeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked) {
+                    Login.isGuide = false;
+                    final Account[] a = new Account[1];
+                    Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            a[0] = dataSnapshot.getValue(Account.class);
+                            a[0].setIsGuide(false);
+                            Map<String, Object> map = new HashMap<String, Object>();
+                            map.put("account", a[0]);
+                            Login.currentUserRef.updateChildren(map);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.d("Data Access", "GuideHome.java: Error accessing account");
+                        }
+                    });
+                    startActivity(new Intent(GuideHome.this, HomeActivity.class));
+                }
             }
         });
 

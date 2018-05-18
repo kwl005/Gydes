@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,10 +26,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import gydes.gyde.R;
+import gydes.gyde.models.Account;
 
 public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,6 +45,33 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Switch modeToggle = findViewById(R.id.t_to_g_switch);
+        modeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    Login.isGuide = true;
+                    final Account[] a = new Account[1];
+                    Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            a[0] = dataSnapshot.getValue(Account.class);
+                            a[0].setIsGuide(true);
+                            Map<String, Object> map = new HashMap<String, Object>();
+                            map.put("account", a[0]);
+                            Login.currentUserRef.updateChildren(map);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.d("Data Access", "HomeActivity.java: Error accessing account");
+                        }
+                    });
+                    startActivity(new Intent(HomeActivity.this, GuideHome.class));
+                }
+            }
+        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

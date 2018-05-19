@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,10 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gydes.gyde.R;
-import gydes.gyde.models.Account;
 import gydes.gyde.models.Tour;
 
-public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
+public class GuideHome extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private HashMap<String, Marker> mMarkers = new HashMap<>();
@@ -48,6 +48,7 @@ public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_home);
+        NavigationDrawerBuilder.build(this, savedInstanceState);
 
         Button myToursButton = findViewById(R.id.tours_button);
         myToursButton.setOnClickListener(new View.OnClickListener() {
@@ -56,36 +57,9 @@ public class GuideHome extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        Switch modeToggle = findViewById(R.id.g_to_t_switch);
-        modeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked) {
-                    Login.isGuide = false;
-                    final Account[] a = new Account[1];
-                    Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            a[0] = dataSnapshot.getValue(Account.class);
-                            a[0].setIsGuide(false);
-                            Map<String, Object> map = new HashMap<String, Object>();
-                            map.put("account", a[0]);
-                            Login.currentUserRef.updateChildren(map);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.d("Data Access", "GuideHome.java: Error accessing account");
-                        }
-                    });
-                    startActivity(new Intent(GuideHome.this, HomeActivity.class));
-                }
-            }
-        });
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.location_map);
+                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         // Check GPS is enabled

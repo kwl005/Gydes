@@ -17,29 +17,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/toolbar"/>
-      
-        <Switch
-            android:id="@+id/t_to_g_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
-            android:checked="false"
-            android:text="Mode"
-            android:textOff="@string/traveler_txt"
-            android:textOn="@string/guide_txt"
-            android:textSize="16sp" />
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:context="gydes.gyde.controllers.HomeActivity" />
+            android:layout_height="match_parent">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:context="gydes.gyde.controllers.HomeActivity" />
+
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

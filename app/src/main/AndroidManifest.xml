@@ -31,6 +31,15 @@
             android:name=".controllers.HomeActivity"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".controllers.GuideHome"
+            android:label="@string/title_activity_guide_home" />
+        <activity
+            android:name=".controllers.MyTours"
+            android:label="@string/title_activity_my_tours"/>
+        <activity
+            android:name=".controllers.DesignTour"
+            android:label="@string/title_activity_design_tour"/>
+        <activity
             android:name=".controllers.Login"
             android:theme="@style/Gyde" />
         <activity

@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gydes.gyde.R;
-import gydes.gyde.models.Account;
 import gydes.gyde.models.Tour;
 
 public class DesignTour extends AppCompatActivity {

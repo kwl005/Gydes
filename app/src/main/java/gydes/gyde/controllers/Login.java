@@ -36,6 +36,11 @@ public class Login extends AppCompatActivity {
             new AuthUI.IdpConfig.EmailBuilder().build()
     );
 
+    private static final String[] days = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
+    private static final String[] times = {"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
+        "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00",
+        "22:00", "23:00"};
+
     // Listener for activity_login button
     private OnClickListener loginListener = new OnClickListener() {
         @Override
@@ -69,8 +74,13 @@ public class Login extends AppCompatActivity {
 
             if(resultCode == RESULT_OK) {
                 initializeNewUserInstance();
-                
-                startActivity(new Intent(Login.this, HomeActivity.class));
+
+                if(!Login.isGuide) {
+                    startActivity(new Intent(Login.this, HomeActivity.class));
+                }
+                else {
+                    startActivity(new Intent(Login.this, GuideHome.class));
+                }
             } else {
                 Log.d(TAG, "onActivityResult: result code " + resultCode);
             }
@@ -85,17 +95,47 @@ public class Login extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild(currentUser.getUid())) {
                     Login.currentUserRef = usersRef.child(currentUser.getUid());
-                    Task<Void> accountTask = currentUserRef.child("account").setValue(new Account(
-                            currentUser.getUid(), currentUser.getDisplayName(),
-                            currentUser.getEmail()));
+                    currentUserRef.child("displayName").setValue(currentUser.getDisplayName());
+                    currentUserRef.child("uid").setValue(currentUser.getUid());
+                    currentUserRef.child("email").setValue(currentUser.getEmail());
+                    currentUserRef.child("isGuide").setValue(false);
+
+                    final DatabaseReference traveler = currentUserRef.child("traveler");
+                    traveler.child("avgRating").setValue(0);
+                    traveler.child("numRatings").setValue(0);
+                    for(int i = 0; i < days.length; i++) {
+                        for(int j = 0; j < times.length; j++) {
+                            traveler.child("bookings").child(days[i]).child(times[j]).child("travelerID").setValue(currentUser.getUid());
+                            traveler.child("bookings").child(days[i]).child(times[j]).child("guideID").setValue("");
+                            traveler.child("bookings").child(days[i]).child(times[j]).child("tour").setValue(null);
+                        }
+                    }
+
+                    final DatabaseReference guide = currentUserRef.child("guide");
+                    guide.child("tourIDs");
+                    guide.child("bio").setValue("");
+                    guide.child("avgRating").setValue(0);
+                    guide.child("numRatings").setValue(0);
+                    for(int i = 0; i < days.length; i++) {
+                        for(int j = 0; j < times.length; j++) {
+                            guide.child("bookings").child(days[i]).child(times[j]).child("travelerID").setValue("");
+                            guide.child("bookings").child(days[i]).child(times[j]).child("guideID").setValue(currentUser.getUid());
+                            guide.child("bookings").child(days[i]).child(times[j]).child("tour").setValue(null);
+                        }
+                    }
+                    for(int i = 0; i < days.length; i++) {
+                        for(int j = 0; j < times.length; j++) {
+                            traveler.child("schedule").child(days[i]).child(times[j]).setValue(false);
+                        }
+                    }
                     isGuide = false;
                 }
 
                 Login.currentUserRef = usersRef.child(currentUser.getUid());
-                Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                Login.currentUserRef.child("isGuide").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Login.isGuide = dataSnapshot.getValue(Account.class).getIsGuide();
+                        Login.isGuide = (boolean)dataSnapshot.getValue();
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {

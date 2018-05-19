@@ -167,8 +167,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="@string/save_txt"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -180,12 +178,10 @@
         android:id="@+id/design_tour_cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="@string/cancel_txt"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/design_tour_save_button"
-        app:layout_constraintEnd_toEndOf="@+id/tags_box"/>
+        app:layout_constraintEnd_toEndOf="@+id/tags_box"
+        app:layout_constraintStart_toEndOf="@+id/design_tour_save_button"/>
 
 </android.support.constraint.ConstraintLayout>

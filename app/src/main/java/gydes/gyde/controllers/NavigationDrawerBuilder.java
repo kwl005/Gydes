@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -27,13 +31,17 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import gydes.gyde.R;
 
 /**
  * Created by kelvinlui1 on 5/17/18.
  */
 
-class NavigationDrawerBuilder  {
+public class NavigationDrawerBuilder  {
 
     private enum DrawerItemConstant {
         PROFILE(1, "Profile"),
@@ -61,7 +69,7 @@ class NavigationDrawerBuilder  {
                     return REPORT;
                 case 6:
                     return LOGOUT;
-                case 7:
+                case 8:
                     return TOGGLE;
                 default:
                     throw new IndexOutOfBoundsException("DrawerItemConstant: index " + index + " does not exist.");
@@ -155,7 +163,7 @@ class NavigationDrawerBuilder  {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String displayName = user.getDisplayName() == null ? "Anonymous" : user.getDisplayName();
         String email = user.getEmail();
-        String photoUrl = user.getPhotoUrl().getPath();
+        //String photoUrl = user.getPhotoUrl().getPath();
 
         // Create a profile header
         AccountHeader header = new AccountHeaderBuilder()
@@ -198,6 +206,16 @@ class NavigationDrawerBuilder  {
                         activity.startActivity(new Intent(activity, Login.class));
                         activity.finish();
                     case TOGGLE:
+                        if(!Login.isGuide) {
+                            Login.isGuide = true;
+                            Login.currentUserRef.child("isGuide").setValue(true);
+                            activity.startActivity(new Intent(activity, GuideHome.class));
+                        }
+                        else {
+                            Login.isGuide = false;
+                            Login.currentUserRef.child("isGuide").setValue(false);
+                            activity.startActivity(new Intent(activity, HomeActivity.class));
+                        }
                         break;
                     default:
                         break;

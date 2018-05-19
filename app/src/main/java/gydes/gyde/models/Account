@@ -1,3 +1,5 @@
+the account class and objects are no longer necessary, so I've cut them and archived the original code here
+
 package gydes.gyde.models;
 
 import java.util.ArrayList;

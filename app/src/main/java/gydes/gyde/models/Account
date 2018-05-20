@@ -1,24 +1,28 @@
+the account class and objects are no longer necessary, so I've cut them and archived the original code here
+
 package gydes.gyde.models;
 
 import java.util.ArrayList;
 
 public class Account {
     private String id;
-    private String firstName;
-    private String lastName;
+    private String displayName;
     private String email;
-    private String profilePic;
-    private String bio;
+    private boolean isGuide;
     private Traveler t;
     private Guide g;
 
-    public Account(String uid, String fName, String lName, String eMail, String pPic, String b) {
+    public Account() {
+        t = new Traveler();
+        g = new Guide();
+        isGuide = false;
+    }
+
+    public Account(String uid, String dName, String eMail) {
         id = uid;
-        firstName = fName;
-        lastName = lName;
+        displayName = dName;
         email = eMail;
-        profilePic = pPic;
-        bio = b;
+        isGuide = false;
         t = new Traveler();
         g = new Guide();
     }
@@ -34,6 +38,8 @@ public class Account {
 
     public void gAddNewTourID(String id) { g.addNewTourID(id); }
     public String[] gGetTourIDs() { return g.getTourIDs(); }
+    public String gGetBio() { return g.getBio(); }
+    public void gSetBio(String b) { g.setBio(b); }
     public float gCalcNewRating(int rate) { return g.calcNewRating(rate); }
     public float gGetAvgRating() { return g.getAvgRating(); }
     public void gSetAvailability(int day, int time, boolean avail) { g.setAvailability(day, time, avail); }
@@ -43,16 +49,14 @@ public class Account {
     public Booking[] gGetDayBookings(int day) { return g.getDayBookings(day); }
     public Booking gGetBooking(int day, int time) { return g.getBooking(day, time); }
 
-    public String getFirstName() { return firstName; }
-    public String getLastName() {return lastName; }
-    public void setFirstName(String fName) { firstName = fName; }
-    public void setLastname(String lName) { lastName = lName; }
+    public String getId() { return id; }
+    public void setId(String uid) { id = uid; }
+    public String getDisplayName() { return displayName; }
+    public void setDisplayName(String dName) { displayName = dName; }
     public String getEmail() { return email; }
     public void setEmail(String mail) { email = mail; }
-    public String getPic() { return profilePic; }
-    public void setPic(String pic) { profilePic = pic; }
-    public String getBio() { return bio; }
-    public void setBio(String b) { bio = b; }
+    public boolean getIsGuide() { return isGuide; }
+    public void setIsGuide(boolean isG) { isGuide = isG;}
 
     private class Traveler {
         private ArrayList<String> tourIDs;
@@ -88,6 +92,7 @@ public class Account {
     private class Guide {
         private ArrayList<String> tourIDs;
         //Stripe
+        private String bio;
         private float avgRating;
         private int numRatings;
         private boolean[][] schedule;
@@ -103,6 +108,8 @@ public class Account {
 
         public void addNewTourID(String id) { tourIDs.add(id); }
         public String[] getTourIDs() { return (String[])tourIDs.toArray(); }
+        public String getBio() { return bio; }
+        public void setBio(String b) { bio = b; }
         public float calcNewRating(int rate) {
             avgRating = ((avgRating * numRatings) + rate) / numRatings + 1;
             numRatings++;

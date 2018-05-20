@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:labelFor="@+id/name_box"
+        android:padding="8dp"
+        android:text="@string/name_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/stops_text"
+        app:layout_constraintEnd_toStartOf="@+id/name_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/name_box"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="text"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/name_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/name_text" />
+
+    <TextView
+        android:id="@+id/stops_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:text="@string/stops_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/duration_text"
+        app:layout_constraintStart_toStartOf="@+id/name_text"
+        app:layout_constraintTop_toBottomOf="@+id/name_text" />
+
+    <EditText
+        android:id="@+id/stops_box"
+        android:layout_width="192dp"
+        android:layout_height="49dp"
+        android:ems="10"
+        android:inputType="text"
+        android:labelFor="@+id/stops_text"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stops_text"
+        app:layout_constraintEnd_toEndOf="@+id/name_box" />
+
+    <TextView
+        android:id="@+id/duration_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:text="@string/duration_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/transport_text"
+        app:layout_constraintStart_toStartOf="@+id/stops_text"
+        app:layout_constraintTop_toBottomOf="@+id/stops_text" />
+
+    <EditText
+        android:id="@+id/duration_box"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:labelFor="@+id/duration_text"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/duration_text"
+        app:layout_constraintEnd_toEndOf="@+id/stops_box" />
+
+    <TextView
+        android:id="@+id/transport_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:text="@string/transport_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/capacity_text"
+        app:layout_constraintStart_toStartOf="@+id/duration_text"
+        app:layout_constraintTop_toBottomOf="@+id/duration_text" />
+
+    <ToggleButton
+        android:id="@+id/transport_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="@string/walk_txt"
+        android:textOn="@string/drive_txt"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/transport_text"
+        app:layout_constraintEnd_toEndOf="@+id/duration_box" />
+
+    <TextView
+        android:id="@+id/capacity_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:text="@string/capacity_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/tags_text"
+        app:layout_constraintStart_toStartOf="@+id/transport_text"
+        app:layout_constraintTop_toBottomOf="@+id/transport_text" />
+
+    <EditText
+        android:id="@+id/capacity_box"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:labelFor="@+id/capacity_text"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/capacity_text"
+        app:layout_constraintEnd_toEndOf="@+id/transport_button" />
+
+    <TextView
+        android:id="@+id/tags_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:text="@string/tags_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/design_tour_save_button"
+        app:layout_constraintStart_toStartOf="@+id/capacity_text"
+        app:layout_constraintTop_toBottomOf="@+id/capacity_text" />
+
+    <EditText
+        android:id="@+id/tags_box"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:labelFor="@+id/tags_text"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tags_text"
+        app:layout_constraintEnd_toEndOf="@+id/capacity_box" />
+
+    <Button
+        android:id="@+id/design_tour_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/save_txt"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/design_tour_cancel_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_text" />
+
+    <Button
+        android:id="@+id/design_tour_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_txt"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/design_tour_save_button"
+        app:layout_constraintEnd_toEndOf="@+id/tags_box"
+        app:layout_constraintStart_toEndOf="@+id/design_tour_save_button"/>
+
+</android.support.constraint.ConstraintLayout>

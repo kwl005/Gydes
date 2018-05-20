@@ -1,12 +1,19 @@
 package gydes.gyde.controllers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
@@ -76,6 +83,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
                     case "Visa":
                         brand = R.drawable.cio_ic_visa;
                         break;
+                    case "MasterCard":
+                        brand = R.drawable.cio_ic_mastercard;
+                        break;
                     case "Mastercard":
                         brand = R.drawable.cio_ic_mastercard;
                         break;
@@ -107,6 +117,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
     private RecyclerView cardListView;
     private ArrayList<SimpleCard> cardList;
     private CardListAdapter cardListAdapter;
+    private Paint p = new Paint();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +136,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
         cardListView.setLayoutManager(llm);
         this.cardListAdapter = new CardListAdapter(cardList);
         cardListView.setAdapter(this.cardListAdapter);
-
+        initSwipe();
     }
 
     public void onAddCardPress(View v) {
@@ -134,6 +145,65 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, true); // default: false
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
         startActivityForResult(scanIntent, SCAN_REQUEST_CODE);
+    }
+
+    private void initSwipe(){
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+
+                if (direction == ItemTouchHelper.LEFT){
+                    paymentModel.removeCard(cardList.get(position));
+                }
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                Bitmap icon;
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    if(dX > 0){
+                        // Left-To-Right swipe unused
+                        /*
+                        p.setColor(Color.parseColor("#388E3C"));
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
+                        c.drawRect(background,p);
+                        */
+                        /*
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_edit_white);
+                        RectF icon_dest = new RectF((float) itemView.getLeft() + width ,(float) itemView.getTop() + width,(float) itemView.getLeft()+ 2*width,(float)itemView.getBottom() - width);
+                        c.drawBitmap(icon,null,icon_dest,p);
+                        c.drawBitmap(null,null,icon_dest,p);
+                        */
+                    } else {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background,p);
+                        /* // TODO: Find suitable icon
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white);
+                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                        c.drawBitmap(icon,null,icon_dest,p);
+                        c.drawBitmap(null,null,icon_dest,p);
+                        */
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(cardListView);
     }
 
     @Override
@@ -161,7 +231,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
                 makeToast("Database error");
                 break;
             case PaymentModel.STRIPE_CARD_ERROR:
-                makeToast("Unable to add card");
+                makeToast("Stripe error");
                 break;
             case PaymentModel.STRIPE_CUSTOMER_ERROR:
                 makeToast("Unable to create customer");
@@ -174,8 +244,12 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
         switch (successCode) {
             case PaymentModel.STRIPE_ADD_CARD_SUCCESS:
                 makeToast("Added card successfully");
+                break;
+            case PaymentModel.STRIPE_CUSTOMER_SUCCESS:
+                break;
             case PaymentModel.STRIPE_REMOVE_CARD_SUCCESS:
                 makeToast("Removed card successfully");
+                break;
         }
     }
 
@@ -183,7 +257,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
     public void onCardData(ArrayList<SimpleCard> cards) {
         this.cardList.clear();
         this.cardList.addAll(cards);
-        this.cardListAdapter.notifyItemInserted(cards.size() - 1);
+        this.cardListAdapter.notifyDataSetChanged();
     }
 
     private void makeToast(String msg) {

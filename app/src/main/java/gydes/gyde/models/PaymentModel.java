@@ -181,11 +181,11 @@ public class PaymentModel {
                         cardWithToken.setCVV(card.getCVV());
                         cardWithToken.setExpiryMonth(card.getExpiryMonth());
                         cardWithToken.setExpiryYear(card.getExpiryYear());
-                        cardWithToken.setStripeToken(token.getId());
+                        cardWithToken.setStripeToken(token.getCard().getId()); // Store CARD
                         cardWithToken.setCardType(token.getCard().getBrand());
                         cards.add(cardWithToken);
                         databaseRef.child(CARD_PATH).setValue(cards); // Push to firebase
-                        if ( addCardOnCustomer(token.getId()) ) {
+                        if ( addCardOnCustomer(token.getId()) ) { // Pass TOKEN
                             ((PaymentModelCallback)activity).onSuccess(STRIPE_ADD_CARD_SUCCESS);
                         } else {
                             ((PaymentModelCallback)activity).onError(STRIPE_CARD_ERROR);
@@ -202,13 +202,15 @@ public class PaymentModel {
     }
 
     public void removeCard(SimpleCard card) {
-        if (customer == null)
+        if (customer == null) {
             return;
+        }
 
         try {
             customer.getSources().retrieve(card.getStripeToken()).delete();
         } catch(Exception e) {
             ((PaymentModelCallback)activity).onError(STRIPE_CARD_ERROR);
+            return;
         }
 
         cards.remove(card);

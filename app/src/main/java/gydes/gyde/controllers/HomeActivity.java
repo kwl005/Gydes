@@ -1,6 +1,7 @@
 package gydes.gyde.controllers;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -13,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -31,10 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import gydes.gyde.R;
 
 public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -48,13 +51,23 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Setup navigation drawer and action bar
-        Drawer result = NavigationDrawerBuilder.build(this, savedInstanceState);
+        // Setup navigation drawer, action bar and status bar
+        final Drawer result = NavigationDrawerBuilder.build(this, savedInstanceState);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                result.openDrawer();
+            }
+        });
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.menu);
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.gydeYellow));
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -109,11 +122,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.setMaxZoomPreference(16);
         subscribeToUpdates();
-
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private void subscribeToUpdates() {
@@ -163,6 +171,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         for(Marker marker : mMarkers.values()) {
             builder.include(marker.getPosition());
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
     }
 }

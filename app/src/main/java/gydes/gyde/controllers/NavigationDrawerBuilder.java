@@ -20,6 +20,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
@@ -167,6 +168,7 @@ public class NavigationDrawerBuilder  {
                         break;
                     case PAYMENTS:
                         activity.startActivity(new Intent(activity, PaymentActivity.class));
+                        activity.finish();
                         break;
                     case TOURS:
                         break;
@@ -181,16 +183,3 @@ public class NavigationDrawerBuilder  {
         };
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

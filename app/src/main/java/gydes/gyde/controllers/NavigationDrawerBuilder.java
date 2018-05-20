@@ -5,37 +5,26 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import gydes.gyde.R;
 
@@ -48,13 +37,10 @@ public class NavigationDrawerBuilder  {
     private static final String TAG = NavigationDrawerBuilder.class.getSimpleName();
 
     private enum DrawerItemConstant {
-        PROFILE(1, "Profile"),
-        PAYMENT(2, "Payment"),
-        SCHEDULE(3, "Schedule"),
-        TOURS(4, "Tours"),
-        REPORT(5, "Report"),
-        LOGOUT(6, "Logout"),
-        SWITCH_ROLE(8, "Switch Role");
+        PROFILE(1, "Account"),
+        PAYMENTS(2, "Payments"),
+        TOURS(3, "My Tours"),
+        REPORT(4, "Report");
 
         private final int index;
         private final String name;
@@ -64,17 +50,11 @@ public class NavigationDrawerBuilder  {
                 case 1:
                     return PROFILE;
                 case 2:
-                    return PAYMENT;
+                    return PAYMENTS;
                 case 3:
-                    return SCHEDULE;
-                case 4:
                     return TOURS;
-                case 5:
+                case 4:
                     return REPORT;
-                case 6:
-                    return LOGOUT;
-                case 8: // TOGGLE is at 8 because divider is at 7
-                    return SWITCH_ROLE;
                 default:
                     throw new IndexOutOfBoundsException("DrawerItemConstant: index " + index + " does not exist.");
             }
@@ -96,13 +76,10 @@ public class NavigationDrawerBuilder  {
 
     static Drawer build(final AppCompatActivity activity, final Bundle savedInstanceState) {
         // Set up items in the drawer
-        PrimaryDrawerItem profileItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.PROFILE.getIndex()).withName(DrawerItemConstant.PROFILE.getName());
-        PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.PAYMENT.getIndex()).withName(DrawerItemConstant.PAYMENT.getName());
-        PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
-        PrimaryDrawerItem logoutItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.LOGOUT.getIndex()).withName(DrawerItemConstant.LOGOUT.getName());
-        PrimaryDrawerItem scheduleItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.SCHEDULE.getIndex()).withName(DrawerItemConstant.SCHEDULE.getName());
-        PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.TOURS.getIndex()).withName(DrawerItemConstant.TOURS.getName());
-        PrimaryDrawerItem switchRoleItem = new PrimaryDrawerItem() .withSelectable(false).withIdentifier(DrawerItemConstant.SWITCH_ROLE.getIndex()).withName(DrawerItemConstant.SWITCH_ROLE.getName());
+        PrimaryDrawerItem profileItem = new PrimaryDrawerItem().withIcon(R.drawable.account).withSelectable(false).withIdentifier(DrawerItemConstant.PROFILE.getIndex()).withName(DrawerItemConstant.PROFILE.getName());
+        PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withIcon(R.drawable.payments).withSelectable(false).withIdentifier(DrawerItemConstant.PAYMENTS.getIndex()).withName(DrawerItemConstant.PAYMENTS.getName());
+        PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withIcon(R.drawable.report).withSelectable(false).withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
+        PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withIcon(R.drawable.tours).withSelectable(false).withIdentifier(DrawerItemConstant.TOURS.getIndex()).withName(DrawerItemConstant.TOURS.getName());
 
         // Setup profile image
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
@@ -139,16 +116,13 @@ public class NavigationDrawerBuilder  {
                 .withActionBarDrawerToggle(true)
                 .withDisplayBelowStatusBar(false)
                 .withTranslucentStatusBar(false)
-                .withTranslucentNavigationBar(false)
+                .withTranslucentNavigationBar(true)
+                .withSliderBackgroundColorRes(R.color.gydeBlue)
                 .addDrawerItems(
                         profileItem,
                         paymentItem,
                         tourItem,
-                        scheduleItem,
-                        reportItem,
-                        logoutItem,
-                        new DividerDrawerItem(),
-                        switchRoleItem
+                        reportItem
                 )
                 .withMultiSelect(false)
                 .withSelectedItem(-1)
@@ -195,9 +169,11 @@ public class NavigationDrawerBuilder  {
         AccountHeader header = new AccountHeaderBuilder()
                 .withActivity(activity)
                 .withSavedInstance(savedInstanceState)
+                .withHeaderBackground(R.color.gydeYellow)
+                .withTextColorRes(R.color.gydeBlue)
                 .addProfiles(
                         new ProfileDrawerItem()
-                                .withName(displayName)
+                                .withName("Hi! " + displayName)
                                 .withEmail(email)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -206,6 +182,7 @@ public class NavigationDrawerBuilder  {
                         return false;
                     }
                 })
+                .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
         return header;
@@ -217,37 +194,12 @@ public class NavigationDrawerBuilder  {
             public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                 switch(DrawerItemConstant.getItem(position)) {
                     case PROFILE:
-                        Log.d(TAG, "PROFILE: " + position);
                         break;
-                    case PAYMENT:
-                        Log.d(TAG, "PAYMENT: " + position);
-                        break;
-                    case SCHEDULE:
-                        Log.d(TAG, "SCHEDULE: " + position);
+                    case PAYMENTS:
                         break;
                     case TOURS:
-                        Log.d(TAG, "TOURS: " + position);
                         break;
                     case REPORT:
-                        Log.d(TAG, "REPORT: " + position);
-                        break;
-                    case LOGOUT:
-                        Log.d(TAG, "LOGOUT: " + position);
-                        FirebaseAuth.getInstance().signOut();
-                        activity.startActivity(new Intent(activity, Login.class));
-                        activity.finish();
-                    case SWITCH_ROLE:
-                        Log.d(TAG, "TOGGLE: " + position);
-                        if(!Login.isGuide) {
-                            Login.isGuide = true;
-                            Login.currentUserRef.child("isGuide").setValue(true);
-                            activity.startActivity(new Intent(activity, GuideHome.class));
-                        }
-                        else {
-                            Login.isGuide = false;
-                            Login.currentUserRef.child("isGuide").setValue(false);
-                            activity.startActivity(new Intent(activity, HomeActivity.class));
-                        }
                         break;
                     default:
                         break;

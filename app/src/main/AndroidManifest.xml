@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/MaterialDrawerTheme.ActionBar">
+        android:theme="@style/MaterialDrawerTheme">
         <activity
             android:name=".controllers.Welcome"
             android:theme="@style/Gyde">

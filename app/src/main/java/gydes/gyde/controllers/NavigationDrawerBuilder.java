@@ -106,17 +106,13 @@ public class NavigationDrawerBuilder  {
             }
         });
 
-        ActionBar actionBar = activity.getSupportActionBar();
-
         // Build the drawer
         Drawer result = new DrawerBuilder()
                 .withActivity(activity)
                 .withSavedInstance(savedInstanceState)
                 .withAccountHeader(getAccountHeader(activity, savedInstanceState))
                 .withActionBarDrawerToggle(true)
-                .withDisplayBelowStatusBar(false)
                 .withTranslucentStatusBar(false)
-                .withTranslucentNavigationBar(true)
                 .withSliderBackgroundColorRes(R.color.gydeBlue)
                 .addDrawerItems(
                         profileItem,
@@ -127,35 +123,9 @@ public class NavigationDrawerBuilder  {
                 .withMultiSelect(false)
                 .withSelectedItem(-1)
                 .withOnDrawerItemClickListener(getDrawerItemClickListener(activity))
-                .withOnDrawerListener(getDrawerListener(activity, actionBar))
                 .build();
 
-        // Setup action bar
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setTitle(R.string.app_name);
-        actionBar.setIcon(R.drawable.gyde_logo);
-
         return result;
-    }
-
-    private static Drawer.OnDrawerListener getDrawerListener(final AppCompatActivity activity, final ActionBar actionBar) {
-        return new Drawer.OnDrawerListener() {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                actionBar.hide();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                actionBar.show();
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                // TODO
-            }
-        };
     }
 
     private static AccountHeader getAccountHeader(final AppCompatActivity activity, final Bundle savedInstanceState) {

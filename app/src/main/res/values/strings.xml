@@ -26,4 +26,5 @@
     <string name="title_activity_guide_home">GuideHome</string>
     <string name="title_activity_design_tour">DesignTour</string>
     <string name="title_activity_my_tours">MyTours</string>
+    <string name="search_tour_field_placeholder">Where to?</string>
 </resources>

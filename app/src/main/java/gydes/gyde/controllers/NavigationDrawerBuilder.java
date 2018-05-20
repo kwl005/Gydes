@@ -166,6 +166,7 @@ public class NavigationDrawerBuilder  {
                     case PROFILE:
                         break;
                     case PAYMENTS:
+                        activity.startActivity(new Intent(activity, PaymentActivity.class));
                         break;
                     case TOURS:
                         break;

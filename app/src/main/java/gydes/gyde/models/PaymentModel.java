@@ -47,6 +47,7 @@ public class PaymentModel {
     public final static int STRIPE_CUSTOMER_SUCCESS = 5;
     public final static int STRIPE_ADD_SOURCE_SUCCESS = 6;
     public final static int STRIPE_ADD_CARD_SUCCESS = 7;
+    public final static int STRIPE_REMOVE_CARD_SUCCESS = 8;
 
     private Stripe stripe;
     private FirebaseUser currentUser;
@@ -201,7 +202,18 @@ public class PaymentModel {
     }
 
     public void removeCard(SimpleCard card) {
-        // TODO: Complete this function
+        if (customer == null)
+            return;
+
+        try {
+            customer.getSources().retrieve(card.getStripeToken()).delete();
+        } catch(Exception e) {
+            ((PaymentModelCallback)activity).onError(STRIPE_CARD_ERROR);
+        }
+
+        cards.remove(card);
+        databaseRef.child(CARD_PATH).setValue(cards); // Push to firebase
+        ((PaymentModelCallback)activity).onSuccess(STRIPE_REMOVE_CARD_SUCCESS);
     }
 
     // For testing

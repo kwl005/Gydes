@@ -174,6 +174,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentModel.P
         switch (successCode) {
             case PaymentModel.STRIPE_ADD_CARD_SUCCESS:
                 makeToast("Added card successfully");
+            case PaymentModel.STRIPE_REMOVE_CARD_SUCCESS:
+                makeToast("Removed card successfully");
         }
     }
 

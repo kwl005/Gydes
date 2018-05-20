@@ -11,6 +11,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/gydeYellow"
+            android:elevation="4dp"
+            android:layout_gravity="top"
+            app:popupTheme="@style/MaterialDrawerTheme.Light"
+            app:title="@string/app_name"
+            android:theme="@style/MaterialDrawerTheme.ActionBar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <EditText
+                        android:id="@+id/search_tour_bar"
+                        android:gravity="start"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="@string/search_tour_field_placeholder"
+                        android:textColorHint="#999999"
+                        android:textCursorDrawable="@null"
+                        android:textColor="#333333"
+                        android:background="@drawable/rounded_search_field" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -18,7 +59,6 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             tools:context="gydes.gyde.controllers.HomeActivity" />
 
         <android.support.design.widget.FloatingActionButton

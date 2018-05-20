@@ -17,7 +17,11 @@
         <activity
             android:name=".controllers.Welcome"
             android:theme="@style/Gyde">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".controllers.CardIOExample" />
 
@@ -41,11 +45,7 @@
             android:name=".controllers.Login"
             android:theme="@style/Gyde" />
         <activity android:name=".controllers.GetProfileImageActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <service
             android:name=".controllers.TrackerService"

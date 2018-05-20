@@ -62,7 +62,6 @@ public class Login extends AppCompatActivity {
 
         loginButton = (SignInButton) findViewById(R.id.login_button);
         loginButton.setOnClickListener(loginListener);
-
     }
 
     @Override

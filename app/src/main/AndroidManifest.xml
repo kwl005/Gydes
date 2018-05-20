@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera2" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -15,11 +17,7 @@
         <activity
             android:name=".controllers.Welcome"
             android:theme="@style/Gyde">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".controllers.CardIOExample" />
 
@@ -42,13 +40,17 @@
         <activity
             android:name=".controllers.Login"
             android:theme="@style/Gyde" />
-        <activity
-            android:name=".controllers.NavigationDrawerBuilder" />
+        <activity android:name=".controllers.GetProfileImageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <service
             android:name=".controllers.TrackerService"
             android:enabled="true"
             android:exported="true" />
-
     </application>
 
 </manifest>

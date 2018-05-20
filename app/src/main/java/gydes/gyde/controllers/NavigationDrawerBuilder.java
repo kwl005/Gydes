@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,7 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -43,6 +45,8 @@ import gydes.gyde.R;
 
 public class NavigationDrawerBuilder  {
 
+    private static final String TAG = NavigationDrawerBuilder.class.getSimpleName();
+
     private enum DrawerItemConstant {
         PROFILE(1, "Profile"),
         PAYMENT(2, "Payment"),
@@ -50,7 +54,7 @@ public class NavigationDrawerBuilder  {
         TOURS(4, "Tours"),
         REPORT(5, "Report"),
         LOGOUT(6, "Logout"),
-        TOGGLE(7, "Guide");
+        SWITCH_ROLE(8, "Switch Role");
 
         private final int index;
         private final String name;
@@ -69,8 +73,8 @@ public class NavigationDrawerBuilder  {
                     return REPORT;
                 case 6:
                     return LOGOUT;
-                case 8:
-                    return TOGGLE;
+                case 8: // TOGGLE is at 8 because divider is at 7
+                    return SWITCH_ROLE;
                 default:
                     throw new IndexOutOfBoundsException("DrawerItemConstant: index " + index + " does not exist.");
             }
@@ -92,13 +96,13 @@ public class NavigationDrawerBuilder  {
 
     static Drawer build(final AppCompatActivity activity, final Bundle savedInstanceState) {
         // Set up items in the drawer
-        PrimaryDrawerItem profileItem = new PrimaryDrawerItem().withIdentifier(DrawerItemConstant.PROFILE.getIndex()).withName(DrawerItemConstant.PROFILE.getName());
-        PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withIdentifier(DrawerItemConstant.PAYMENT.getIndex()).withName(DrawerItemConstant.PAYMENT.getName());
-        PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
-        PrimaryDrawerItem logoutItem = new PrimaryDrawerItem().withIdentifier(DrawerItemConstant.LOGOUT.getIndex()).withName(DrawerItemConstant.LOGOUT.getName());
-        PrimaryDrawerItem scheduleItem = new PrimaryDrawerItem().withIdentifier(DrawerItemConstant.SCHEDULE.getIndex()).withName(DrawerItemConstant.SCHEDULE.getName());
-        PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withIdentifier(DrawerItemConstant.TOURS.getIndex()).withName(DrawerItemConstant.TOURS.getName());
-        SecondarySwitchDrawerItem toggle = new SecondarySwitchDrawerItem().withIdentifier(5).withName("Guide");
+        PrimaryDrawerItem profileItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.PROFILE.getIndex()).withName(DrawerItemConstant.PROFILE.getName());
+        PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.PAYMENT.getIndex()).withName(DrawerItemConstant.PAYMENT.getName());
+        PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
+        PrimaryDrawerItem logoutItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.LOGOUT.getIndex()).withName(DrawerItemConstant.LOGOUT.getName());
+        PrimaryDrawerItem scheduleItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.SCHEDULE.getIndex()).withName(DrawerItemConstant.SCHEDULE.getName());
+        PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.TOURS.getIndex()).withName(DrawerItemConstant.TOURS.getName());
+        PrimaryDrawerItem switchRoleItem = new PrimaryDrawerItem() .withSelectable(false).withIdentifier(DrawerItemConstant.SWITCH_ROLE.getIndex()).withName(DrawerItemConstant.SWITCH_ROLE.getName());
 
         // Setup profile image
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
@@ -125,6 +129,8 @@ public class NavigationDrawerBuilder  {
             }
         });
 
+        ActionBar actionBar = activity.getSupportActionBar();
+
         // Build the drawer
         Drawer result = new DrawerBuilder()
                 .withActivity(activity)
@@ -142,20 +148,40 @@ public class NavigationDrawerBuilder  {
                         reportItem,
                         logoutItem,
                         new DividerDrawerItem(),
-                        toggle
+                        switchRoleItem
                 )
+                .withMultiSelect(false)
                 .withSelectedItem(-1)
                 .withOnDrawerItemClickListener(getDrawerItemClickListener(activity))
+                .withOnDrawerListener(getDrawerListener(activity, actionBar))
                 .build();
 
         // Setup action bar
-        ActionBar actionBar = activity.getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle(R.string.app_name);
         actionBar.setIcon(R.drawable.gyde_logo);
 
         return result;
+    }
+
+    private static Drawer.OnDrawerListener getDrawerListener(final AppCompatActivity activity, final ActionBar actionBar) {
+        return new Drawer.OnDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                actionBar.hide();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                actionBar.show();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // TODO
+            }
+        };
     }
 
     private static AccountHeader getAccountHeader(final AppCompatActivity activity, final Bundle savedInstanceState) {
@@ -189,23 +215,29 @@ public class NavigationDrawerBuilder  {
         return new Drawer.OnDrawerItemClickListener() {
             @Override
             public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                drawerItem.withSetSelected(false);
                 switch(DrawerItemConstant.getItem(position)) {
                     case PROFILE:
+                        Log.d(TAG, "PROFILE: " + position);
                         break;
                     case PAYMENT:
+                        Log.d(TAG, "PAYMENT: " + position);
                         break;
                     case SCHEDULE:
+                        Log.d(TAG, "SCHEDULE: " + position);
                         break;
                     case TOURS:
+                        Log.d(TAG, "TOURS: " + position);
                         break;
                     case REPORT:
+                        Log.d(TAG, "REPORT: " + position);
                         break;
                     case LOGOUT:
+                        Log.d(TAG, "LOGOUT: " + position);
                         FirebaseAuth.getInstance().signOut();
                         activity.startActivity(new Intent(activity, Login.class));
                         activity.finish();
-                    case TOGGLE:
+                    case SWITCH_ROLE:
+                        Log.d(TAG, "TOGGLE: " + position);
                         if(!Login.isGuide) {
                             Login.isGuide = true;
                             Login.currentUserRef.child("isGuide").setValue(true);

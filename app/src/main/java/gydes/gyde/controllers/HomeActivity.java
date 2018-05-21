@@ -1,7 +1,6 @@
 package gydes.gyde.controllers;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -13,20 +12,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -34,17 +32,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 import java.util.HashMap;
-import java.util.Map;
+
 import gydes.gyde.R;
 
 public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private GoogleMap mMap;
+    private GoogleMap map;
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private static final int PERMISSIONS_REQUEST = 1;
     private static final String TAG = HomeActivity.class.getSimpleName();
+    private boolean isMapReady;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +71,19 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // Fix cannot zoom to bounds until the map has a size
+        final View mapView = mapFragment.getView();
+        if(mapView != null && mapView.getViewTreeObserver().isAlive()) {
+            mapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (isMapReady) {
+                        subscribeToUpdates();
+                    }
+                }
+            });
+        }
 
         // Check GPS is enabled
         LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -119,9 +130,20 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMaxZoomPreference(16);
-        subscribeToUpdates();
+        map = googleMap;
+        map.setMaxZoomPreference(32);
+        map.setTrafficEnabled(true);
+        map.setBuildingsEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
+        map.getUiSettings().setIndoorLevelPickerEnabled(true);
+        map.setIndoorEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        }
+
+        isMapReady = true;
     }
 
     private void subscribeToUpdates() {
@@ -129,12 +151,12 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                setMarker(dataSnapshot);
+//                setMarker(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                setMarker(dataSnapshot);
+//                setMarker(dataSnapshot);
             }
 
             @Override
@@ -163,7 +185,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         double longitude = Double.parseDouble(value.get("longitude").toString());
         LatLng location = new LatLng(latitude, longitude);
         if(!mMarkers.containsKey(key)) {
-            mMarkers.put(key, mMap.addMarker(new MarkerOptions().title(key).position(location)));
+            mMarkers.put(key, map.addMarker(new MarkerOptions().title(key).position(location)));
         } else {
             mMarkers.get(key).setPosition(location);
         }
@@ -171,6 +193,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         for(Marker marker : mMarkers.values()) {
             builder.include(marker.getPosition());
         }
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 20));
     }
 }

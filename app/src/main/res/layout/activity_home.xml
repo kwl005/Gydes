@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true" >
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,51 +16,42 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
+            android:layout_gravity="top"
             android:background="@color/gydeYellow"
             android:elevation="4dp"
-            android:layout_gravity="top"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/MaterialDrawerTheme.ActionBar"
             app:popupTheme="@style/MaterialDrawerTheme.Light"
-            app:title="@string/app_name"
-            android:theme="@style/MaterialDrawerTheme.ActionBar">
+            app:title="@string/app_name">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-                <LinearLayout
+                <SearchView
+                    android:id="@+id/search_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
-                    <EditText
-                        android:id="@+id/search_tour_bar"
-                        android:gravity="start"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.9"
-                        android:maxLines="1"
-                        android:padding="5dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="@string/search_tour_field_placeholder"
-                        android:textColorHint="#999999"
-                        android:textCursorDrawable="@null"
-                        android:textColor="#333333"
-                        android:background="@drawable/rounded_search_field" />
-                </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:iconifiedByDefault="false"
+                    android:orientation="horizontal" />
             </LinearLayout>
+
         </android.support.v7.widget.Toolbar>
 
-         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:map="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/map"
-             android:name="com.google.android.gms.maps.SupportMapFragment"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="gydes.gyde.controllers.HomeActivity" />
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="gydes.gyde.controllers.HomeActivity" />
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

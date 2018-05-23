@@ -6,6 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gydeBlue"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -33,23 +34,23 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <SearchView
-                    android:id="@+id/search_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="5dp"
-                    android:iconifiedByDefault="false"
-                    android:orientation="horizontal" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Payment"
+                android:textColor="@color/gydeBlue"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cardList"
-            android:layout_width="368dp"
-            android:layout_height="357dp"
+            android:layout_width="384dp"
+            android:layout_height="366dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -64,8 +65,10 @@
             android:layout_marginEnd="148dp"
             android:layout_marginStart="148dp"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/roboto"
             android:onClick="onAddCardPress"
             android:text="Add Card"
+            android:textColor="@color/gydeYellow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

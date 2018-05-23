@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="gydeYellow">#dfb816</color>
-    <color name="gydeBlue">#0099CC</color>
+    <color name="gydeBlue">#0099cc</color>
+    <color name="gydeBackground">#ECEFF1</color>
 </resources>

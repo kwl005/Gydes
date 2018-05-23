@@ -40,8 +40,9 @@ public class NavigationDrawerBuilder  {
     private enum DrawerItemConstant {
         PROFILE(1, "Account"),
         PAYMENTS(2, "Payments"),
-        TOURS(3, "My Tours"),
-        REPORT(4, "Report");
+        BOOKINGS(3, "My Bookings"),
+        REPORT(4, "Report"),
+        TOGGLE(5, "Toggle");
 
         private final int index;
         private final String name;
@@ -53,9 +54,11 @@ public class NavigationDrawerBuilder  {
                 case 2:
                     return PAYMENTS;
                 case 3:
-                    return TOURS;
+                    return BOOKINGS;
                 case 4:
                     return REPORT;
+                case 5:
+                    return TOGGLE;
                 default:
                     throw new IndexOutOfBoundsException("DrawerItemConstant: index " + index + " does not exist.");
             }
@@ -80,7 +83,8 @@ public class NavigationDrawerBuilder  {
         PrimaryDrawerItem profileItem = new PrimaryDrawerItem().withIcon(R.drawable.account).withSelectable(false).withIdentifier(DrawerItemConstant.PROFILE.getIndex()).withName(DrawerItemConstant.PROFILE.getName());
         PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withIcon(R.drawable.payments).withSelectable(false).withIdentifier(DrawerItemConstant.PAYMENTS.getIndex()).withName(DrawerItemConstant.PAYMENTS.getName());
         PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withIcon(R.drawable.report).withSelectable(false).withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
-        PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withIcon(R.drawable.tours).withSelectable(false).withIdentifier(DrawerItemConstant.TOURS.getIndex()).withName(DrawerItemConstant.TOURS.getName());
+        PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withIcon(R.drawable.tours).withSelectable(false).withIdentifier(DrawerItemConstant.BOOKINGS.getIndex()).withName(DrawerItemConstant.BOOKINGS.getName());
+        PrimaryDrawerItem toggleItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.TOGGLE.getIndex()).withName(DrawerItemConstant.TOGGLE.getName());
 
         // Setup profile image
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
@@ -119,7 +123,8 @@ public class NavigationDrawerBuilder  {
                         profileItem,
                         paymentItem,
                         tourItem,
-                        reportItem
+                        reportItem,
+                        toggleItem
                 )
                 .withMultiSelect(false)
                 .withSelectedItem(-1)
@@ -170,9 +175,22 @@ public class NavigationDrawerBuilder  {
                         activity.startActivity(new Intent(activity, PaymentActivity.class));
                         activity.finish();
                         break;
-                    case TOURS:
+                    case BOOKINGS:
                         break;
                     case REPORT:
+                        break;
+                    case TOGGLE:
+                        if(!Login.isGuide) {
+                            Login.isGuide = true;
+                            Login.currentUserRef.child("isGuide").setValue(true);
+                            activity.startActivity(new Intent(activity, GuideHome.class));
+                        }
+                        else {
+                            Login.isGuide = false;
+                            Login.currentUserRef.child("isGuide").setValue(false);
+                            activity.startActivity(new Intent(activity, HomeActivity.class));
+                        }
+                        activity.finish();
                         break;
                     default:
                         break;

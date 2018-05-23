@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,33 +9,44 @@
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_stops"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView_stops"
+        android:text="Name"
         android:textSize="32sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView_stops"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_name"
-        android:layout_margin="10dp"
-        android:textSize="12sp"/>
+        app:layout_constraintBottom_toTopOf="@+id/textView_tags"
+        app:layout_constraintEnd_toStartOf="@+id/view_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_name"
+        android:text="Stops"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_stops"
-        android:layout_margin="10dp"
-        android:textSize="12sp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_stops"
+        app:layout_constraintStart_toStartOf="@+id/textView_stops"
+        android:text="Tags"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/view_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/textView_stops"
-        android:layout_margin="10dp"
         android:text="@string/view_txt"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_stops"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_cosntraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

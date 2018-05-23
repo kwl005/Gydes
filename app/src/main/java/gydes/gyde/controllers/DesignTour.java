@@ -38,6 +38,7 @@ public class DesignTour extends AppCompatActivity {
                 final DatabaseReference toursRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_tours_path));
 
                 String name = ((EditText) findViewById(R.id.name_box)).getText().toString();
+                String location = "San Diego";
                 String stops = ((EditText) findViewById(R.id.stops_box)).getText().toString();
                 int duration = Integer.parseInt(((EditText) findViewById(R.id.duration_box)).getText().toString());
                 boolean walking = !((ToggleButton) findViewById(R.id.transport_button)).isChecked();
@@ -46,8 +47,8 @@ public class DesignTour extends AppCompatActivity {
                 String tourID = toursRef.push().getKey();
                 String creatorID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                Tour t = new Tour(name, duration, stops, walking, capacity, tags, tourID, creatorID);
-                toursRef.child(tourID).setValue(t);
+                Tour t = new Tour(name, location, duration, stops, walking, capacity, tags, tourID, creatorID);
+                toursRef.child(location).child(tourID).setValue(t);
 
                 Login.currentUserRef.child("guide").child("tourIDs").child(tourID).setValue(tourID);
                 finish();

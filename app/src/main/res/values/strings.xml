@@ -23,6 +23,7 @@
     <string name="cancel_txt">Cancel</string>
     <string name="traveler_txt">Traveler</string>
     <string name="guide_txt">Guide</string>
+    <string name="view_txt">View</string>
     <string name="title_activity_guide_home">GuideHome</string>
     <string name="title_activity_design_tour">DesignTour</string>
     <string name="title_activity_my_tours">MyTours</string>

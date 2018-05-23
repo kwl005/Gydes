@@ -9,43 +9,45 @@
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textView_stops"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView_stops"
+        android:gravity="left"
         android:text="Name"
         android:textSize="32sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView_stops"
+        app:layout_constraintStart_toStartOf="@+id/textView_stops"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView_stops"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textView_tags"
-        app:layout_constraintEnd_toStartOf="@+id/view_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_name"
+        android:gravity="left"
         android:text="Stops"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_tags"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
 
     <TextView
         android:id="@+id/textView_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_stops"
-        app:layout_constraintStart_toStartOf="@+id/textView_stops"
+        android:gravity="left"
         android:text="Tags"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView_stops"
+        app:layout_constraintTop_toBottomOf="@+id/textView_stops" />
 
     <Button
         android:id="@+id/view_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="right"
         android:text="@string/view_txt"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_stops"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="296dp" />
 
 </android.support.constraint.ConstraintLayout>

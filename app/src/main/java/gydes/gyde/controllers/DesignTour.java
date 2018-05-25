@@ -38,7 +38,7 @@ public class DesignTour extends AppCompatActivity {
                 final DatabaseReference toursRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_tours_path));
 
                 String name = ((EditText) findViewById(R.id.name_box)).getText().toString();
-                String location = "San Diego";
+                String location = SearchResults.toCamelCase(((EditText) findViewById(R.id.location_box)).getText().toString());
                 String stops = ((EditText) findViewById(R.id.stops_box)).getText().toString();
                 int duration = Integer.parseInt(((EditText) findViewById(R.id.duration_box)).getText().toString());
                 boolean walking = !((ToggleButton) findViewById(R.id.transport_button)).isChecked();

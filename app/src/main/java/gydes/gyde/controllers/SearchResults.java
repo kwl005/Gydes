@@ -30,14 +30,23 @@ import gydes.gyde.models.Tour;
 
 public class SearchResults extends ListActivity {
 
+    final static String name_prefix = "Name: %s";
+    final static String stops_prefix = "Stops: %s";
+    final static String tags_prefix = "Tags: %s";
+    final static String duration_prefix = "Duration: %s";
+    final static String transport_prefix = "Transport: %s";
+    final static String capacity_prefix = "Capacity: %s";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
+        findViewById(R.id.details_window).setVisibility(View.GONE);
+
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            final String query = intent.getStringExtra(SearchManager.QUERY);
+            final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY));
             final ArrayList<Tour> tours = new ArrayList<Tour>();
 
             final ButtonAdapter adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
@@ -63,46 +72,82 @@ public class SearchResults extends ListActivity {
             });
         }
     }
-}
 
-class ButtonAdapter extends ArrayAdapter<Tour> {
-    private Context context;
-    private int resourceID;
-    private ArrayList<Tour> tourList;
-
-    public ButtonAdapter(@NonNull Context c, int rID, ArrayList<Tour> list) {
-        super(c, 0, list);
-        context = c;
-        resourceID = rID;
-        tourList = list;
+    public static String toCamelCase(String str) {
+        String[] words = str.split(" ");
+        String camelCaseStr = "";
+        for(int i = 0; i < words.length; i++) {
+            camelCaseStr += words[i].substring(0,1).toUpperCase() + words[i].substring(1).toLowerCase();
+            if(i < words.length - 1) {
+                camelCaseStr += " ";
+            }
+        }
+        return camelCaseStr;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View listItem = convertView;
-        if (listItem == null) {
-            listItem = LayoutInflater.from(context).inflate(resourceID, parent, false);
+    class ButtonAdapter extends ArrayAdapter<Tour> {
+        private Context context;
+        private int resourceID;
+        private ArrayList<Tour> tourList;
+
+        public ButtonAdapter(@NonNull Context c, int rID, ArrayList<Tour> list) {
+            super(c, 0, list);
+            context = c;
+            resourceID = rID;
+            tourList = list;
         }
 
-        Tour currTour = tourList.get(position);
-
-        TextView name = listItem.findViewById(R.id.textView_name);
-        name.setText(currTour.getName());
-
-        TextView stops = listItem.findViewById(R.id.textView_stops);
-        stops.setText(currTour.getStops());
-
-        TextView tags = listItem.findViewById(R.id.textView_tags);
-        tags.setText(currTour.getTags());
-
-        Button viewButton = listItem.findViewById(R.id.view_button);
-        viewButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //TODO
-                Log.d("BUTTON", "view tour details button clicked");
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View listItem = convertView;
+            if (listItem == null) {
+                listItem = LayoutInflater.from(context).inflate(resourceID, parent, false);
             }
-        });
 
-        return listItem;
+            final Tour currTour = tourList.get(position);
+
+            TextView name = listItem.findViewById(R.id.textView_name);
+            name.setText(currTour.getName());
+
+            TextView stops = listItem.findViewById(R.id.textView_stops);
+            stops.setText(currTour.getStops());
+
+            TextView tags = listItem.findViewById(R.id.textView_tags);
+            tags.setText(currTour.getTags());
+
+            Button viewButton = listItem.findViewById(R.id.view_button);
+            viewButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ((TextView)findViewById(R.id.tour_name)).setText(String.format(name_prefix, currTour.getName()));
+                    ((TextView)findViewById(R.id.tour_stops)).setText(String.format(stops_prefix, currTour.getStops()));
+                    ((TextView)findViewById(R.id.tour_tags)).setText(String.format(tags_prefix, currTour.getTags()));
+                    ((TextView)findViewById(R.id.tour_duration)).setText(String.format(duration_prefix, currTour.getDuration()));
+                    if(currTour.getWalking()) {
+                        ((TextView)findViewById(R.id.tour_transport)).setText(String.format(transport_prefix, "Walk"));
+                    }
+                    else {
+                        ((TextView)findViewById(R.id.tour_transport)).setText(String.format(transport_prefix, "Drive"));
+                    }
+                    ((TextView)findViewById(R.id.tour_capacity)).setText(String.format(capacity_prefix, currTour.getCapacity()));
+
+                    Button bookButton = findViewById(R.id.book_button);
+                    bookButton.setOnClickListener(new View.OnClickListener() {
+                       public void onClick(View v) {
+                           Log.d("BUTTON", "book button pressed");
+                       }
+                    });
+                    Button exitButton = findViewById(R.id.tour_details_exit_button);
+                    exitButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            findViewById(R.id.details_window).setVisibility(View.GONE);
+                        }
+                    });
+
+                    findViewById(R.id.details_window).setVisibility(View.VISIBLE);
+                }
+            });
+
+            return listItem;
+        }
     }
 }

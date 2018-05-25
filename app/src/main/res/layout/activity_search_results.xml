@@ -1,9 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controllers.SearchResults">
 
-</ListView>
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/details_window"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="144dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="144dp"
+        android:background="@color/gydeYellow"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tour_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/name_txt"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tour_stops"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tour_stops"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/stops_txt"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/tour_tags"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tour_name" />
+
+        <TextView
+            android:id="@+id/tour_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/tags_txt"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/tour_transport"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tour_stops" />
+
+        <TextView
+            android:id="@+id/tour_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/duration_txt"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toStartOf="@+id/tour_transport"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tour_transport" />
+
+        <TextView
+            android:id="@+id/tour_transport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/transport_txt"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@id/book_button"
+            app:layout_constraintEnd_toStartOf="@+id/tour_capacity"
+            app:layout_constraintStart_toEndOf="@+id/tour_duration"
+            app:layout_constraintTop_toBottomOf="@+id/tour_tags" />
+
+        <TextView
+            android:id="@+id/tour_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/capacity_txt"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tour_transport"
+            app:layout_constraintTop_toTopOf="@+id/tour_transport" />
+
+        <Button
+            android:id="@+id/book_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/book_txt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tour_transport" />
+
+        <Button
+            android:id="@+id/tour_details_exit_button"
+            android:layout_width="32dp"
+            android:layout_height="36dp"
+            android:text="x"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</RelativeLayout>

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import gydes.gyde.R;
 import gydes.gyde.models.Tour;
@@ -36,6 +38,7 @@ public class SearchResults extends ListActivity {
     final static String duration_prefix = "Duration: %s";
     final static String transport_prefix = "Transport: %s";
     final static String capacity_prefix = "Capacity: %s";
+    final static long MILLIS_IN_SIX_DAYS = 518400000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class SearchResults extends ListActivity {
         setContentView(R.layout.activity_search_results);
 
         findViewById(R.id.details_window).setVisibility(View.GONE);
+        findViewById(R.id.calendar_window).setVisibility(View.GONE);
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -133,7 +137,21 @@ public class SearchResults extends ListActivity {
                     Button bookButton = findViewById(R.id.book_button);
                     bookButton.setOnClickListener(new View.OnClickListener() {
                        public void onClick(View v) {
-                           Log.d("BUTTON", "book button pressed");
+                           findViewById(R.id.details_window).setVisibility(View.GONE);
+
+                           CalendarView cal = findViewById(R.id.date_calendar);
+                           cal.setMinDate(System.currentTimeMillis());
+                           cal.setMaxDate(cal.getMinDate() + MILLIS_IN_SIX_DAYS);
+                           cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                               @Override
+                               public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                                   Calendar calendar = Calendar.getInstance();
+                                   calendar.set(year, month, dayOfMonth);
+                                   final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                               }
+                           });
+
+                           findViewById(R.id.calendar_window).setVisibility(View.VISIBLE);
                        }
                     });
                     Button exitButton = findViewById(R.id.tour_details_exit_button);

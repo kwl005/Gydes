@@ -46,7 +46,20 @@ public class SearchResults extends ListActivity {
         setContentView(R.layout.activity_search_results);
 
         findViewById(R.id.details_window).setVisibility(View.GONE);
+        Button exitDetailsButton = findViewById(R.id.tour_details_exit_button);
+        exitDetailsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                findViewById(R.id.details_window).setVisibility(View.GONE);
+            }
+        });
+
         findViewById(R.id.calendar_window).setVisibility(View.GONE);
+        Button exitCalButton = findViewById(R.id.calendar_exit_button);
+        exitCalButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                findViewById(R.id.calendar_window).setVisibility(View.GONE);
+            }
+        });
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -135,6 +148,7 @@ public class SearchResults extends ListActivity {
                     ((TextView)findViewById(R.id.tour_capacity)).setText(String.format(capacity_prefix, currTour.getCapacity()));
 
                     Button bookButton = findViewById(R.id.book_button);
+                    bookButton.setOnClickListener(null);
                     bookButton.setOnClickListener(new View.OnClickListener() {
                        public void onClick(View v) {
                            findViewById(R.id.details_window).setVisibility(View.GONE);
@@ -148,17 +162,13 @@ public class SearchResults extends ListActivity {
                                    Calendar calendar = Calendar.getInstance();
                                    calendar.set(year, month, dayOfMonth);
                                    final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+                                   //TODO open a time picker and receive time input
                                }
                            });
 
                            findViewById(R.id.calendar_window).setVisibility(View.VISIBLE);
                        }
-                    });
-                    Button exitButton = findViewById(R.id.tour_details_exit_button);
-                    exitButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            findViewById(R.id.details_window).setVisibility(View.GONE);
-                        }
                     });
 
                     findViewById(R.id.details_window).setVisibility(View.VISIBLE);

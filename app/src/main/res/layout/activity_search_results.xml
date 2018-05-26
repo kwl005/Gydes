@@ -128,12 +128,10 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/calendar_window"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="108dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="108dp"
         android:background="@color/gydeYellow"
         android:gravity="center"
         android:visibility="visible">
@@ -142,5 +140,13 @@
             android:id="@+id/date_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/calendar_exit_button"
+            android:layout_width="32dp"
+            android:layout_height="36dp"
+            android:text="x"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 </RelativeLayout>

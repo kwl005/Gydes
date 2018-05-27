@@ -1,7 +1,9 @@
 package gydes.gyde.controllers;
 
+import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,25 +27,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import gydes.gyde.R;
+import gydes.gyde.models.BookTourDialogFragment;
 import gydes.gyde.models.Tour;
 
 public class SearchResults extends ListActivity {
-
-    final static String name_prefix = "Name: %s";
-    final static String stops_prefix = "Stops: %s";
-    final static String tags_prefix = "Tags: %s";
-    final static String duration_prefix = "Duration: %s";
-    final static String transport_prefix = "Transport: %s";
-    final static String capacity_prefix = "Capacity: %s";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-
-        findViewById(R.id.details_window).setVisibility(View.GONE);
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -118,32 +114,8 @@ public class SearchResults extends ListActivity {
             Button viewButton = listItem.findViewById(R.id.view_button);
             viewButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    ((TextView)findViewById(R.id.tour_name)).setText(String.format(name_prefix, currTour.getName()));
-                    ((TextView)findViewById(R.id.tour_stops)).setText(String.format(stops_prefix, currTour.getStops()));
-                    ((TextView)findViewById(R.id.tour_tags)).setText(String.format(tags_prefix, currTour.getTags()));
-                    ((TextView)findViewById(R.id.tour_duration)).setText(String.format(duration_prefix, currTour.getDuration()));
-                    if(currTour.getWalking()) {
-                        ((TextView)findViewById(R.id.tour_transport)).setText(String.format(transport_prefix, "Walk"));
-                    }
-                    else {
-                        ((TextView)findViewById(R.id.tour_transport)).setText(String.format(transport_prefix, "Drive"));
-                    }
-                    ((TextView)findViewById(R.id.tour_capacity)).setText(String.format(capacity_prefix, currTour.getCapacity()));
-
-                    Button bookButton = findViewById(R.id.book_button);
-                    bookButton.setOnClickListener(new View.OnClickListener() {
-                       public void onClick(View v) {
-                           Log.d("BUTTON", "book button pressed");
-                       }
-                    });
-                    Button exitButton = findViewById(R.id.tour_details_exit_button);
-                    exitButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            findViewById(R.id.details_window).setVisibility(View.GONE);
-                        }
-                    });
-
-                    findViewById(R.id.details_window).setVisibility(View.VISIBLE);
+                    BookTourDialogFragment frag = BookTourDialogFragment.newInstance(currTour);
+                    frag.show(getFragmentManager(), "tour details");
                 }
             });
 

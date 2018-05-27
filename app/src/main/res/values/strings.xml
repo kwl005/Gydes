@@ -39,5 +39,6 @@
     <string name="traveler_txt">Traveler</string>
     <string name="guide_txt">Guide</string>
     <string name="view_txt">View</string>
+    <string name="title_activity_book_tour">BookTour</string>
 
 </resources>

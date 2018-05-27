@@ -12,18 +12,18 @@ import android.widget.TextView;
 
 import gydes.gyde.R;
 
-public class BookTourDialogFragment extends DialogFragment {
-    Tour tour;
+public class TourDetailsDialogFragment extends DialogFragment {
 
     final static String stops_prefix = "Stops: %s";
     final static String tags_prefix = "Tags: %s";
     final static String duration_prefix = "Duration: %s";
     final static String transport_prefix = "Transport: %s";
     final static String capacity_prefix = "Capacity: %s";
-    final static long MILLIS_IN_SIX_DAYS = 518400000;
 
-    public static BookTourDialogFragment newInstance(Tour t) {
-        BookTourDialogFragment frag = new BookTourDialogFragment();
+    Tour tour;
+
+    public static TourDetailsDialogFragment newInstance(Tour t) {
+        TourDetailsDialogFragment frag = new TourDetailsDialogFragment();
         Bundle b = new Bundle();
         b.putParcelable("tour", t);
         frag.setArguments(b);
@@ -60,26 +60,14 @@ public class BookTourDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.book_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                Log.d("BUTTON", "book button pressed");
-                /*CalendarView cal = findViewById(R.id.date_calendar);
-                cal.setMinDate(System.currentTimeMillis());
-                cal.setMaxDate(cal.getMinDate() + MILLIS_IN_SIX_DAYS);
-                cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                    @Override
-                    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(year, month, dayOfMonth);
-                        final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                    }
-                });
-
-                findViewById(R.id.calendar_window).setVisibility(View.VISIBLE);*/
+                DateTimePickerDialogFragment frag = new DateTimePickerDialogFragment();
+                frag.show(getFragmentManager(), "date time picker");
             }
         });
         builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                BookTourDialogFragment.this.getDialog().cancel();
+                TourDetailsDialogFragment.this.getDialog().cancel();
             }
         });
 

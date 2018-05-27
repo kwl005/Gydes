@@ -1,14 +1,10 @@
 package gydes.gyde.controllers;
 
-import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.app.SearchManager;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,10 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import gydes.gyde.R;
-import gydes.gyde.models.BookTourDialogFragment;
+import gydes.gyde.models.TourDetailsDialogFragment;
 import gydes.gyde.models.Tour;
 
 public class SearchResults extends ListActivity {
@@ -114,7 +108,7 @@ public class SearchResults extends ListActivity {
             Button viewButton = listItem.findViewById(R.id.view_button);
             viewButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    BookTourDialogFragment frag = BookTourDialogFragment.newInstance(currTour);
+                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour);
                     frag.show(getFragmentManager(), "tour details");
                 }
             });

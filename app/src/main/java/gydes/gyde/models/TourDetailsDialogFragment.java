@@ -59,7 +59,7 @@ public class TourDetailsDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.book_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                DateTimePickerDialogFragment frag = new DateTimePickerDialogFragment();
+                DateTimePickerDialogFragment frag = DateTimePickerDialogFragment.newInstance(tour);
                 frag.show(getFragmentManager(), "date time picker");
             }
         });

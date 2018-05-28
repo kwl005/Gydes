@@ -16,6 +16,14 @@
     <string name="firebase_user_locations_path" translatable="false">locations/users</string>
     <string name="firebase_users_path" translatable="false">users</string>
     <string name="firebase_tours_path" translatable="false">tours</string>
+    <string name="firebase_trav_path" translatable="false">traveler</string>
+    <string name="firebase_guide_path" translatable="false">guide</string>
+    <string name="firebase_book_path" translatable="false">bookings</string>
+    <string name="firebase_tID_path" translatable="false">travelerID</string>
+    <string name="firebase_gID_path" translatable="false">guideID</string>
+    <string name="firebase_tour_path" translatable="false">tour</string>
+    <string name="firebase_sameasprev_path" translatable="false">sameAsPrev</string>
+
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
 
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>

@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -41,7 +40,7 @@ public class TourDetailsDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.activity_book_tour, null);
+        View view = inflater.inflate(R.layout.tour_details_dialog, null);
 
         builder.setTitle(tour.getName());
 
@@ -60,7 +59,7 @@ public class TourDetailsDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.book_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                DateTimePickerDialogFragment frag = new DateTimePickerDialogFragment();
+                DateTimePickerDialogFragment frag = DateTimePickerDialogFragment.newInstance(tour);
                 frag.show(getFragmentManager(), "date time picker");
             }
         });

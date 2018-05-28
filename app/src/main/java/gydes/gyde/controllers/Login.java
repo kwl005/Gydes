@@ -99,27 +99,31 @@ public class Login extends AppCompatActivity {
                     currentUserRef.child("email").setValue(currentUser.getEmail());
                     currentUserRef.child("isGuide").setValue(false);
 
-                    final DatabaseReference traveler = currentUserRef.child("traveler");
+                    final DatabaseReference traveler = currentUserRef.child(getString(R.string.firebase_trav_path));
                     traveler.child("avgRating").setValue(0);
                     traveler.child("numRatings").setValue(0);
                     for(int i = 0; i < days.length; i++) {
                         for(int j = 0; j < times.length; j++) {
-                            traveler.child("bookings").child(days[i]).child(times[j]).child("travelerID").setValue(currentUser.getUid());
-                            traveler.child("bookings").child(days[i]).child(times[j]).child("guideID").setValue("");
-                            traveler.child("bookings").child(days[i]).child(times[j]).child("tour").setValue(null);
+                            DatabaseReference ref = traveler.child(getString(R.string.firebase_book_path)).child(days[i]).child(times[j]);
+                            ref.child(getString(R.string.firebase_tID_path)).setValue(currentUser.getUid());
+                            ref.child(getString(R.string.firebase_gID_path)).setValue("");
+                            ref.child(getString(R.string.firebase_tour_path)).setValue(null);
+                            ref.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
                         }
                     }
 
-                    final DatabaseReference guide = currentUserRef.child("guide");
+                    final DatabaseReference guide = currentUserRef.child(getString(R.string.firebase_guide_path));
                     guide.child("tourIDs");
                     guide.child("bio").setValue("");
                     guide.child("avgRating").setValue(0);
                     guide.child("numRatings").setValue(0);
                     for(int i = 0; i < days.length; i++) {
                         for(int j = 0; j < times.length; j++) {
-                            guide.child("bookings").child(days[i]).child(times[j]).child("travelerID").setValue("");
-                            guide.child("bookings").child(days[i]).child(times[j]).child("guideID").setValue(currentUser.getUid());
-                            guide.child("bookings").child(days[i]).child(times[j]).child("tour").setValue(null);
+                            DatabaseReference ref = guide.child(getString(R.string.firebase_book_path)).child(days[i]).child(times[j]);
+                            ref.child(getString(R.string.firebase_tID_path)).setValue("");
+                            ref.child(getString(R.string.firebase_gID_path)).setValue(currentUser.getUid());
+                            ref.child(getString(R.string.firebase_tour_path)).setValue(null);
+                            ref.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
                         }
                     }
                     for(int i = 0; i < days.length; i++) {

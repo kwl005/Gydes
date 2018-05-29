@@ -134,6 +134,10 @@ public class Login extends AppCompatActivity {
                     isGuide = false;
                 }
 
+                // Initialize user singleton
+                User user = User.INSTANCE;
+                user.init(currentUser);
+
                 Login.currentUserRef = usersRef.child(currentUser.getUid());
                 Login.currentUserRef.child("isGuide").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

@@ -176,6 +176,8 @@ public class NavigationDrawerBuilder  {
                         activity.finish();
                         break;
                     case BOOKINGS:
+                        activity.startActivity(new Intent(activity, MyBookingsActivity.class));
+                        activity.finish();
                         break;
                     case REPORT:
                         break;

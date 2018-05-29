@@ -170,10 +170,10 @@ public class NavigationDrawerBuilder  {
             public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                 switch(DrawerItemConstant.getItem(position)) {
                     case PROFILE:
+                        activity.startActivity(new Intent(activity, EditProfile.class));
                         break;
                     case PAYMENTS:
                         activity.startActivity(new Intent(activity, PaymentActivity.class));
-                        activity.finish();
                         break;
                     case BOOKINGS:
                         break;

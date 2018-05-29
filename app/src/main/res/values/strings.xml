@@ -23,12 +23,22 @@
     <string name="firebase_gID_path" translatable="false">guideID</string>
     <string name="firebase_tour_path" translatable="false">tour</string>
     <string name="firebase_sameasprev_path" translatable="false">sameAsPrev</string>
+    <string name="firebase_displayname_path" translatable="false">displayName</string>
+    <string name="firebase_email_path" translatable="false">email</string>
+    <string name="firebase_phonenumber_path" translatable="false">phoneNumber</string>
+    <string name="firebase_uid_path" translatable="false">uid</string>
+    <string name="firebase_isguide_path" translatable="false">isGuide</string>
 
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
 
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
 
     <string name="todo">TODO</string>
+
+    <string name="profile_txt">Profile</string>
+    <string name="display_name_txt">Name</string>
+    <string name="email_txt">Email</string>
+    <string name="phone_num_txt">Phone Number</string>
 
     <string name="name_txt">Name:</string>
     <string name="location_txt">Location:</string>
@@ -48,5 +58,6 @@
     <string name="guide_txt">Guide</string>
     <string name="view_txt">View</string>
     <string name="title_activity_book_tour">BookTour</string>
+    <string name="title_activity_edit_profile">EditProfile</string>
 
 </resources>

@@ -1,0 +1,52 @@
+package gydes.gyde.controllers;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import gydes.gyde.R;
+
+public class EditProfile extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_profile);
+
+        Login.currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final EditText displayNameBox = findViewById(R.id.display_name_box);
+                final EditText emailBox = findViewById(R.id.email_box);
+                final EditText phoneNumBox = findViewById(R.id.phone_number_box);
+
+                displayNameBox.setText((String)dataSnapshot.child(getString(R.string.firebase_displayname_path)).getValue());
+                emailBox.setText((String)dataSnapshot.child(getString(R.string.firebase_email_path)).getValue());
+                phoneNumBox.setText((String)dataSnapshot.child(getString(R.string.firebase_phonenumber_path)).getValue());
+
+                findViewById(R.id.save_profile_button).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Login.currentUserRef.child(getString(R.string.firebase_displayname_path)).setValue(displayNameBox.getText().toString());
+                        Login.currentUserRef.child(getString(R.string.firebase_email_path)).setValue(emailBox.getText().toString());
+                        Login.currentUserRef.child(getString(R.string.firebase_phonenumber_path)).setValue(phoneNumBox.getText().toString());
+                        Toast toast = Toast.makeText(EditProfile.this, "Updating profile...", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+}

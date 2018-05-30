@@ -36,6 +36,8 @@ import gydes.gyde.R;
 public class NavigationDrawerBuilder  {
 
     private static final String TAG = NavigationDrawerBuilder.class.getSimpleName();
+    private static final String TO_TRAV_STR = "To Traveler View";
+    private static final String TO_GUIDE_STR = "To Guide View";
 
     private enum DrawerItemConstant {
         PROFILE(1, "Account"),
@@ -84,7 +86,12 @@ public class NavigationDrawerBuilder  {
         PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withIcon(R.drawable.payments).withSelectable(false).withIdentifier(DrawerItemConstant.PAYMENTS.getIndex()).withName(DrawerItemConstant.PAYMENTS.getName());
         PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withIcon(R.drawable.report).withSelectable(false).withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
         PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withIcon(R.drawable.tours).withSelectable(false).withIdentifier(DrawerItemConstant.BOOKINGS.getIndex()).withName(DrawerItemConstant.BOOKINGS.getName());
-        PrimaryDrawerItem toggleItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.TOGGLE.getIndex()).withName(DrawerItemConstant.TOGGLE.getName());
+        PrimaryDrawerItem toggleItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.TOGGLE.getIndex());
+        if(Login.isGuide) {
+            toggleItem.withName(TO_TRAV_STR);
+        } else {
+            toggleItem.withName(TO_GUIDE_STR);
+        }
 
         // Setup profile image
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {

@@ -28,6 +28,7 @@
     <string name="firebase_phonenumber_path" translatable="false">phoneNumber</string>
     <string name="firebase_uid_path" translatable="false">uid</string>
     <string name="firebase_isguide_path" translatable="false">isGuide</string>
+    <string name="firebase_bio_path" translatable="false">bio</string>
 
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
 
@@ -39,6 +40,7 @@
     <string name="display_name_txt">Name</string>
     <string name="email_txt">Email</string>
     <string name="phone_num_txt">Phone Number</string>
+    <string name="bio_txt">Bio</string>
 
     <string name="name_txt">Name:</string>
     <string name="location_txt">Location:</string>

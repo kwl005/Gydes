@@ -108,13 +108,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phone_number_text" />
 
+    <TextView
+        android:id="@+id/bio_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bio_txt"
+        android:textColor="@color/gydeBlue"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone_number_box"
+        app:layout_constraintBottom_toTopOf="@+id/bio_box"/>
+
     <EditText
         android:id="@+id/bio_box"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:visibility="gone"/>
+        android:textColor="@color/gydeBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bio_text"/>
 
     <Button
         android:id="@+id/save_profile_button"
@@ -126,5 +143,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_number_box" />
+        app:layout_constraintTop_toBottomOf="@+id/bio_box" />
+
+
 </android.support.constraint.ConstraintLayout>

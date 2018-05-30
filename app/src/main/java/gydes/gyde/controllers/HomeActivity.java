@@ -53,6 +53,7 @@ import java.util.HashMap;
 
 import gydes.gyde.R;
 import gydes.gyde.controllers.addTour.BeginningConfirmActivity;
+import gydes.gyde.models.User;
 
 public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
@@ -69,6 +70,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Toast.makeText(this, "Welcome! " + User.INSTANCE.getDisplayName(), Toast.LENGTH_SHORT).show();
 
         // Setup navigation drawer, action bar and status bar
         final Drawer result = NavigationDrawerBuilder.build(this, savedInstanceState);

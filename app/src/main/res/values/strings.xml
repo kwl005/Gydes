@@ -52,9 +52,15 @@
     <string name="capacity_txt">Capacity:</string>
     <string name="tags_txt">Tags:</string>
 
+    <string name="name_prompt">Please enter a name for the tour</string>
+    <string name="location_prompt">Please enter a location for the tour</string>
+    <string name="duration_prompt">Please enter a duration for the tour</string>
+    <string name="transport_prompt">Please enter a mode of transportation for the tour</string>
+
     <string name="save_txt">Save</string>
     <string name="book_txt">Book</string>
     <string name="cancel_txt">Cancel</string>
+    <string name="ok_txt">Ok</string>
 
     <string name="traveler_txt">Traveler</string>
     <string name="guide_txt">Guide</string>

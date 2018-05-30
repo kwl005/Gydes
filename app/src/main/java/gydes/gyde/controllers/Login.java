@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.*;
+
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.SignInButton;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
+
 import gydes.gyde.R;
 import gydes.gyde.models.*;
 
@@ -38,8 +40,8 @@ public class Login extends AppCompatActivity {
 
     private static final String[] days = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
     private static final String[] times = {"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
-        "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00",
-        "22:00", "23:00"};
+            "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00",
+            "22:00", "23:00"};
 
     // Listener for activity_login button
     private OnClickListener loginListener = new OnClickListener() {
@@ -68,18 +70,11 @@ public class Login extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 initializeNewUserInstance();
-
-                if(!Login.isGuide) {
-                    startActivity(new Intent(Login.this, HomeActivity.class));
-                }
-                else {
-                    startActivity(new Intent(Login.this, GuideHome.class));
-                }
             } else {
                 Log.d(TAG, "onActivityResult: result code " + resultCode);
             }
@@ -92,7 +87,7 @@ public class Login extends AppCompatActivity {
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(currentUser.getUid())) {
+                if (!dataSnapshot.hasChild(currentUser.getUid())) {
                     Login.currentUserRef = usersRef.child(currentUser.getUid());
                     currentUserRef.child(getString(R.string.firebase_displayname_path)).setValue(currentUser.getDisplayName());
                     currentUserRef.child(getString(R.string.firebase_uid_path)).setValue(currentUser.getUid());
@@ -103,8 +98,8 @@ public class Login extends AppCompatActivity {
                     final DatabaseReference traveler = currentUserRef.child(getString(R.string.firebase_trav_path));
                     traveler.child("avgRating").setValue(0);
                     traveler.child("numRatings").setValue(0);
-                    for(int i = 0; i < days.length; i++) {
-                        for(int j = 0; j < times.length; j++) {
+                    for (int i = 0; i < days.length; i++) {
+                        for (int j = 0; j < times.length; j++) {
                             DatabaseReference ref = traveler.child(getString(R.string.firebase_book_path)).child(days[i]).child(times[j]);
                             ref.child(getString(R.string.firebase_tID_path)).setValue(currentUser.getUid());
                             ref.child(getString(R.string.firebase_gID_path)).setValue("");
@@ -118,8 +113,8 @@ public class Login extends AppCompatActivity {
                     guide.child("bio").setValue("");
                     guide.child("avgRating").setValue(0);
                     guide.child("numRatings").setValue(0);
-                    for(int i = 0; i < days.length; i++) {
-                        for(int j = 0; j < times.length; j++) {
+                    for (int i = 0; i < days.length; i++) {
+                        for (int j = 0; j < times.length; j++) {
                             DatabaseReference ref = guide.child(getString(R.string.firebase_book_path)).child(days[i]).child(times[j]);
                             ref.child(getString(R.string.firebase_tID_path)).setValue("");
                             ref.child(getString(R.string.firebase_gID_path)).setValue(currentUser.getUid());
@@ -127,8 +122,8 @@ public class Login extends AppCompatActivity {
                             ref.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
                         }
                     }
-                    for(int i = 0; i < days.length; i++) {
-                        for(int j = 0; j < times.length; j++) {
+                    for (int i = 0; i < days.length; i++) {
+                        for (int j = 0; j < times.length; j++) {
                             traveler.child("schedule").child(days[i]).child(times[j]).setValue(false);
                         }
                     }
@@ -140,16 +135,13 @@ public class Login extends AppCompatActivity {
                 user.init(currentUser);
 
                 Login.currentUserRef = usersRef.child(currentUser.getUid());
-                Login.currentUserRef.child("isGuide").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Login.isGuide = (boolean)dataSnapshot.getValue();
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d("Data Access", "Login.java: Error accessing isGuide upon login");
-                    }
-                });
+                Login.isGuide = (boolean) dataSnapshot.child(currentUser.getUid()).child(getString(R.string.firebase_isguide_path)).getValue();
+
+                if (Login.isGuide) {
+                    startActivity(new Intent(Login.this, GuideHome.class));
+                } else {
+                    startActivity(new Intent(Login.this, HomeActivity.class));
+                }
             }
 
             @Override

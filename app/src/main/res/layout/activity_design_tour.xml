@@ -133,15 +133,32 @@
         app:layout_constraintStart_toStartOf="@+id/duration_text"
         app:layout_constraintTop_toBottomOf="@+id/duration_text" />
 
-    <ToggleButton
-        android:id="@+id/transport_button"
+    <RadioGroup
+        android:id="@+id/transport_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textOff="@string/walk_txt"
-        android:textOn="@string/drive_txt"
-        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/duration_box"
         app:layout_constraintBottom_toBottomOf="@+id/transport_text"
-        app:layout_constraintEnd_toEndOf="@+id/duration_box" />
+        app:layout_constraintTop_toTopOf="@+id/transport_text">
+
+        <RadioButton
+            android:id="@+id/walk_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/gydeBlue"
+            android:text="@string/walk_txt"
+            android:textColor="@color/gydeBlue" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/gydeBlue"
+            android:text="@string/drive_txt"
+            android:textColor="@color/gydeBlue" />
+    </RadioGroup>
 
     <TextView
         android:id="@+id/capacity_text"
@@ -166,7 +183,8 @@
         android:textColor="@color/gydeBlue"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/capacity_text"
-        app:layout_constraintEnd_toEndOf="@+id/transport_button" />
+        app:layout_constraintEnd_toEndOf="@+id/transport_buttons"
+        tools:layout_editor_absoluteX="157dp" />
 
     <TextView
         android:id="@+id/tags_text"

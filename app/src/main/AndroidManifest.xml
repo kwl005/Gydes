@@ -57,7 +57,12 @@
         <activity android:name=".controllers.GetProfileImageActivity" />
 
         <service
-            android:name=".controllers.TrackerService"
+        android:name=".controllers.TrackerService"
+        android:enabled="true"
+        android:exported="true" />
+
+        <service
+            android:name=".controllers.TourNotificationService"
             android:enabled="true"
             android:exported="true" />
 

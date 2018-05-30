@@ -114,8 +114,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST);
         }
+
+        startTourNotificationService();
     }
 
+    private void startTourNotificationService() { startService(new Intent(this, TourNotificationService.class)); }
     private void startTrackerService() {
         startService(new Intent(this, TrackerService.class));
     }

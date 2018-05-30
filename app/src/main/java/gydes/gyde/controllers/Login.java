@@ -94,10 +94,11 @@ public class Login extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild(currentUser.getUid())) {
                     Login.currentUserRef = usersRef.child(currentUser.getUid());
-                    currentUserRef.child("displayName").setValue(currentUser.getDisplayName());
-                    currentUserRef.child("uid").setValue(currentUser.getUid());
-                    currentUserRef.child("email").setValue(currentUser.getEmail());
-                    currentUserRef.child("isGuide").setValue(false);
+                    currentUserRef.child(getString(R.string.firebase_displayname_path)).setValue(currentUser.getDisplayName());
+                    currentUserRef.child(getString(R.string.firebase_uid_path)).setValue(currentUser.getUid());
+                    currentUserRef.child(getString(R.string.firebase_email_path)).setValue(currentUser.getEmail());
+                    currentUserRef.child(getString(R.string.firebase_isguide_path)).setValue(false);
+                    currentUserRef.child(getString(R.string.firebase_phonenumber_path)).setValue(currentUser.getPhoneNumber());
 
                     final DatabaseReference traveler = currentUserRef.child(getString(R.string.firebase_trav_path));
                     traveler.child("avgRating").setValue(0);

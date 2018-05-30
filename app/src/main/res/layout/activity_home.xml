@@ -28,28 +28,42 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="1">
-
                 <SearchView
                     android:id="@+id/search_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="5dp"
-                    android:iconifiedByDefault="false"
                     android:orientation="horizontal" />
             </LinearLayout>
-
         </android.support.v7.widget.Toolbar>
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <FrameLayout
+            android:id="@+id/home_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="gydes.gyde.controllers.HomeActivity" />
+            android:layout_height="match_parent">
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="gydes.gyde.controllers.HomeActivity" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_gravity="bottom|start"
+                android:id="@+id/tour_pin_button"
+                android:backgroundTint="@color/gydeYellow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/tour_pin"
+                app:borderWidth="0dp"
+                />
+        </FrameLayout>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

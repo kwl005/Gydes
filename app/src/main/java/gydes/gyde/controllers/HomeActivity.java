@@ -91,7 +91,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchBar = (SearchView)findViewById(R.id.search_bar);
         searchBar.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchResults.class)));
-
+        searchBar.setFocusable(true);
+        searchBar.setIconifiedByDefault(true);
         findViewById(R.id.drawer_layout).requestFocus();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

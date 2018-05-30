@@ -74,9 +74,15 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+<<<<<<< HEAD
 
         <activity
             android:name=".controllers.addTour.BeginningConfirmActivity" />
+=======
+        <activity
+            android:name=".controllers.EditProfile"
+            android:label="@string/title_activity_edit_profile"></activity>
+>>>>>>> 56b539c330ab8c02f6ff39322450704255a6b09e
     </application>
 
 </manifest>

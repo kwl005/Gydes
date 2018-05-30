@@ -36,7 +36,7 @@ public class SearchResults extends ListActivity {
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY));
+            final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY).trim());
             final ArrayList<Tour> tours = new ArrayList<Tour>();
 
             final ButtonAdapter adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);

@@ -80,7 +80,7 @@ public class NavigationDrawerBuilder  {
         }
     }
 
-    static Drawer build(final AppCompatActivity activity, final Bundle savedInstanceState) {
+    public static Drawer build(final AppCompatActivity activity, final Bundle savedInstanceState) {
         // Set up items in the drawer
         PrimaryDrawerItem profileItem = new PrimaryDrawerItem().withIcon(R.drawable.account).withSelectable(false).withIdentifier(DrawerItemConstant.PROFILE.getIndex()).withName(DrawerItemConstant.PROFILE.getName());
         PrimaryDrawerItem paymentItem = new PrimaryDrawerItem().withIcon(R.drawable.payments).withSelectable(false).withIdentifier(DrawerItemConstant.PAYMENTS.getIndex()).withName(DrawerItemConstant.PAYMENTS.getName());

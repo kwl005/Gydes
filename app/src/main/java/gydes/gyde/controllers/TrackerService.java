@@ -34,7 +34,6 @@ import gydes.gyde.R;
 public class TrackerService extends Service {
 
     private static final String TAG = TrackerService.class.getSimpleName();
-    private FirebaseUser currentUser;
 
     protected BroadcastReceiver stopReceiver = new BroadcastReceiver() {
         @Override
@@ -104,5 +103,4 @@ public class TrackerService extends Service {
             }, null);
         }
     }
-
 }

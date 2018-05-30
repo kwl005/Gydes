@@ -10,6 +10,8 @@
         android:name="android.hardware.camera2"
         android:required="true" />
 
+    <uses-sdk android:minSdkVersion="27" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -72,6 +74,12 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
+        <activity
+            android:name=".controllers.addTour.BeginningConfirmActivity" />
+        <activity
+            android:name=".controllers.EditProfile"
+            android:label="@string/title_activity_edit_profile"></activity>
         <activity
             android:name=".controllers.EditProfile"
             android:label="@string/title_activity_edit_profile"></activity>

@@ -2,12 +2,16 @@ package gydes.gyde.controllers;
 
 import android.Manifest;
 import android.app.SearchManager;
+import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
+import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -15,22 +19,30 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,22 +52,30 @@ import com.mikepenz.materialdrawer.Drawer;
 import java.util.HashMap;
 
 import gydes.gyde.R;
+import gydes.gyde.controllers.addTour.BeginningConfirmActivity;
+import gydes.gyde.models.User;
 
 public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
+    private FusedLocationProviderClient locationProviderClient;
+    private LocationManager locationManager;
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private static final int PERMISSIONS_REQUEST = 1;
     private static final String TAG = HomeActivity.class.getSimpleName();
-    private boolean isMapReady;
+    private FloatingActionButton tourPinButton;
+    private ImageView imageView;
+    private FrameLayout homeFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Toast.makeText(this, "Welcome! " + User.INSTANCE.getDisplayName(), Toast.LENGTH_SHORT).show();
+
         // Setup navigation drawer, action bar and status bar
         final Drawer result = NavigationDrawerBuilder.build(this, savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +92,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.gydeYellow));
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchBar = findViewById(R.id.search_bar);
+        SearchView searchBar = (SearchView)findViewById(R.id.search_bar);
         searchBar.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchResults.class)));
         searchBar.setFocusable(true);
         searchBar.setIconifiedByDefault(true);
@@ -89,19 +109,29 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             mapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    if (isMapReady) {
-                        subscribeToUpdates();
-                    }
+                    subscribeToUpdates();
                 }
             });
         }
 
+        // Set up tour pin
+        homeFrame = (FrameLayout) findViewById(R.id.home_frame);
+        homeFrame.setOnDragListener(new TourPinDragListener());
+        imageView = new ImageView(this);
+        imageView.setVisibility(View.INVISIBLE);
+        imageView.setImageResource(R.drawable.tour_pin);
+        imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        homeFrame.addView(imageView);
+        tourPinButton = (FloatingActionButton) findViewById(R.id.tour_pin_button);
+        tourPinButton.setOnTouchListener(new TourPinTouchListener());
+
         // Check GPS is enabled
-        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(this, "Please enable location service", Toast.LENGTH_LONG).show();
             finish();
         }
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Check location permission is granted - if it is, start
         // the service, otherwise request the permission
@@ -142,7 +172,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        map.setMaxZoomPreference(32);
+        map.setMaxZoomPreference(64);
         map.setTrafficEnabled(true);
         map.setBuildingsEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
@@ -154,7 +184,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             map.setMyLocationEnabled(true);
         }
 
-        isMapReady = true;
+        // Move camera to user's location when map is ready
+        locationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null) {
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16f));
+                }
+            }
+        });
     }
 
     private void subscribeToUpdates() {
@@ -162,6 +200,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                // Check whether the user is user themselves
 //                setMarker(dataSnapshot);
             }
 
@@ -205,5 +244,55 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             builder.include(marker.getPosition());
         }
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 20));
+    }
+
+    private final class TourPinDragListener implements View.OnDragListener {
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            int action = dragEvent.getAction();
+            switch (action) {
+                case DragEvent.ACTION_DRAG_STARTED:
+//                    Toast.makeText(getBaseContext(), "Drag started", Toast.LENGTH_SHORT).show();
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+//                    Toast.makeText(getBaseContext(), "Drag entered", Toast.LENGTH_SHORT).show();
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+//                    Toast.makeText(getBaseContext(), "Drag exited", Toast.LENGTH_SHORT).show();
+                    break;
+                case DragEvent.ACTION_DROP:
+                    int x = (int)dragEvent.getX();
+                    int y = (int)dragEvent.getY();
+                    LatLng latLng = map.getProjection().fromScreenLocation(new Point(x, y));
+                    Toast.makeText(getBaseContext(),
+                            latLng.latitude + ", " + latLng.longitude,
+                            Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getBaseContext(), BeginningConfirmActivity.class);
+                    intent.putExtra("latLng", latLng);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+//                    Log.d(TAG, "onDrag: drag ended.");
+                    break;
+            }
+
+            return true;
+        }
+    }
+
+    private final class TourPinTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(imageView);
+                imageView.startDragAndDrop(data, shadowBuilder, null, 0);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

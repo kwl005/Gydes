@@ -22,13 +22,11 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -52,7 +50,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import java.util.HashMap;
 
 import gydes.gyde.R;
-import gydes.gyde.controllers.addTour.BeginningConfirmActivity;
+import gydes.gyde.controllers.addTour.AddTourConfirmBeginning;
 import gydes.gyde.models.User;
 
 public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -129,7 +127,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(this, "Please enable location service", Toast.LENGTH_LONG).show();
-            finish();
         }
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -264,14 +261,13 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     int x = (int)dragEvent.getX();
                     int y = (int)dragEvent.getY();
                     LatLng latLng = map.getProjection().fromScreenLocation(new Point(x, y));
-                    Toast.makeText(getBaseContext(),
-                            latLng.latitude + ", " + latLng.longitude,
-                            Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(getBaseContext(), BeginningConfirmActivity.class);
-                    intent.putExtra("latLng", latLng);
+//                    Toast.makeText(getBaseContext(),
+//                            latLng.latitude + ", " + latLng.longitude,
+//                            Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getBaseContext(), AddTourConfirmBeginning.class);
+                    intent.putExtra("latitude", latLng.latitude);
+                    intent.putExtra("longitude", latLng.longitude);
                     startActivity(intent);
-                    finish();
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
 //                    Log.d(TAG, "onDrag: drag ended.");

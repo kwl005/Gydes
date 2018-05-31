@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@android:color/white">
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -23,7 +23,36 @@
             app:popupTheme="@style/MaterialDrawerTheme.Light"
             app:title="@string/app_name">
         </android.support.v7.widget.Toolbar>
-
-
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_view"
+                android:layout_margin="@dimen/fab_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:textSize="24sp"
+                android:text="Confirmation (TODO)"
+                android:textColor="@color/yelpNormalText"/>
+            <android.support.design.widget.FloatingActionButton
+                android:src="@drawable/cross"
+                android:id="@+id/cancel_button"
+                android:backgroundTint="@color/yelpRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="@dimen/fab_margin"
+                app:borderWidth="0dp"/>
+            <android.support.design.widget.FloatingActionButton
+                android:src="@drawable/right_arrow"
+                android:id="@+id/continue_button"
+                android:backgroundTint="@color/yelpGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                app:borderWidth="0dp"/>
+        </FrameLayout>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

@@ -22,14 +22,8 @@ public enum User {
     /**
      * Initialize user singleton. All properties can not be set before user instance has been initialized.
      * @param user Firebase user
-     * @throws IllegalStateException if user singleton is initialized the second time.
      */
     public void init(FirebaseUser user) {
-        if(userRef != null) {
-            throw new IllegalStateException("User singleton has been initialized." +
-                    "Please check for existing code for where it was initialized.");
-        }
-
         uid = user.getUid();
         phoneNumber = user.getPhoneNumber();
         displayName = user.getDisplayName();

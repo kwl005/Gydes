@@ -76,13 +76,11 @@
         </activity>
 
         <activity
-            android:name=".controllers.addTour.BeginningConfirmActivity" />
+            android:name=".controllers.addTour.AddTourConfirmBeginning" />
         <activity
             android:name=".controllers.EditProfile"
             android:label="@string/title_activity_edit_profile"></activity>
-        <activity
-            android:name=".controllers.EditProfile"
-            android:label="@string/title_activity_edit_profile"></activity>
+        <activity android:name=".controllers.addTour.AddTourConfirmName" />
     </application>
 
 </manifest>

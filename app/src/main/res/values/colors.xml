@@ -6,4 +6,9 @@
     <color name="gydeYellow">#dfb816</color>
     <color name="gydeBlue">#0099cc</color>
     <color name="gydeBackground">#ECEFF1</color>
+    <color name="yelpNormalText">#333333</color>
+    <color name="yelpMidText">#666666</color>
+    <color name="yelpSubtleText">#999999</color>
+    <color name="yelpGreen">#41a700</color>
+    <color name="yelpRed">#d3232d</color>
 </resources>

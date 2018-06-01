@@ -53,9 +53,7 @@ public class MyTours extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == RC_TOUR_MADE) {
-            Log.d("AAAAA", resultCode + "");
             if(resultCode == RESULT_OK) {
-                Log.d("AAAAA", "updating tours list");
                 updateMyTours();
             }
             else {
@@ -64,7 +62,7 @@ public class MyTours extends AppCompatActivity {
         }
     }
 
-    public void updateMyTours() {
+    void updateMyTours() {
         final ArrayList<Tour> tours = new ArrayList<Tour>();
 
         final TourListAdapter adapter = new TourListAdapter(this, R.layout.tour_list_item, tours, MY_TOURS_BUTTON_OPT);

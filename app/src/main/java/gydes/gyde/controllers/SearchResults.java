@@ -6,20 +6,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
 
@@ -27,12 +41,34 @@ import gydes.gyde.R;
 import gydes.gyde.models.TourDetailsDialogFragment;
 import gydes.gyde.models.Tour;
 
-public class SearchResults extends ListActivity {
+public class SearchResults extends AppCompatActivity {
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        Toolbar toolbar = findViewById(R.id.filter_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Setup navigation drawer, action bar and status bar
+        final Drawer result = NavigationDrawerBuilder.build(this, savedInstanceState);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                result.openDrawer();
+            }
+        });
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.menu);
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.gydeYellow));
+
+        searchView = (SearchView) findViewById(R.id.filter_search_bar);
+        searchView.setFocusable(false);
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -115,5 +151,42 @@ public class SearchResults extends ListActivity {
 
             return listItem;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.filter_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.filter:
+                Toast.makeText(this, "filter clicked", Toast.LENGTH_SHORT).show();
+                openDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public void openDialog() {
+        /*
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.filter_dialog);
+
+        dialog.show();*/
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
+        View view = getLayoutInflater().inflate(R.layout.tour_filter_dialog, null);
+        builder.setView(view);
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 }

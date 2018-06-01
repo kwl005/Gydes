@@ -26,8 +26,11 @@ import java.util.ArrayList;
 import gydes.gyde.R;
 import gydes.gyde.models.TourDetailsDialogFragment;
 import gydes.gyde.models.Tour;
+import gydes.gyde.models.TourListAdapter;
 
 public class SearchResults extends ListActivity {
+
+    public static final int SEARCH_RESULTS_BUTTON_OPT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class SearchResults extends ListActivity {
             final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY).trim());
             final ArrayList<Tour> tours = new ArrayList<Tour>();
 
-            final ButtonAdapter adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
+            final TourListAdapter adapter = new TourListAdapter(this, R.layout.tour_list_item, tours, SEARCH_RESULTS_BUTTON_OPT);
             ListView listView = findViewById(android.R.id.list);
             listView.setAdapter(adapter);
 
@@ -73,47 +76,5 @@ public class SearchResults extends ListActivity {
             }
         }
         return camelCaseStr;
-    }
-
-    class ButtonAdapter extends ArrayAdapter<Tour> {
-        private Context context;
-        private int resourceID;
-        private ArrayList<Tour> tourList;
-
-        public ButtonAdapter(@NonNull Context c, int rID, ArrayList<Tour> list) {
-            super(c, 0, list);
-            context = c;
-            resourceID = rID;
-            tourList = list;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View listItem = convertView;
-            if (listItem == null) {
-                listItem = LayoutInflater.from(context).inflate(resourceID, parent, false);
-            }
-
-            final Tour currTour = tourList.get(position);
-
-            TextView name = listItem.findViewById(R.id.textView_name);
-            name.setText(currTour.getName());
-
-            TextView stops = listItem.findViewById(R.id.textView_stops);
-            stops.setText(currTour.getStops());
-
-            TextView tags = listItem.findViewById(R.id.textView_tags);
-            tags.setText(currTour.getTags());
-
-            Button viewButton = listItem.findViewById(R.id.view_button);
-            viewButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour);
-                    frag.show(getFragmentManager(), "tour details");
-                }
-            });
-
-            return listItem;
-        }
     }
 }

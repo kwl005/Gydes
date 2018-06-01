@@ -104,6 +104,7 @@ public class DesignTour extends AppCompatActivity {
 
                 Login.currentUserRef.child("guide").child("tourIDs").child(tourID).setValue(tourID);
                 Login.currentUserRef.child("guide").child("tourIDs").child(tourID).child("location").setValue(location);
+                setResult(RESULT_OK);
                 finish();
             }
         });

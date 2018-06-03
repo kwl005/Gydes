@@ -1,5 +1,6 @@
 package gydes.gyde.models;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -92,7 +93,8 @@ public class TourDetailsDialogFragment extends DialogFragment {
                 builder.setNegativeButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(TourDetailsDialogFragment.this.getActivity());
+                        final Activity act = TourDetailsDialogFragment.this.getActivity();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(act);
                         builder.setMessage(R.string.delete_tour_confirmation);
                         builder.setPositiveButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
                             @Override
@@ -100,6 +102,7 @@ public class TourDetailsDialogFragment extends DialogFragment {
                                 Login.currentUserRef.child("guide").child("tourIDs").child(tour.getTourID()).removeValue();
                                 DatabaseReference toursRef = Login.currentUserRef.getRoot().child("tours");
                                 toursRef.child(tour.getLocation()).child(tour.getTourID()).removeValue();
+                                ((MyTours)act).updateMyTours();
                             }
                         });
                         builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {

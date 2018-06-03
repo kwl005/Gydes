@@ -221,6 +221,7 @@ public class SearchResults extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
                         EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
+                        EditText capacityBox = (EditText) view.findViewById(R.id.capacity_box);
 
                         final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
                         final TourListAdapter adapter2 = new TourListAdapter(context, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
@@ -228,21 +229,22 @@ public class SearchResults extends AppCompatActivity {
                         listView2.setAdapter(adapter2);
 
 
-
-
-
-
-                        String inputDurationText = durationBox.getText().toString();
+                        String inputDurationText = durationBox.getText().toString().trim();
+                        String inputCapacityText = capacityBox.getText().toString().trim();
                         String inputTagsText = tagsBox.getText().toString();
 
                         if(!inputDurationText.isEmpty()) {
                             int inputDuration = Integer.parseInt(inputDurationText);
                             toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
+                        }
 
+                        if(!inputCapacityText.isEmpty()) {
+                            int inputCapacity = Integer.parseInt(inputCapacityText);
+                            toursCopy.removeIf((Tour tour) -> tour.getCapacity() != inputCapacity);
                         }
 
                         if(!inputTagsText.isEmpty()) {
-                            String[] tags = inputTagsText.split(", ");
+                            String[] tags = inputTagsText.split(",");
 
                             for(int i=0; i<tags.length; i++) {
                                 String tag = tags[i];

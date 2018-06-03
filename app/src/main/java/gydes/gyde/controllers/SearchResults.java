@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -44,6 +45,11 @@ import gydes.gyde.models.Tour;
 
 public class SearchResults extends AppCompatActivity {
     SearchView searchView;
+
+//    final ArrayList<Tour> tours;
+
+    final ArrayList<Tour> tours = new ArrayList<Tour>();
+//    ButtonAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +90,12 @@ public class SearchResults extends AppCompatActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY).trim());
-            final ArrayList<Tour> tours = new ArrayList<Tour>();
+//            final ArrayList<Tour> tours = new ArrayList<Tour>();
+//            tours = new ArrayList<Tour>();
 
             final ButtonAdapter adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
+//            adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
+
             ListView listView = findViewById(android.R.id.list);
             listView.setAdapter(adapter);
 
@@ -214,6 +223,32 @@ public class SearchResults extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        Button filterButton = (Button) view.findViewById(R.id.filter_button);
+        EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
+
+        final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
+        final ButtonAdapter adapter2 = new ButtonAdapter(this, R.layout.tour_list_item, toursCopy);
+        ListView listView2 = findViewById(android.R.id.list);
+        listView2.setAdapter(adapter2);
+
+        filterButton.setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        String inputDurationText = durationBox.getText().toString();
+
+                        if(!inputDurationText.isEmpty()) {
+                            int inputDuration = Integer.parseInt(inputDurationText);
+
+                            toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
+                        }
+                        adapter2.notifyDataSetChanged();
+                    }
+                }
+        );
 
     }
 }

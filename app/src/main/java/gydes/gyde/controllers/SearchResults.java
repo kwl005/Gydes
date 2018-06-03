@@ -215,6 +215,7 @@ public class SearchResults extends AppCompatActivity {
 
         Button filterButton = (Button) view.findViewById(R.id.filter_button);
         EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
+        EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
 
         final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
         final TourListAdapter adapter2 = new TourListAdapter(this, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
@@ -228,13 +229,24 @@ public class SearchResults extends AppCompatActivity {
                     public void onClick(View view) {
 
                         String inputDurationText = durationBox.getText().toString();
+                        String inputTagsText = tagsBox.getText().toString();
 
                         if(!inputDurationText.isEmpty()) {
                             int inputDuration = Integer.parseInt(inputDurationText);
-
                             toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
 
                         }
+
+                        if(!inputTagsText.isEmpty()) {
+                            String[] tags = inputTagsText.split(", ");
+
+                            for(int i=0; i<tags.length; i++) {
+                                String tag = tags[i];
+                                toursCopy.removeIf((Tour tour) -> !tour.getTags().contains(tag));
+                            }
+                        }
+
+
                         adapter2.notifyDataSetChanged();
                     }
                 }

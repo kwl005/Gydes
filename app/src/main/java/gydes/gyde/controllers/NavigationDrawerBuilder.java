@@ -28,6 +28,7 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import gydes.gyde.R;
+import gydes.gyde.controllers.addTour.MyBookings;
 
 /**
  * Created by kelvinlui1 on 5/17/18.
@@ -183,6 +184,7 @@ public class NavigationDrawerBuilder  {
                         activity.startActivity(new Intent(activity, PaymentActivity.class));
                         break;
                     case BOOKINGS:
+                        activity.startActivity(new Intent(activity, MyBookings.class));
                         break;
                     case REPORT:
                         break;

@@ -72,5 +72,6 @@
     <string name="view_txt">View</string>
     <string name="title_activity_book_tour">BookTour</string>
     <string name="title_activity_edit_profile">EditProfile</string>
+    <string name="title_activity_my_bookings">MyBookings</string>
 
 </resources>

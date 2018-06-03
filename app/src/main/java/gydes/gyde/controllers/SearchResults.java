@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,6 +46,7 @@ import gydes.gyde.models.Tour;
 import gydes.gyde.models.TourListAdapter;
 
 public class SearchResults extends AppCompatActivity {
+    Context context = this;
     SearchView searchView;
 
 //    final ArrayList<Tour> tours;
@@ -206,12 +208,59 @@ public class SearchResults extends AppCompatActivity {
         dialog.show();*/
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
-        View view = getLayoutInflater().inflate(R.layout.tour_filter_dialog, null);
-        builder.setView(view);
+        View view = getLayoutInflater().inflate(R.layout.tour_filter_layout_dialog, null);
+        builder.setView(view)
+                .setTitle("Filter")
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setPositiveButton("filter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
+                        EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
+
+                        final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
+                        final TourListAdapter adapter2 = new TourListAdapter(context, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
+                        ListView listView2 = findViewById(android.R.id.list);
+                        listView2.setAdapter(adapter2);
+
+
+
+
+
+
+                        String inputDurationText = durationBox.getText().toString();
+                        String inputTagsText = tagsBox.getText().toString();
+
+                        if(!inputDurationText.isEmpty()) {
+                            int inputDuration = Integer.parseInt(inputDurationText);
+                            toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
+
+                        }
+
+                        if(!inputTagsText.isEmpty()) {
+                            String[] tags = inputTagsText.split(", ");
+
+                            for(int i=0; i<tags.length; i++) {
+                                String tag = tags[i];
+                                toursCopy.removeIf((Tour tour) -> !tour.getTags().contains(tag));
+                            }
+                        }
+
+
+                        adapter2.notifyDataSetChanged();
+
+                    }
+                });
 
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        /*
 
         Button filterButton = (Button) view.findViewById(R.id.filter_button);
         EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
@@ -250,7 +299,7 @@ public class SearchResults extends AppCompatActivity {
                         adapter2.notifyDataSetChanged();
                     }
                 }
-        );
+        );*/
 
     }
 }

@@ -128,47 +128,47 @@ public class SearchResults extends AppCompatActivity {
         return camelCaseStr;
     }
 
-    class ButtonAdapter extends ArrayAdapter<Tour> {
-        private Context context;
-        private int resourceID;
-        private ArrayList<Tour> tourList;
-
-        public ButtonAdapter(@NonNull Context c, int rID, ArrayList<Tour> list) {
-            super(c, 0, list);
-            context = c;
-            resourceID = rID;
-            tourList = list;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View listItem = convertView;
-            if (listItem == null) {
-                listItem = LayoutInflater.from(context).inflate(resourceID, parent, false);
-            }
-
-            final Tour currTour = tourList.get(position);
-
-            TextView name = listItem.findViewById(R.id.textView_name);
-            name.setText(currTour.getName());
-
-            TextView stops = listItem.findViewById(R.id.textView_stops);
-            stops.setText(currTour.getStops());
-
-            TextView tags = listItem.findViewById(R.id.textView_tags);
-            tags.setText(currTour.getTags());
-
-            Button viewButton = listItem.findViewById(R.id.view_button);
-            viewButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour, SEARCH_RESULTS_BUTTON_OPT);
-                    frag.show(getFragmentManager(), "tour details");
-                }
-            });
-
-            return listItem;
-        }
-    }
+//    class ButtonAdapter extends ArrayAdapter<Tour> {
+//        private Context context;
+//        private int resourceID;
+//        private ArrayList<Tour> tourList;
+//
+//        public ButtonAdapter(@NonNull Context c, int rID, ArrayList<Tour> list) {
+//            super(c, 0, list);
+//            context = c;
+//            resourceID = rID;
+//            tourList = list;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            View listItem = convertView;
+//            if (listItem == null) {
+//                listItem = LayoutInflater.from(context).inflate(resourceID, parent, false);
+//            }
+//
+//            final Tour currTour = tourList.get(position);
+//
+//            TextView name = listItem.findViewById(R.id.textView_name);
+//            name.setText(currTour.getName());
+//
+//            TextView stops = listItem.findViewById(R.id.textView_stops);
+//            stops.setText(currTour.getStops());
+//
+//            TextView tags = listItem.findViewById(R.id.textView_tags);
+//            tags.setText(currTour.getTags());
+//
+//            Button viewButton = listItem.findViewById(R.id.view_button);
+//            viewButton.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour, SEARCH_RESULTS_BUTTON_OPT);
+//                    frag.show(getFragmentManager(), "tour details");
+//                }
+//            });
+//
+//            return listItem;
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,7 +209,7 @@ public class SearchResults extends AppCompatActivity {
         EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
 
         final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
-        final ButtonAdapter adapter2 = new ButtonAdapter(this, R.layout.tour_list_item, toursCopy);
+        final TourListAdapter adapter2 = new TourListAdapter(this, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
         ListView listView2 = findViewById(android.R.id.list);
         listView2.setAdapter(adapter2);
 
@@ -225,6 +225,7 @@ public class SearchResults extends AppCompatActivity {
                             int inputDuration = Integer.parseInt(inputDurationText);
 
                             toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
+
                         }
                         adapter2.notifyDataSetChanged();
                     }

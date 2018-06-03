@@ -208,6 +208,8 @@ public class SearchResults extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
         View view = getLayoutInflater().inflate(R.layout.tour_filter_dialog, null);
+
+
         builder.setView(view);
 
         AlertDialog dialog = builder.create();

@@ -62,7 +62,7 @@ public class MyTours extends AppCompatActivity {
         }
     }
 
-    void updateMyTours() {
+    public void updateMyTours() {
         final ArrayList<Tour> tours = new ArrayList<Tour>();
 
         final TourListAdapter adapter = new TourListAdapter(this, R.layout.tour_list_item, tours, MY_TOURS_BUTTON_OPT);

@@ -2,6 +2,7 @@ package gydes.gyde.controllers;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.app.TimePickerDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 
@@ -39,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import gydes.gyde.R;
 import gydes.gyde.models.TourDetailsDialogFragment;
@@ -48,6 +51,7 @@ import gydes.gyde.models.TourListAdapter;
 public class SearchResults extends AppCompatActivity {
     Context context = this;
     SearchView searchView;
+    EditText startTime;
 
 //    final ArrayList<Tour> tours;
 
@@ -257,6 +261,28 @@ public class SearchResults extends AppCompatActivity {
 
                     }
                 });
+
+        /*
+        startTime = (EditText) view.findViewById(R.id.startTime_box);
+        startTime.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Calendar mcurrentTime = Calendar.getInstance();
+                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                        int minute = mcurrentTime.get(Calendar.MINUTE);
+                        TimePickerDialog mTimePicker;
+                        mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                startTime.setText(selectedHour + ":" + selectedMinute);
+                            }
+                        }, hour, minute, false);//Yes 24 hour time
+                        mTimePicker.setTitle("Select Time");
+                        mTimePicker.show();
+                    }
+                }
+        );*/
 
 
         AlertDialog dialog = builder.create();

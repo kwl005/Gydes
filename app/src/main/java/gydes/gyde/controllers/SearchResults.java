@@ -161,7 +161,7 @@ public class SearchResults extends AppCompatActivity {
             Button viewButton = listItem.findViewById(R.id.view_button);
             viewButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour);
+                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour, SEARCH_RESULTS_BUTTON_OPT);
                     frag.show(getFragmentManager(), "tour details");
                 }
             });

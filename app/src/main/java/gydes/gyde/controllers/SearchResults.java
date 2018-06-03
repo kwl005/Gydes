@@ -2,6 +2,7 @@ package gydes.gyde.controllers;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,9 +74,19 @@ public class SearchResults extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.gydeYellow));
 
+        // setting up search
         searchView = (SearchView) findViewById(R.id.filter_search_bar);
         searchView.setFocusable(false);
 
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchBar = (SearchView)findViewById(R.id.filter_search_bar);
+        searchBar.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchResults.class)));
+        searchBar.setFocusable(true);
+        searchBar.setIconifiedByDefault(true);
+        //findViewById(R.id.drawer_layout).requestFocus();
+
+        // search from previous activity
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY).trim());
@@ -166,6 +177,21 @@ public class SearchResults extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.filter_menu, menu);
+        //MenuItem searchBox = menu.findItem(R.id.filter_search_bar);
+        //SearchView searchView = (SearchView)searchBox.getActionView();
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Toast.makeText(SearchResults.this, query, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });*/
+
         return true;
     }
 
@@ -192,7 +218,6 @@ public class SearchResults extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
         View view = getLayoutInflater().inflate(R.layout.tour_filter_dialog, null);
         builder.setView(view);
-
 
         AlertDialog dialog = builder.create();
         dialog.show();

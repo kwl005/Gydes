@@ -1,15 +1,23 @@
 package gydes.gyde.models;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import gydes.gyde.R;
+import gydes.gyde.controllers.Login;
+import gydes.gyde.controllers.MyTours;
+import gydes.gyde.controllers.SearchResults;
 
 public class TourDetailsDialogFragment extends DialogFragment {
 
@@ -20,11 +28,13 @@ public class TourDetailsDialogFragment extends DialogFragment {
     final static String capacity_prefix = "Capacity: %s";
 
     Tour tour;
+    int buttonOpt;
 
-    public static TourDetailsDialogFragment newInstance(Tour t) {
+    public static TourDetailsDialogFragment newInstance(Tour t, double opt) {
         TourDetailsDialogFragment frag = new TourDetailsDialogFragment();
         Bundle b = new Bundle();
         b.putParcelable("tour", t);
+        b.putDouble("opt", opt);
         frag.setArguments(b);
 
         return frag;
@@ -34,6 +44,7 @@ public class TourDetailsDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tour = getArguments().getParcelable("tour");
+        buttonOpt = (int)getArguments().getDouble("opt");
     }
 
     @Override
@@ -56,19 +67,70 @@ public class TourDetailsDialogFragment extends DialogFragment {
         ((TextView) view.findViewById(R.id.tour_capacity)).setText(String.format(capacity_prefix, tour.getCapacity()));
         builder.setView(view);
 
-        builder.setPositiveButton(R.string.book_txt, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                DateTimePickerDialogFragment frag = DateTimePickerDialogFragment.newInstance(tour);
-                frag.show(getFragmentManager(), "date time picker");
-            }
-        });
-        builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                TourDetailsDialogFragment.this.getDialog().cancel();
-            }
-        });
+        switch (buttonOpt) {
+            case SearchResults.SEARCH_RESULTS_BUTTON_OPT:
+                builder.setPositiveButton(R.string.book_txt, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        DateTimePickerDialogFragment frag = DateTimePickerDialogFragment.newInstance(tour);
+                        frag.show(getFragmentManager(), "date time picker");
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TourDetailsDialogFragment.this.getDialog().cancel();
+                    }
+                });
+                break;
+            case MyTours.MY_TOURS_BUTTON_OPT:
+                builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do nothing
+                    }
+                });
+                builder.setNegativeButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Activity act = TourDetailsDialogFragment.this.getActivity();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(act);
+                        builder.setMessage(R.string.delete_tour_confirmation);
+                        builder.setPositiveButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Login.currentUserRef.child("guide").child("tourIDs").child(tour.getTourID()).removeValue();
+                                DatabaseReference toursRef = Login.currentUserRef.getRoot().child("tours");
+                                toursRef.child(tour.getLocation()).child(tour.getTourID()).removeValue();
+                                ((MyTours)act).updateMyTours();
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Do nothing
+                            }
+                        });
+                        builder.create().show();
+                    }
+                });
+                break;
+            default:
+                builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d("TourDetails", "invalid button opt");
+                    }
+                });
+                builder.setNegativeButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d("TourDetails", "invalid button opt");
+                    }
+                });
+        }
+
+
 
         return builder.create();
     }

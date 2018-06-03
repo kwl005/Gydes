@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import gydes.gyde.R;
 import gydes.gyde.models.TourDetailsDialogFragment;
 import gydes.gyde.models.Tour;
+import gydes.gyde.models.TourListAdapter;
 
 public class SearchResults extends AppCompatActivity {
     SearchView searchView;
@@ -50,6 +51,8 @@ public class SearchResults extends AppCompatActivity {
 
     final ArrayList<Tour> tours = new ArrayList<Tour>();
 //    ButtonAdapter adapter;
+
+    public static final int SEARCH_RESULTS_BUTTON_OPT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +96,14 @@ public class SearchResults extends AppCompatActivity {
 //            final ArrayList<Tour> tours = new ArrayList<Tour>();
 //            tours = new ArrayList<Tour>();
 
+            /*
+<<<<<<< HEAD
             final ButtonAdapter adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
 //            adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
 
+=======*/
+            final TourListAdapter adapter = new TourListAdapter(this, R.layout.tour_list_item, tours, SEARCH_RESULTS_BUTTON_OPT);
+//>>>>>>> master
             ListView listView = findViewById(android.R.id.list);
             listView.setAdapter(adapter);
 

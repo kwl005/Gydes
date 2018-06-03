@@ -2,6 +2,7 @@ package gydes.gyde.controllers;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,7 +80,14 @@ public class SearchResults extends AppCompatActivity {
         searchView = (SearchView) findViewById(R.id.filter_search_bar);
         searchView.setFocusable(false);
 
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchBar = (SearchView)findViewById(R.id.filter_search_bar);
+        searchBar.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchResults.class)));
+        searchBar.setFocusable(true);
+        searchBar.setIconifiedByDefault(true);
         Intent intent = getIntent();
+
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY).trim());
 //            final ArrayList<Tour> tours = new ArrayList<Tour>();

@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -220,66 +221,76 @@ public class SearchResults extends AppCompatActivity {
         EditText endTime = (EditText) view.findViewById(R.id.endTime_box);
         EditText date = (EditText) view.findViewById(R.id.dates_box);
 
-        startTime.setOnClickListener(
-                new View.OnClickListener() {
+        startTime.setOnTouchListener(
+                new View.OnTouchListener() {
 
                     @Override
-                    public void onClick(View view) {
-                        Calendar mcurrentTime = Calendar.getInstance();
-                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                        int minute = mcurrentTime.get(Calendar.MINUTE);
-                        TimePickerDialog mTimePicker;
-                        mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                startTime.setText(selectedHour + ":" + selectedMinute);
-                            }
-                        }, hour, minute, false);//Yes 24 hour time
-                        mTimePicker.setTitle("Select Time");
-                        mTimePicker.show();
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Calendar mcurrentTime = Calendar.getInstance();
+                            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                            int minute = mcurrentTime.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    startTime.setText(selectedHour + ":" + selectedMinute);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                        }
+                        return false;
                     }
                 }
         );
 
-        endTime.setOnClickListener(
-                new View.OnClickListener() {
+        endTime.setOnTouchListener(
+                new View.OnTouchListener() {
 
                     @Override
-                    public void onClick(View view) {
-                        Calendar mcurrentTime = Calendar.getInstance();
-                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                        int minute = mcurrentTime.get(Calendar.MINUTE);
-                        TimePickerDialog mTimePicker;
-                        mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                endTime.setText(selectedHour + ":" + selectedMinute);
-                            }
-                        }, hour, minute, false);//Yes 24 hour time
-                        mTimePicker.setTitle("Select Time");
-                        mTimePicker.show();
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Calendar mcurrentTime = Calendar.getInstance();
+                            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                            int minute = mcurrentTime.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    endTime.setText(selectedHour + ":" + selectedMinute);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                        }
+                        return false;
                     }
                 }
         );
 
 
-        date.setOnClickListener(
-                new View.OnClickListener() {
+        date.setOnTouchListener(
+                new View.OnTouchListener() {
 
                     @Override
-                    public void onClick(View view) {
-                        Calendar calendar = Calendar.getInstance();
-                        int year = calendar.get(Calendar.YEAR);
-                        int month = calendar.get(Calendar.MONTH);
-                        int day = calendar.get(Calendar.DAY_OF_MONTH);
-                        DatePickerDialog mDatePicker = new DatePickerDialog(SearchResults.this, new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-                                date.setText(m + "/" + d + "/" + y );
-                            }
-                        }, year, month, day);
-                        mDatePicker.setTitle("Select Date");
-                        mDatePicker.show();
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Calendar calendar = Calendar.getInstance();
+                            int year = calendar.get(Calendar.YEAR);
+                            int month = calendar.get(Calendar.MONTH);
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                            DatePickerDialog mDatePicker = new DatePickerDialog(SearchResults.this, new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                                    date.setText(m + "/" + d + "/" + y);
+                                }
+                            }, year, month, day);
+                            mDatePicker.setTitle("Select Date");
+                            mDatePicker.show();
+                        }
+
+                        return false;
                     }
                 }
         );

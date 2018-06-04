@@ -1,5 +1,6 @@
 package gydes.gyde.controllers;
 
+import android.app.DatePickerDialog;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
@@ -19,12 +20,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -213,6 +216,86 @@ public class SearchResults extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
         View view = getLayoutInflater().inflate(R.layout.tour_filter_layout_dialog, null);
+
+        EditText startTime = (EditText) view.findViewById(R.id.startTime_box);
+        EditText endTime = (EditText) view.findViewById(R.id.endTime_box);
+        EditText date = (EditText) view.findViewById(R.id.dates_box);
+
+        startTime.setOnTouchListener(
+                new View.OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Calendar mcurrentTime = Calendar.getInstance();
+                            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                            int minute = mcurrentTime.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    startTime.setText(selectedHour + ":" + selectedMinute);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                        }
+                        return false;
+                    }
+                }
+        );
+
+        endTime.setOnTouchListener(
+                new View.OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Calendar mcurrentTime = Calendar.getInstance();
+                            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                            int minute = mcurrentTime.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    endTime.setText(selectedHour + ":" + selectedMinute);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                        }
+                        return false;
+                    }
+                }
+        );
+
+
+        date.setOnTouchListener(
+                new View.OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Calendar calendar = Calendar.getInstance();
+                            int year = calendar.get(Calendar.YEAR);
+                            int month = calendar.get(Calendar.MONTH);
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                            DatePickerDialog mDatePicker = new DatePickerDialog(SearchResults.this, new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                                    date.setText(m + "/" + d + "/" + y);
+                                }
+                            }, year, month, day);
+                            mDatePicker.setTitle("Select Date");
+                            mDatePicker.show();
+                        }
+
+                        return false;
+                    }
+                }
+        );
+
+
         builder.setView(view)
                 .setTitle("Filter")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -248,11 +331,11 @@ public class SearchResults extends AppCompatActivity {
                         }
 
                         if(!inputTagsText.isEmpty()) {
-                            String[] tags = inputTagsText.split(",");
+                            String[] tags = inputTagsText.toLowerCase().split(",");
 
                             for(int i=0; i<tags.length; i++) {
-                                String tag = tags[i];
-                                toursCopy.removeIf((Tour tour) -> !tour.getTags().contains(tag));
+                                String tag = tags[i].trim();
+                                toursCopy.removeIf((Tour tour) -> !tour.getTags().toLowerCase().contains(tag));
                             }
                         }
 

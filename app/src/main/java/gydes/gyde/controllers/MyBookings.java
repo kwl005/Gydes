@@ -1,4 +1,4 @@
-package gydes.gyde.controllers.addTour;
+package gydes.gyde.controllers;
 
 import android.os.Bundle;
 import android.app.Activity;

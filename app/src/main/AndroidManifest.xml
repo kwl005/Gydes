@@ -84,7 +84,7 @@
             android:label="@string/title_activity_edit_profile" />
         <activity android:name=".controllers.addTour.AddTourConfirmName" />
         <activity
-            android:name=".controllers.addTour.MyBookings"
+            android:name=".controllers.MyBookings"
             android:label="@string/title_activity_my_bookings"></activity>
     </application>
 

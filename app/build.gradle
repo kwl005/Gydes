@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "gydes.gyde"
-        minSdkVersion 27
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -18,23 +18,23 @@ android {
     }
     productFlavors {
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation("com.mikepenz:materialdrawer:6.0.7@aar") {
+    implementation('com.mikepenz:materialdrawer:6.0.7@aar') {
         transitive = true
     }
 
-    implementation 'com.wdullaer:materialdatetimepicker:3.6.0'
-
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-
-    implementation "com.android.support:appcompat-v7:27.1.1"
-    implementation "com.android.support:recyclerview-v7:27.1.1"
-    implementation "com.android.support:support-annotations:27.1.1"
-    implementation "com.android.support:design:27.1.1"
-
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:support-annotations:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1'
     implementation 'com.android.support:customtabs:27.1.1'
@@ -47,7 +47,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'io.card:android-sdk:5.5.0'
     implementation 'com.stripe:stripe-android:6.1.2'
-    implementation "com.stripe:stripe-java:5.36.0"
+    implementation 'com.stripe:stripe-java:5.36.0'
     implementation 'com.google.firebase:firebase-core:15.0.0'
     implementation 'com.google.firebase:firebase-iid:15.0.0'
     implementation 'com.google.firebase:firebase-auth:15.0.0'

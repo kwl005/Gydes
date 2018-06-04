@@ -6,9 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".controllers.SearchResults">
 
+    <include
+        android:id="@+id/filter_toolbar"
+        layout="@layout/activity_search_toolbar" />
+
     <ListView
         android:id="@android:id/list"
+        android:layout_below="@+id/filter_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </ListView>
+
 </RelativeLayout>

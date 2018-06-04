@@ -104,6 +104,7 @@ public class DesignTour extends AppCompatActivity {
 
                 Login.currentUserRef.child("guide").child("tourIDs").child(tourID).setValue(tourID);
                 Login.currentUserRef.child("guide").child("tourIDs").child(tourID).child("location").setValue(location);
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -111,6 +112,7 @@ public class DesignTour extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.design_tour_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
             }
         });

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        android:textSize="20sp"
+        />
+
+    <Spinner
+        android:id="@+id/startTime_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End Time"
+        android:textSize="20sp"
+        />
+
+    <Spinner
+        android:id="@+id/endTime_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textSize="20sp"
+        />
+
+    <Spinner
+        android:id="@+id/dates_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:id="@+id/price_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Duration"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:id="@+id/duration_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capacity"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:id="@+id/capacity_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tags"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:id="@+id/tags_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

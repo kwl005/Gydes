@@ -43,6 +43,8 @@ captures/
 .idea/misc.xml
 .idea/vcs.xml
 .idea/caches/build_file_checksums.ser
+.idea\caches\build_file_checksums.ser
+.idea\kotlinc.xml
 
 # Keystore files
 *.jks

@@ -74,21 +74,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <activity
-            android:name=".controllers.addTour.AddTourConfirmBeginning"
-            android:launchMode="singleTop"/>
-        <activity
-            android:name=".controllers.EditProfile"
-            android:label="@string/title_activity_edit_profile"></activity>
-        <activity android:name=".controllers.addTour.AddTourConfirmName"
-            android:launchMode="singleTop"/>
-        <activity android:name=".controllers.addTour.AddTourConfirmCapacity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".controllers.addTour.AddTourConfirmDuration"
-            android:launchMode="singleTop"/>
-        <activity android:name=".controllers.addTour.AddTourConfirmMethod"
-            android:launchMode="singleTop"/>
     </application>
 
 </manifest>

@@ -29,16 +29,26 @@
                 android:orientation="vertical"
                 android:weightSum="1">
                 <EditText
+                    android:id="@+id/edit_text"
                     android:focusedByDefault="true"
                     android:layout_margin="@dimen/fab_margin"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/yelpNormalText"
+                    android:textColor="@color/yelpMidText"
                     android:textColorHint="@color/yelpSubtleText"
-                    android:hint="Enter the name of the tour."
+                    android:hint="Enter the name of the tour"
+                    android:inputType="textVisiblePassword|textNoSuggestions"
+                    android:maxLength="21"
                     android:background="@android:color/transparent"
                     android:layout_weight="0.2"/>
+                <TextView
+                    android:id="@+id/word_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/yelpSubtleText"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_gravity="end"/>
                 <android.support.design.widget.FloatingActionButton
                     android:src="@drawable/right_arrow"
                     android:id="@+id/continue_button"

@@ -14,9 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.io.IOException;
@@ -56,9 +53,10 @@ public class AddTourConfirmBeginning extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.gydeYellow));
 
+        final Bundle bundle = getIntent().getExtras();
         // Get location from lat and lng using Map API
-        final Double longitude = getIntent().getExtras().getDouble("longitude");
-        final Double latitude = getIntent().getExtras().getDouble("latitude");
+        final Double longitude = bundle.getDouble("longitude");
+        final Double latitude = bundle.getDouble("latitude");
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addresses = null;
         try {
@@ -66,6 +64,7 @@ public class AddTourConfirmBeginning extends AppCompatActivity {
         } catch(IOException e) {
             e.printStackTrace();
         }
+        final String location = addresses == null ? "Unknown" : addresses.get(0).getLocality();
 
         // Setup text view
         textView = (TextView) findViewById(R.id.text_view);
@@ -87,7 +86,10 @@ public class AddTourConfirmBeginning extends AppCompatActivity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getBaseContext(), AddTourConfirmName.class));
+                Intent intent = new Intent(getBaseContext(), AddTourConfirmName.class);
+                bundle.putString("location", location);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

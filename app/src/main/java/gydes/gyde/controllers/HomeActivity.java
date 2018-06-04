@@ -265,8 +265,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                            latLng.latitude + ", " + latLng.longitude,
 //                            Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getBaseContext(), AddTourConfirmBeginning.class);
-                    intent.putExtra("latitude", latLng.latitude);
-                    intent.putExtra("longitude", latLng.longitude);
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("latitude", latLng.latitude);
+                    bundle.putDouble("longitude", latLng.longitude);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:

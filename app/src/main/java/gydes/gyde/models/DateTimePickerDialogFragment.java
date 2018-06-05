@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -77,7 +78,7 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                 cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
                 int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-                String dayStr = getDayStr(dayOfWeek);
+                String dayStr = Login.dayToStr(dayOfWeek);
 
                 String timeStr;
                 int startHour = hourPicker.getValue();
@@ -109,9 +110,11 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                         currHour = 0;
                         dayOfWeek++;
                         if(dayOfWeek > Calendar.SATURDAY) dayOfWeek = Calendar.SUNDAY;
-                        dayStr = getDayStr(dayOfWeek);
+                        dayStr = Login.dayToStr(dayOfWeek);
                     }
                 }
+                Toast toast = Toast.makeText(getActivity(), "Tour booked", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
         builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
@@ -122,27 +125,6 @@ public class DateTimePickerDialogFragment extends DialogFragment {
         });
 
         return builder.create();
-    }
-
-    static String getDayStr (int dayOfWeek) {
-        switch (dayOfWeek) {
-            case Calendar.SUNDAY:
-                return "sunday";
-            case Calendar.MONDAY:
-                return "monday";
-            case Calendar.TUESDAY:
-                return "tuesday";
-            case Calendar.WEDNESDAY:
-                return "wednesday";
-            case Calendar.THURSDAY:
-                return "thursday";
-            case Calendar.FRIDAY:
-                return "friday";
-            case Calendar.SATURDAY:
-                return "saturday";
-        }
-        Log.d("getDayStr()", "dayOfWeek out of bounds");
-        return "";
     }
 }
 

@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".controllers.MyBookings">
+
+    <Button
+        android:id="@+id/pick_day_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_day_button_text" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -297,7 +308,7 @@
                 android:id="@+id/two_pm_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="01:00 PM" />
+                android:text="02:00 PM" />
 
             <TextView
                 android:id="@+id/two_pm_booking"
@@ -487,4 +498,5 @@
         </TableRow>
 
     </TableLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

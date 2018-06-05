@@ -57,6 +57,8 @@
         <activity
             android:name=".controllers.DesignTour"
             android:label="@string/title_activity_design_tour" />
+        <activity android:name=".controllers.EditProfile"
+            android:label="@string/title_activity_edit_profile" />
         <activity
             android:name=".controllers.Login"
             android:theme="@style/Gyde" />

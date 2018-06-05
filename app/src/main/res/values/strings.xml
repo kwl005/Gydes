@@ -36,6 +36,7 @@
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
 
     <string name="design_tour_button_text">Design A Tour</string>
+    <string name="pick_day_button_text">Pick a day</string>
 
     <string name="todo">TODO</string>
 
@@ -54,6 +55,7 @@
     <string name="drive_txt">Drive</string>
     <string name="capacity_txt">Capacity:</string>
     <string name="tags_txt">Tags:</string>
+    <string name="with_txt">With:</string>
 
     <string name="name_prompt">Please enter a name for the tour</string>
     <string name="location_prompt">Please enter a location for the tour</string>
@@ -65,6 +67,7 @@
     <string name="book_txt">Book</string>
     <string name="cancel_txt">Cancel</string>
     <string name="ok_txt">Ok</string>
+    <string name="done_txt">Done</string>
     <string name="delete_txt">Delete</string>
 
     <string name="traveler_txt">Traveler</string>

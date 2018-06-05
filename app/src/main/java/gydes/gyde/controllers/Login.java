@@ -38,8 +38,8 @@ public class Login extends AppCompatActivity {
             new AuthUI.IdpConfig.EmailBuilder().build()
     );
 
-    private static final String[] days = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
-    private static final String[] times = {"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
+    private static final String[] DAYS = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
+    private static final String[] TIMES = {"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
             "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00",
             "22:00", "23:00"};
 
@@ -99,9 +99,9 @@ public class Login extends AppCompatActivity {
                     final DatabaseReference traveler = currentUserRef.child(getString(R.string.firebase_trav_path));
                     traveler.child("avgRating").setValue(0);
                     traveler.child("numRatings").setValue(0);
-                    for (int i = 0; i < days.length; i++) {
-                        for (int j = 0; j < times.length; j++) {
-                            DatabaseReference ref = traveler.child(getString(R.string.firebase_book_path)).child(days[i]).child(times[j]);
+                    for (int i = 0; i < DAYS.length; i++) {
+                        for (int j = 0; j < TIMES.length; j++) {
+                            DatabaseReference ref = traveler.child(getString(R.string.firebase_book_path)).child(DAYS[i]).child(TIMES[j]);
                             ref.child(getString(R.string.firebase_tID_path)).setValue(currentUser.getUid());
                             ref.child(getString(R.string.firebase_gID_path)).setValue("");
                             ref.child(getString(R.string.firebase_tour_path)).setValue(null);
@@ -114,18 +114,18 @@ public class Login extends AppCompatActivity {
                     guide.child("bio").setValue("");
                     guide.child("avgRating").setValue(0);
                     guide.child("numRatings").setValue(0);
-                    for (int i = 0; i < days.length; i++) {
-                        for (int j = 0; j < times.length; j++) {
-                            DatabaseReference ref = guide.child(getString(R.string.firebase_book_path)).child(days[i]).child(times[j]);
+                    for (int i = 0; i < DAYS.length; i++) {
+                        for (int j = 0; j < TIMES.length; j++) {
+                            DatabaseReference ref = guide.child(getString(R.string.firebase_book_path)).child(DAYS[i]).child(TIMES[j]);
                             ref.child(getString(R.string.firebase_tID_path)).setValue("");
                             ref.child(getString(R.string.firebase_gID_path)).setValue(currentUser.getUid());
                             ref.child(getString(R.string.firebase_tour_path)).setValue(null);
                             ref.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
                         }
                     }
-                    for (int i = 0; i < days.length; i++) {
-                        for (int j = 0; j < times.length; j++) {
-                            traveler.child("schedule").child(days[i]).child(times[j]).setValue(false);
+                    for (int i = 0; i < DAYS.length; i++) {
+                        for (int j = 0; j < TIMES.length; j++) {
+                            traveler.child("schedule").child(DAYS[i]).child(TIMES[j]).setValue(false);
                         }
                     }
                     isGuide = false;
@@ -157,5 +157,13 @@ public class Login extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         // Delete super call to avoid an unknown bug
+    }
+
+    public static String dayToStr(int dayOfWeek) {
+        return DAYS[dayOfWeek-1];
+    }
+
+    public static String hourToStr(int hour) {
+        return TIMES[hour];
     }
 }

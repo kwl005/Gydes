@@ -86,16 +86,14 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                 int currHour = startHour;
 
                 for(int i = 0; i < tour.getDuration(); i++) {
-                    timeStr = "";
-
-                    if (currHour < DOUBLE_DIGITS) timeStr += "0";
-                    timeStr += currHour + ":00";
+                    timeStr = Login.hourToStr(currHour);
 
                     DatabaseReference travBookSpot = Login.currentUserRef.child(getString(R.string.firebase_trav_path))
                             .child(getString(R.string.firebase_book_path)).child(dayStr).child(timeStr);
                     travBookSpot.child(getString(R.string.firebase_gID_path)).setValue(tour.getCreatorID());
                     travBookSpot.child(getString(R.string.firebase_tour_path)).setValue(tour);
-                    if(currHour != startHour) travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
+                    if(currHour == startHour) travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
+                    else travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
 
                     DatabaseReference guideBookSpot = FirebaseDatabase.getInstance().getReference()
                             .child(getString(R.string.firebase_users_path)).child(tour.getCreatorID())
@@ -103,7 +101,8 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                             .child(dayStr).child(timeStr);
                     guideBookSpot.child(getString(R.string.firebase_tID_path)).setValue(Login.currentUserRef.getKey());
                     guideBookSpot.child(getString(R.string.firebase_tour_path)).setValue(tour);
-                    if(currHour != startHour) guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
+                    if(currHour == startHour) guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
+                    else guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
 
                     currHour++;
                     if(currHour == HOURS_IN_FULL_DAY) {

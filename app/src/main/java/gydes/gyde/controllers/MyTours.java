@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +55,8 @@ public class MyTours extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == RC_TOUR_MADE) {
             if(resultCode == RESULT_OK) {
+                Toast toast = Toast.makeText(this, "Updating tours...", Toast.LENGTH_SHORT);
+                toast.show();
                 updateMyTours();
             }
             else {

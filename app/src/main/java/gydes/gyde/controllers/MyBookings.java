@@ -63,7 +63,7 @@ public class MyBookings extends Activity {
                         String dayStr = Login.dayToStr(dayOfWeek);
 
                         pickDayButton.setText(String.format("%s, %d/%d/%d", SearchResults.toCamelCase(dayStr), picker.getMonth() + 1, picker.getDayOfMonth(), picker.getYear()));
-                        updateBookingsList(dayStr);
+                        updateBookingsList(dayOfWeek);
                     }
                 });
 
@@ -72,7 +72,8 @@ public class MyBookings extends Activity {
         });
     }
 
-    void updateBookingsList(String dayStr) {
+    public void updateBookingsList(int day) {
+        String dayStr = Login.dayToStr(day);
         Toast toast = Toast.makeText(this, "Updating list...", Toast.LENGTH_SHORT);
         toast.show();
         clearBookings();
@@ -99,89 +100,14 @@ public class MyBookings extends Activity {
                 int currColor = gydeBlue;
 
                 for (int hour = 0; hour < HOURS_IN_DAY; hour++) {
+                    final int currHour = hour;
                     hourStr = Login.hourToStr(hour);
                     final DataSnapshot booking = bookList.child(hourStr);
                     if (booking.hasChild(getString(R.string.firebase_tour_path))) {
                         final Tour tour = booking.child(getString(R.string.firebase_tour_path)).getValue(Tour.class);
 
-                        /* findViewById only allows id ints, so this is the only way to find the right textview */
-                        TextView bookText;
-                        switch (hour) {
-                            case 0:
-                                bookText = findViewById(R.id.twelve_am_booking);
-                                break;
-                            case 1:
-                                bookText = findViewById(R.id.one_am_booking);
-                                break;
-                            case 2:
-                                bookText = findViewById(R.id.two_am_booking);
-                                break;
-                            case 3:
-                                bookText = findViewById(R.id.three_am_booking);
-                                break;
-                            case 4:
-                                bookText = findViewById(R.id.four_am_booking);
-                                break;
-                            case 5:
-                                bookText = findViewById(R.id.five_am_booking);
-                                break;
-                            case 6:
-                                bookText = findViewById(R.id.six_am_booking);
-                                break;
-                            case 7:
-                                bookText = findViewById(R.id.seven_am_booking);
-                                break;
-                            case 8:
-                                bookText = findViewById(R.id.eight_am_booking);
-                                break;
-                            case 9:
-                                bookText = findViewById(R.id.nine_am_booking);
-                                break;
-                            case 10:
-                                bookText = findViewById(R.id.ten_am_booking);
-                                break;
-                            case 11:
-                                bookText = findViewById(R.id.eleven_am_booking);
-                                break;
-                            case 12:
-                                bookText = findViewById(R.id.twelve_pm_booking);
-                                break;
-                            case 13:
-                                bookText = findViewById(R.id.one_pm_booking);
-                                break;
-                            case 14:
-                                bookText = findViewById(R.id.two_pm_booking);
-                                break;
-                            case 15:
-                                bookText = findViewById(R.id.three_pm_booking);
-                                break;
-                            case 16:
-                                bookText = findViewById(R.id.four_pm_booking);
-                                break;
-                            case 17:
-                                bookText = findViewById(R.id.five_pm_booking);
-                                break;
-                            case 18:
-                                bookText = findViewById(R.id.six_pm_booking);
-                                break;
-                            case 19:
-                                bookText = findViewById(R.id.seven_pm_booking);
-                                break;
-                            case 20:
-                                bookText = findViewById(R.id.eight_pm_booking);
-                                break;
-                            case 21:
-                                bookText = findViewById(R.id.nine_pm_booking);
-                                break;
-                            case 22:
-                                bookText = findViewById(R.id.ten_pm_booking);
-                                break;
-                            case 23:
-                                bookText = findViewById(R.id.eleven_pm_booking);
-                                break;
-                            default:
-                                bookText = findViewById(R.id.twelve_am_booking);
-                        }
+                        TextView bookText = findViewById(getViewIdOfHour(hour));
+
                         if (hour == 0 || !(boolean) booking.child(getString(R.string.firebase_sameasprev_path)).getValue()) {
                             bookText.setText(tour.getName());
                             currColor = currColor == gydeBlue ? gydeYellow : gydeBlue;
@@ -200,7 +126,8 @@ public class MyBookings extends Activity {
                                 String phoneNum = (String) users.child(otherID).child(getString(R.string.firebase_phonenumber_path)).getValue();
                                 String email = (String) users.child(otherID).child(getString(R.string.firebase_email_path)).getValue();
 
-                                BookingDetailsDialogFragment frag = BookingDetailsDialogFragment.newInstance(tour, otherID, name, phoneNum, email);
+                                BookingDetailsDialogFragment frag = BookingDetailsDialogFragment
+                                        .newInstance(tour, otherID, name, phoneNum, email, sideStr, day, currHour);
                                 frag.show(getFragmentManager(), "booking details");
                                 return false;
                             }
@@ -217,88 +144,67 @@ public class MyBookings extends Activity {
     }
 
     void clearBookings() {
-        for(int hour = 0; hour < HOURS_IN_DAY; hour++) {
-            TextView bookText;
-            switch (hour) {
-                case 0:
-                    bookText = findViewById(R.id.twelve_am_booking);
-                    break;
-                case 1:
-                    bookText = findViewById(R.id.one_am_booking);
-                    break;
-                case 2:
-                    bookText = findViewById(R.id.two_am_booking);
-                    break;
-                case 3:
-                    bookText = findViewById(R.id.three_am_booking);
-                    break;
-                case 4:
-                    bookText = findViewById(R.id.four_am_booking);
-                    break;
-                case 5:
-                    bookText = findViewById(R.id.five_am_booking);
-                    break;
-                case 6:
-                    bookText = findViewById(R.id.six_am_booking);
-                    break;
-                case 7:
-                    bookText = findViewById(R.id.seven_am_booking);
-                    break;
-                case 8:
-                    bookText = findViewById(R.id.eight_am_booking);
-                    break;
-                case 9:
-                    bookText = findViewById(R.id.nine_am_booking);
-                    break;
-                case 10:
-                    bookText = findViewById(R.id.ten_am_booking);
-                    break;
-                case 11:
-                    bookText = findViewById(R.id.eleven_am_booking);
-                    break;
-                case 12:
-                    bookText = findViewById(R.id.twelve_pm_booking);
-                    break;
-                case 13:
-                    bookText = findViewById(R.id.one_pm_booking);
-                    break;
-                case 14:
-                    bookText = findViewById(R.id.two_pm_booking);
-                    break;
-                case 15:
-                    bookText = findViewById(R.id.three_pm_booking);
-                    break;
-                case 16:
-                    bookText = findViewById(R.id.four_pm_booking);
-                    break;
-                case 17:
-                    bookText = findViewById(R.id.five_pm_booking);
-                    break;
-                case 18:
-                    bookText = findViewById(R.id.six_pm_booking);
-                    break;
-                case 19:
-                    bookText = findViewById(R.id.seven_pm_booking);
-                    break;
-                case 20:
-                    bookText = findViewById(R.id.eight_pm_booking);
-                    break;
-                case 21:
-                    bookText = findViewById(R.id.nine_pm_booking);
-                    break;
-                case 22:
-                    bookText = findViewById(R.id.ten_pm_booking);
-                    break;
-                case 23:
-                    bookText = findViewById(R.id.eleven_pm_booking);
-                    break;
-                default:
-                    bookText = findViewById(R.id.twelve_am_booking);
-            }
+        for (int hour = 0; hour < HOURS_IN_DAY; hour++) {
+            TextView bookText = findViewById(getViewIdOfHour(hour));
             bookText.setBackgroundColor(getColor(R.color.fui_transparent));
             bookText.setText("");
             bookText.setOnTouchListener(null);
         }
     }
 
+    int getViewIdOfHour(int hour) {
+        switch (hour) {
+            case 0:
+                return R.id.twelve_am_booking;
+            case 1:
+                return R.id.one_am_booking;
+            case 2:
+                return R.id.two_am_booking;
+            case 3:
+                return R.id.three_am_booking;
+            case 4:
+                return R.id.four_am_booking;
+            case 5:
+                return R.id.five_am_booking;
+            case 6:
+                return R.id.six_am_booking;
+            case 7:
+                return R.id.seven_am_booking;
+            case 8:
+                return R.id.eight_am_booking;
+            case 9:
+                return R.id.nine_am_booking;
+            case 10:
+                return R.id.ten_am_booking;
+            case 11:
+                return R.id.eleven_am_booking;
+            case 12:
+                return R.id.twelve_pm_booking;
+            case 13:
+                return R.id.one_pm_booking;
+            case 14:
+                return R.id.two_pm_booking;
+            case 15:
+                return R.id.three_pm_booking;
+            case 16:
+                return R.id.four_pm_booking;
+            case 17:
+                return R.id.five_pm_booking;
+            case 18:
+                return R.id.six_pm_booking;
+            case 19:
+                return R.id.seven_pm_booking;
+            case 20:
+                return R.id.eight_pm_booking;
+            case 21:
+                return R.id.nine_pm_booking;
+            case 22:
+                return R.id.ten_pm_booking;
+            case 23:
+                return R.id.eleven_pm_booking;
+            default:
+                return R.id.twelve_am_booking;
+        }
+
+    }
 }

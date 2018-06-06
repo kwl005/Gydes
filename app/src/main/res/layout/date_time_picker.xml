@@ -6,7 +6,7 @@
 
     <DatePicker
         android:id="@+id/date_picker"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/hour_picker"
         app:layout_constraintEnd_toEndOf="parent"

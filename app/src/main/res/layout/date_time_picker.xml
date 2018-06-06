@@ -6,7 +6,7 @@
 
     <DatePicker
         android:id="@+id/date_picker"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/hour_picker"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,18 +36,5 @@
         app:layout_constraintStart_toEndOf="@+id/hour_picker"
         app:layout_constraintEnd_toEndOf="parent">
     </NumberPicker>
-
-    <!--
-    <TimePicker
-        android:id="@+id/time_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker">
-    </TimePicker>
-    -->
 
 </android.support.constraint.ConstraintLayout>

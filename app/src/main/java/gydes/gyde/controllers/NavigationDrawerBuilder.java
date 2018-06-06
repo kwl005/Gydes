@@ -36,8 +36,8 @@ import gydes.gyde.models.User;
 public class NavigationDrawerBuilder {
 
     private static final String TAG = NavigationDrawerBuilder.class.getSimpleName();
-    private static final String TO_TRAV_STR = "To Traveler View";
-    private static final String TO_GUIDE_STR = "To Guide View";
+    private static final String TO_TRAV_STR = "To Traveler's View";
+    private static final String TO_GUIDE_STR = "To Guide's View";
 
     private enum DrawerItemConstant {
         PROFILE(1, "Account"),

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="gydes.gyde">
 
+    <uses-sdk android:minSdkVersion="27" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -10,7 +12,9 @@
         android:name="android.hardware.camera2"
         android:required="true" />
 
-    <uses-sdk android:minSdkVersion="27" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -53,6 +57,8 @@
         <activity
             android:name=".controllers.DesignTour"
             android:label="@string/title_activity_design_tour" />
+        <activity android:name=".controllers.EditProfile"
+            android:label="@string/title_activity_edit_profile" />
         <activity
             android:name=".controllers.Login"
             android:theme="@style/Gyde" />
@@ -73,6 +79,10 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".controllers.MyBookings"
+            android:label="@string/title_activity_my_bookings">
         </activity>
     </application>
 

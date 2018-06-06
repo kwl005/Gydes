@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -95,16 +96,18 @@ public class TourDetailsDialogFragment extends DialogFragment {
                         final Activity act = TourDetailsDialogFragment.this.getActivity();
                         AlertDialog.Builder builder = new AlertDialog.Builder(act);
                         builder.setMessage(R.string.delete_tour_confirmation);
-                        builder.setPositiveButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton(R.string.yes_txt, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Toast toast = Toast.makeText(act, "Deleting tour...", Toast.LENGTH_SHORT);
+                                toast.show();
                                 Login.currentUserRef.child("guide").child("tourIDs").child(tour.getTourID()).removeValue();
                                 DatabaseReference toursRef = Login.currentUserRef.getRoot().child("tours");
                                 toursRef.child(tour.getLocation()).child(tour.getTourID()).removeValue();
                                 ((MyTours)act).updateMyTours();
                             }
                         });
-                        builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //Do nothing

@@ -14,11 +14,16 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/toolbar"/>
+            android:layout_height="wrap_content"
+            android:background="@color/gydeYellow"
+            android:elevation="4dp"
+            android:minHeight="58dp"
+            android:theme="@style/MaterialDrawerTheme.ActionBar"
+            app:popupTheme="@style/MaterialDrawerTheme.ActionBar" />
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -31,18 +36,31 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 tools:context="gydes.gyde.controllers.GuideHome" />
+
             <Button
                 android:id="@+id/tours_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/design_tour_button"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
                 android:background="#ffffff"
                 android:padding="8dp"
                 android:text="My Tours"
                 android:textColor="#000000" />
-        </RelativeLayout>
+
+            <Button
+                android:id="@+id/design_tour_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/tours_button"
+                app:layout_constraintBottom_toBottomOf="@+id/tours_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/design_tour_button_text"
+                android:background="#ffffff"
+                android:padding="8dp"
+                android:textColor="#000000" />
+        </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

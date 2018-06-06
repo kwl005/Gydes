@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -77,7 +78,7 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                 cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
                 int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-                String dayStr = getDayStr(dayOfWeek);
+                String dayStr = Login.dayToStr(dayOfWeek);
 
                 String timeStr;
                 int startHour = hourPicker.getValue();
@@ -85,16 +86,14 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                 int currHour = startHour;
 
                 for(int i = 0; i < tour.getDuration(); i++) {
-                    timeStr = "";
-
-                    if (currHour < DOUBLE_DIGITS) timeStr += "0";
-                    timeStr += currHour + ":00";
+                    timeStr = Login.hourToStr(currHour);
 
                     DatabaseReference travBookSpot = Login.currentUserRef.child(getString(R.string.firebase_trav_path))
                             .child(getString(R.string.firebase_book_path)).child(dayStr).child(timeStr);
                     travBookSpot.child(getString(R.string.firebase_gID_path)).setValue(tour.getCreatorID());
                     travBookSpot.child(getString(R.string.firebase_tour_path)).setValue(tour);
-                    if(currHour != startHour) travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
+                    if(currHour == startHour) travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
+                    else travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
 
                     DatabaseReference guideBookSpot = FirebaseDatabase.getInstance().getReference()
                             .child(getString(R.string.firebase_users_path)).child(tour.getCreatorID())
@@ -102,16 +101,19 @@ public class DateTimePickerDialogFragment extends DialogFragment {
                             .child(dayStr).child(timeStr);
                     guideBookSpot.child(getString(R.string.firebase_tID_path)).setValue(Login.currentUserRef.getKey());
                     guideBookSpot.child(getString(R.string.firebase_tour_path)).setValue(tour);
-                    if(currHour != startHour) guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
+                    if(currHour == startHour) guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
+                    else guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
 
                     currHour++;
                     if(currHour == HOURS_IN_FULL_DAY) {
                         currHour = 0;
                         dayOfWeek++;
                         if(dayOfWeek > Calendar.SATURDAY) dayOfWeek = Calendar.SUNDAY;
-                        dayStr = getDayStr(dayOfWeek);
+                        dayStr = Login.dayToStr(dayOfWeek);
                     }
                 }
+                Toast toast = Toast.makeText(getActivity(), "Tour booked", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
         builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
@@ -122,27 +124,6 @@ public class DateTimePickerDialogFragment extends DialogFragment {
         });
 
         return builder.create();
-    }
-
-    static String getDayStr (int dayOfWeek) {
-        switch (dayOfWeek) {
-            case Calendar.SUNDAY:
-                return "sunday";
-            case Calendar.MONDAY:
-                return "monday";
-            case Calendar.TUESDAY:
-                return "tuesday";
-            case Calendar.WEDNESDAY:
-                return "wednesday";
-            case Calendar.THURSDAY:
-                return "thursday";
-            case Calendar.FRIDAY:
-                return "friday";
-            case Calendar.SATURDAY:
-                return "saturday";
-        }
-        Log.d("getDayStr()", "dayOfWeek out of bounds");
-        return "";
     }
 }
 

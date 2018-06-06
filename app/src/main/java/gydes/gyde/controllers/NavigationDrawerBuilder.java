@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,10 +18,8 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
@@ -28,12 +27,13 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import gydes.gyde.R;
+import gydes.gyde.models.User;
 
 /**
  * Created by kelvinlui1 on 5/17/18.
  */
 
-public class NavigationDrawerBuilder  {
+public class NavigationDrawerBuilder {
 
     private static final String TAG = NavigationDrawerBuilder.class.getSimpleName();
     private static final String TO_TRAV_STR = "To Traveler View";
@@ -44,13 +44,14 @@ public class NavigationDrawerBuilder  {
         PAYMENTS(2, "Payments"),
         BOOKINGS(3, "My Bookings"),
         REPORT(4, "Report"),
-        TOGGLE(5, "Toggle");
+        TOGGLE(5, "Toggle"),
+        LOGOUT(6, "Logout");
 
         private final int index;
         private final String name;
 
         private static DrawerItemConstant getItem(int index) {
-            switch(index) {
+            switch (index) {
                 case 1:
                     return PROFILE;
                 case 2:
@@ -61,6 +62,8 @@ public class NavigationDrawerBuilder  {
                     return REPORT;
                 case 5:
                     return TOGGLE;
+                case 6:
+                    return LOGOUT;
                 default:
                     throw new IndexOutOfBoundsException("DrawerItemConstant: index " + index + " does not exist.");
             }
@@ -87,7 +90,8 @@ public class NavigationDrawerBuilder  {
         PrimaryDrawerItem reportItem = new PrimaryDrawerItem().withIcon(R.drawable.report).withSelectable(false).withIdentifier(DrawerItemConstant.REPORT.getIndex()).withName(DrawerItemConstant.REPORT.getName());
         PrimaryDrawerItem tourItem = new PrimaryDrawerItem().withIcon(R.drawable.tours).withSelectable(false).withIdentifier(DrawerItemConstant.BOOKINGS.getIndex()).withName(DrawerItemConstant.BOOKINGS.getName());
         PrimaryDrawerItem toggleItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.TOGGLE.getIndex());
-        if(Login.isGuide) {
+        PrimaryDrawerItem logoutItem = new PrimaryDrawerItem().withSelectable(false).withIdentifier(DrawerItemConstant.LOGOUT.getIndex()).withName(DrawerItemConstant.LOGOUT.getName());
+        if (Login.isGuide) {
             toggleItem.withName(TO_TRAV_STR);
         } else {
             toggleItem.withName(TO_GUIDE_STR);
@@ -131,7 +135,8 @@ public class NavigationDrawerBuilder  {
                         paymentItem,
                         tourItem,
                         reportItem,
-                        toggleItem
+                        toggleItem,
+                        logoutItem
                 )
                 .withMultiSelect(false)
                 .withSelectedItem(-1)
@@ -172,39 +177,38 @@ public class NavigationDrawerBuilder  {
     }
 
     private static Drawer.OnDrawerItemClickListener getDrawerItemClickListener(final AppCompatActivity activity) {
-        return new Drawer.OnDrawerItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                switch(DrawerItemConstant.getItem(position)) {
-                    case PROFILE:
-                        activity.startActivity(new Intent(activity, EditProfile.class));
-                        break;
-                    case PAYMENTS:
-                        activity.startActivity(new Intent(activity, PaymentActivity.class));
-                        break;
-                    case BOOKINGS:
-                        break;
-                    case REPORT:
-                        break;
-                    case TOGGLE:
-                        if(!Login.isGuide) {
-                            Login.isGuide = true;
-                            Login.currentUserRef.child("isGuide").setValue(true);
-                            activity.startActivity(new Intent(activity, GuideHome.class));
-                        }
-                        else {
-                            Login.isGuide = false;
-                            Login.currentUserRef.child("isGuide").setValue(false);
-                            activity.startActivity(new Intent(activity, HomeActivity.class));
-                        }
-                        activity.finish();
-                        break;
-                    default:
-                        break;
-                }
-
-                return false;
+        return (view, position, drawerItem) -> {
+            switch (DrawerItemConstant.getItem(position)) {
+                case PROFILE:
+                    activity.startActivity(new Intent(activity, EditProfile.class));
+                    break;
+                case PAYMENTS:
+                    activity.startActivity(new Intent(activity, PaymentActivity.class));
+                    break;
+                case BOOKINGS:
+                    break;
+                case REPORT:
+                    break;
+                case TOGGLE:
+                    if (!Login.isGuide) {
+                        Login.isGuide = true;
+                        Login.currentUserRef.child("isGuide").setValue(true);
+                        activity.startActivity(new Intent(activity, GuideHome.class));
+                    } else {
+                        Login.isGuide = false;
+                        Login.currentUserRef.child("isGuide").setValue(false);
+                        activity.startActivity(new Intent(activity, HomeActivity.class));
+                    }
+                    activity.finish();
+                    break;
+                case LOGOUT:
+                    User.INSTANCE.logout();
+                    activity.startActivity(new Intent(activity, Login.class));
+                    activity.finish();
+                default:
+                    break;
             }
+            return false;
         };
     }
 }

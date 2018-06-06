@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import gydes.gyde.R;
 import gydes.gyde.controllers.Login;

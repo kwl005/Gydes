@@ -86,8 +86,9 @@ public class DesignTour extends AppCompatActivity {
                 String tags = tagsBox.getText().toString().trim();
                 String tourID = toursRef.push().getKey();
                 String creatorID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                boolean check_in = false;
 
-                Tour t = new Tour(name, location, duration, stops, walking, capacity, tags, tourID, creatorID);
+                Tour t = new Tour(name, location, duration, stops, walking, capacity, tags, tourID, creatorID, check_in);
                 toursRef.child(location).child(tourID).setValue(t);
 
                 Login.currentUserRef.child("guide").child("tourIDs").child(tourID).setValue(tourID);

@@ -7,7 +7,7 @@ public class Tour implements Parcelable {
 
     final static int NUM_STRING_ARGS = 6;
     final static int NUM_INT_ARGS = 2;
-    final static int NUM_BOOL_ARGS = 1;
+    final static int NUM_BOOL_ARGS = 2;
 
     final static int NAME_IND = 0;
     final static int LOC_IND = 1;
@@ -18,6 +18,7 @@ public class Tour implements Parcelable {
     final static int TAGS_IND = 3;
     final static int tID_IND = 4;
     final static int cID_IND = 5;
+    final static int CHECK_IND = 1;
 
     private double startLng, startLat, endLat, endLng;
     String name;
@@ -30,13 +31,14 @@ public class Tour implements Parcelable {
     private String tourID;
     private String creatorID;
     private boolean[][] schedule;
+    private boolean check_in;
 
     public Tour() {
         schedule = new boolean[7][24];
     }
 
     public Tour(String Name, String Location, int Duration, String Stops,
-                boolean Walking, int Capacity, String Tags, String TourID, String CreatorID) {
+                boolean Walking, int Capacity, String Tags, String TourID, String CreatorID, boolean check) {
         name = Name;
         location = Location;
         duration = Duration;
@@ -46,6 +48,7 @@ public class Tour implements Parcelable {
         tags = Tags;
         tourID = TourID;
         creatorID = CreatorID;
+        check_in = check;
     }
 
     public Tour(Parcel p) {
@@ -66,6 +69,7 @@ public class Tour implements Parcelable {
         tags = strings[TAGS_IND];
         tourID = strings[tID_IND];
         creatorID = strings[cID_IND];
+        check_in = bools[CHECK_IND];
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -82,7 +86,7 @@ public class Tour implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[] {this.name, this.location, this.stops, this.tags, this.tourID, this.creatorID});
         dest.writeIntArray(new int[] {this.duration, this.capacity});
-        dest.writeBooleanArray(new boolean[] {this.walking});
+        dest.writeBooleanArray(new boolean[] {this.walking, this.check_in});
     }
 
     public boolean checkAvailable(int day, int time) { return schedule[day][time]; }
@@ -122,6 +126,8 @@ public class Tour implements Parcelable {
     public void setTourID(String tID) { tourID = tID; }
     public String getCreatorID() { return creatorID; }
     public void setCreatorID(String cID) { creatorID = cID; }
+    public boolean getCheckIn() { return check_in; }
+    public void setCheck_in(boolean check) { check_in = check; }
 
     @Override
     public int describeContents() {

@@ -112,7 +112,6 @@ public class BookingDetailsDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 // set tour checkin to be true
 
-
                 // move model to tour mode
             }
         });
@@ -132,7 +131,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
                 builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Do nothing
+                        //Do nothing, go back to booking page
                     }
                 });
                 builder.create().show();
@@ -147,6 +146,27 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    void checkInBooking(MyBookings act) {
+        final String thisID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String otherID = otherUserID;
+        final String thisSide = thisSideStr;
+        final String otherSide = otherSideStr;
+        final int startHour = hour;
+        final int startDay = day;
+
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     void deleteBooking(MyBookings act) {

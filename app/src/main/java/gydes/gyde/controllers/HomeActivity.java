@@ -1,6 +1,7 @@
 package gydes.gyde.controllers;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ComponentName;
@@ -8,7 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,7 +24,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +34,6 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -76,15 +80,12 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FloatingActionButton tourPinButton;
     private ImageView imageView;
     private FrameLayout homeFrame;
-    private boolean isSelectingDestination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        isSelectingDestination = false;
-        inactivateDarkView();
         Toast.makeText(this, "Welcome! " + User.INSTANCE.getDisplayName(), Toast.LENGTH_SHORT).show();
 
         // Setup navigation drawer, action bar and status bar
@@ -202,7 +203,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onSuccess(Location location) {
                 if(location != null) {
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 20f));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16f));
                 }
             }
         });
@@ -265,32 +266,17 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             int action = dragEvent.getAction();
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    if(!isSelectingDestination) break;
-                    FrameLayout homeFrame = (FrameLayout) findViewById(R.id.home_frame);
-                    setViewGroupStatus(homeFrame, true);
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     break;
                 case DragEvent.ACTION_DROP:
-                    if(!isSelectingDestination) {
-                        LatLng latLng = getLatLngFromScreenPos((int) dragEvent.getX(), (int) dragEvent.getY());
-                        CreateTourDialogSequence sequence = new CreateTourDialogSequence(latLng, (tour) -> {
-                            activateDarkView();
-                            DrawerLayout homeLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-                            setViewGroupStatus(homeLayout, false);
-                        });
-                        sequence.begin();
-                        isSelectingDestination = true;
-                    } else {
-                        isSelectingDestination = false;
-                        // TODO: display dialog to confirm destination location
-                        // TODO: save tour into database
-                        DrawerLayout homeLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        setViewGroupStatus(homeLayout, true);
-                    }
-
+                    int x = (int)dragEvent.getX();
+                    int y = (int)dragEvent.getY();
+                    LatLng latLng = map.getProjection().fromScreenLocation(new Point(x, y));
+                    CreateTourDialogSequence sequence = new CreateTourDialogSequence(latLng);
+                    sequence.begin();
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     break;
@@ -298,35 +284,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             return true;
         }
-    }
-
-    public static void setViewGroupStatus(ViewGroup viewGroup, boolean enabled) {
-        int childCount = viewGroup.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = viewGroup.getChildAt(i);
-
-            // Do not disable tour pin button
-            if(view.getId() == R.id.tour_pin_button) { continue; }
-
-            view.setEnabled(enabled);
-            if (view instanceof ViewGroup) {
-                setViewGroupStatus((ViewGroup) view, enabled);
-            }
-        }
-    }
-
-    private LatLng getLatLngFromScreenPos(int x, int y) {
-        return map.getProjection().fromScreenLocation(new Point(x, y));
-    }
-
-    private void activateDarkView() {
-        View darkView = (View) findViewById(R.id.dark_view);
-        darkView.getForeground().setAlpha(200);
-    }
-
-    private void inactivateDarkView() {
-        View darkView = (View) findViewById(R.id.dark_view);
-        darkView.getForeground().setAlpha(0);
     }
 
     private final class TourPinTouchListener implements View.OnTouchListener {
@@ -346,35 +303,22 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private class CreateTourDialogSequence {
         private final LatLng startingPoint;
         private Tour newTour;
-        private boolean hasBegun;
-        private boolean isComplete;
-        private OnDialogSequenceCompleteListener listener;
 
-        private CreateTourDialogSequence(final LatLng startingPoint, OnDialogSequenceCompleteListener listener) {
+        private CreateTourDialogSequence(final LatLng startingPoint) {
             this.startingPoint = startingPoint;
             newTour = new Tour();
-            hasBegun = false;
-            isComplete = false;
-            newTour.setCreatorID(User.INSTANCE.getUid());
-            this.listener = listener;
         }
 
         private void begin() {
-            if(hasBegun) {
-                throw new IllegalStateException("Can not reuse dialog sequence.");
-            }
-
             Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
             List<Address> addresses = null;
             try {
                 addresses = geocoder.getFromLocation(startingPoint.latitude, startingPoint.longitude, 1);
-            } catch (IOException e) {
+            } catch(IOException e) {
                 e.printStackTrace();
             }
             final String location = addresses == null ? "Unknown" : addresses.get(0).getLocality();
             newTour.setLocation(location);
-            newTour.setStartLat(startingPoint.latitude);
-            newTour.setStartLng(startingPoint.longitude);
 
             final String dialogMessage = "Do you want to create a tour starting at " + addresses.get(0).getAddressLine(0) + "?";
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
@@ -394,7 +338,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     });
             AlertDialog dialog = builder.create();
             dialog.show();
-            hasBegun = true;
         }
 
         private void displayDialogToGetName() {
@@ -420,8 +363,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            KeyboardManager.hideKeyboard(HomeActivity.this);
                             dialogInterface.dismiss();
+                            KeyboardManager.hideKeyboard(HomeActivity.this);
                         }
                     });
             AlertDialog dialog = builder.create();
@@ -507,15 +450,21 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             KeyboardManager.hideKeyboard(HomeActivity.this);
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             final CharSequence[] methods = {"Walking", "Driving"};
-            builder.setItems(methods, ((dialogInterface, i) -> {
-                        newTour.setWalking(i == 0);
-                        displayDialogToGetTags();
-                    }))
+            builder.setItems(methods, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    newTour.setWalking(i == 0);
+                    displayDialogToGetTags();
+                }
+            })
                     .setTitle("What is your preferred exploration method?")
-                    .setNegativeButton("Back", ((dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        displayDialogToGetDuration();
-                    }));
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetDuration();
+                        }
+                    });
             AlertDialog dialog = builder.create();
             dialog.setCancelable(false);
             dialog.show();
@@ -528,14 +477,20 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setView(editText)
                     .setTitle("Do you want to type in any tags for your tour?")
-                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        newTour.setTags(editText.getText().toString());
-                        displayDialogToPickDestination();
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            newTour.setTags(editText.getText().toString());
+                            displayDialogToPickDestination();
+                        }
                     })
-                    .setNegativeButton("Back", ((dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        displayDialogToGetMethod();
-                    }));
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetMethod();
+                        }
+                    });
             AlertDialog dialog = builder.create();
             dialog.setCancelable(false);
             dialog.show();
@@ -546,17 +501,41 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             KeyboardManager.hideKeyboard(HomeActivity.this);
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("Please pick a destination on the map")
-                    .setPositiveButton("Continue", (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        listener.onComplete(newTour);
+                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            Toast.makeText(getBaseContext(), "Work in Progress", Toast.LENGTH_SHORT).show();
+                        }
                     })
-                    .setNegativeButton("Back", ((dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        displayDialogToGetTags();
-                    }));
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetTags();
+                        }
+                    });
             AlertDialog dialog = builder.create();
             dialog.setCancelable(false);
             dialog.show();
+        }
+    }
+
+    private class BlackView extends View {
+        private Paint paint = new Paint();
+        private Paint transparentPaint = new Paint();
+        private BlackView(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            paint.setColor(0xff);
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+            transparentPaint.setAlpha(0xFF);
+            transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            Rect rect = new Rect(20, 20, 40, 40);//make this your rect!
+            canvas.drawRect(rect,transparentPaint);
         }
     }
 }

@@ -1,6 +1,5 @@
 package gydes.gyde.models;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,10 +30,6 @@ public enum User {
         email = user.getEmail();
 
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
-    }
-
-    public void logout() {
-        FirebaseAuth.getInstance().signOut();
     }
 
     public void setPhoneNumber(String phoneNumber) {

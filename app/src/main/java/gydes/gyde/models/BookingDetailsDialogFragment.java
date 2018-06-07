@@ -49,7 +49,6 @@ public class BookingDetailsDialogFragment extends DialogFragment {
 
     public static BookingDetailsDialogFragment newInstance(Tour t, String id, String nam, String phone, String mail,
                                                            String side, int day, int hour) {
-        Log.d("AAAAA", "side: " + side);
         BookingDetailsDialogFragment frag = new BookingDetailsDialogFragment();
         Bundle b = new Bundle();
         b.putParcelable("tour", t);
@@ -139,7 +138,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    void deleteBooking(MyBookings act) {
+    void deleteBooking(final MyBookings act) {
         final String thisID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final String otherID = otherUserID;
         final String thisSide = thisSideStr;
@@ -154,8 +153,6 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot users) {
-                Log.d("AAAAA", "thisSide: " + thisSide);
-                Log.d("AAAAA", "otherSide: " + otherSide);
                 DataSnapshot thisBookings = users.child(thisID).child(thisSide).child("bookings");
                 DataSnapshot otherBookings = users.child(otherID).child(otherSide).child("bookings");
 

@@ -107,10 +107,12 @@ public class BookingDetailsDialogFragment extends DialogFragment {
 
         builder.setView(view);
 
-        builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.check_in_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Do nothing
+                // set tour checkin to be true
+
+                // move model to tour mode
             }
         });
 
@@ -129,14 +131,22 @@ public class BookingDetailsDialogFragment extends DialogFragment {
                 builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Do nothing
+                        //Do nothing, go back to booking page
                     }
                 });
                 builder.create().show();
             }
         });
 
+        builder.setNeutralButton(R.string.close_txt, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+
         return builder.create();
+
     }
 
     void deleteBooking(MyBookings act) {

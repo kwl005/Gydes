@@ -74,6 +74,9 @@
     <string name="delete_txt">Delete</string>
     <string name="yes_txt">Yes</string>
     <string name="no_txt">No</string>
+    <string name="check_in_txt">Check In</string>
+    <string name="close_txt">Close</string>
+    <string name="check_out_txt">Check Out</string>
 
     <string name="traveler_txt">Traveler</string>
     <string name="guide_txt">Guide</string>

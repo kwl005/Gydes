@@ -160,7 +160,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                dataSnapshot.child(thisID).child(thisSide).child("bookings").child()
             }
 
             @Override

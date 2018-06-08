@@ -13,15 +13,14 @@
         android:layout_height="338dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="129dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/gyde_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="77dp"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/guide_your_day_of_exploration"
         android:textAlignment="center"

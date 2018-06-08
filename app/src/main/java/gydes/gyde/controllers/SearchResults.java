@@ -329,7 +329,7 @@ public class SearchResults extends AppCompatActivity {
                             int inputDurationMin = Integer.parseInt(inputDurationMinText);
                             int inputDurationMax = Integer.parseInt(inputDurationMaxText);
                             toursCopy.removeIf((Tour tour) -> tour.getDuration() < inputDurationMin
-                            && tour.getDuration() > inputDurationMax);
+                            || tour.getDuration() > inputDurationMax);
                         }
 
                         if(!inputCapacityText.isEmpty()) {

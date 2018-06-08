@@ -306,7 +306,8 @@ public class SearchResults extends AppCompatActivity {
                 .setPositiveButton("filter", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
+                        EditText durationBoxMin = (EditText) view.findViewById(R.id.duration_box_min);
+                        EditText durationBoxMax = (EditText) view.findViewById(R.id.duration_box_max);
                         EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
                         EditText capacityBox = (EditText) view.findViewById(R.id.capacity_box);
                         EditText priceBox = (EditText) view.findViewById(R.id.price_box);
@@ -317,25 +318,29 @@ public class SearchResults extends AppCompatActivity {
                         listView2.setAdapter(adapter2);
 
 
-                        String inputDurationText = durationBox.getText().toString().trim();
+                        String inputDurationMinText = durationBoxMin.getText().toString().trim();
+                        String inputDurationMaxText = durationBoxMax.getText().toString().trim();
                         String inputCapacityText = capacityBox.getText().toString().trim();
-                        String inputTagsText = tagsBox.getText().toString();
+                        String inputTagsText = tagsBox.getText().toString().trim();
 
-                        String inputPriceText = priceBox.getText().toString();
+                        String inputPriceText = priceBox.getText().toString().trim();
 
-                        if(!inputDurationText.isEmpty()) {
-                            int inputDuration = Integer.parseInt(inputDurationText);
-                            toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
+                        if(!inputDurationMinText.isEmpty() && !inputDurationMaxText.isEmpty()) {
+                            int inputDurationMin = Integer.parseInt(inputDurationMinText);
+                            int inputDurationMax = Integer.parseInt(inputDurationMaxText);
+                            toursCopy.removeIf((Tour tour) -> tour.getDuration() < inputDurationMin
+                            && tour.getDuration() > inputDurationMax);
                         }
 
                         if(!inputCapacityText.isEmpty()) {
                             int inputCapacity = Integer.parseInt(inputCapacityText);
-                            toursCopy.removeIf((Tour tour) -> tour.getCapacity() != inputCapacity);
+                            toursCopy.removeIf((Tour tour) -> tour.getCapacity() < inputCapacity);
                         }
 
-                        if(!inputPriceText.isEmpty()) {
-                            double inputPrice = Double.parseDouble(inputPriceText);
-                        }
+//                        if(!inputPriceText.isEmpty()) {
+//                            double inputPrice = Double.parseDouble(inputPriceText);
+//                            toursCopy.removeIf((Tour tour) -> tour.getPrice() > inputPrice);
+//                        }
 
                         if(!inputTagsText.isEmpty()) {
                             String[] tags = inputTagsText.toLowerCase().split(",");

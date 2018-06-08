@@ -122,7 +122,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
                             Login.currentUserRef.child("activeTour").child("otherSide").setValue(otherSideStr);
                             Login.currentUserRef.child("activeTour").child("hour").setValue(hour);
                             Login.currentUserRef.child("activeTour").child("day").setValue(day);
-                            startActivity(new Intent(act, TourMode.class));
+                            act.startActivity(new Intent(act, TourMode.class));
                         }
                     });
                     builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
@@ -143,12 +143,12 @@ public class BookingDetailsDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton(R.string.cancel_booking_txt, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel_tour_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final Activity act = BookingDetailsDialogFragment.this.getActivity();
                 AlertDialog.Builder builder = new AlertDialog.Builder(act);
-                builder.setMessage(R.string.cancel_booking_confirmation);
+                builder.setMessage(R.string.cancel_tour_confirmation);
                 builder.setPositiveButton(R.string.yes_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

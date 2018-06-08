@@ -15,6 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 import gydes.gyde.R;
 import gydes.gyde.models.BookingDetailsDialogFragment;
 
+import static java.lang.Math.toIntExact;
+
 public class TourMode extends Activity {
 
     @Override
@@ -32,8 +34,8 @@ public class TourMode extends Activity {
                             String otherID = (String)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_otherID_path)).getValue();
                             String thisSide = (String)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_thisside_path)).getValue();
                             String otherSide =(String)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_otherside_path)).getValue();
-                            int hour = (int)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_hour_path)).getValue();
-                            int day = (int)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_day_path)).getValue();
+                            int hour = toIntExact((long)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_hour_path)).getValue());
+                            int day = toIntExact((long)user.child(getString(R.string.firebase_activetour_path)).child(getString(R.string.firebase_day_path)).getValue());
                             BookingDetailsDialogFragment.deleteBooking(null, thisID, otherID, thisSide, otherSide, hour, day);
                             Toast toast = Toast.makeText(TourMode.this, "Tour finished. You have been charged for the tour.", Toast.LENGTH_LONG);
                             toast.show();

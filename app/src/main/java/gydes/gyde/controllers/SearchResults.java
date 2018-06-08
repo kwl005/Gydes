@@ -309,6 +309,7 @@ public class SearchResults extends AppCompatActivity {
                         EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
                         EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
                         EditText capacityBox = (EditText) view.findViewById(R.id.capacity_box);
+                        EditText priceBox = (EditText) view.findViewById(R.id.price_box);
 
                         final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
                         final TourListAdapter adapter2 = new TourListAdapter(context, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
@@ -320,6 +321,8 @@ public class SearchResults extends AppCompatActivity {
                         String inputCapacityText = capacityBox.getText().toString().trim();
                         String inputTagsText = tagsBox.getText().toString();
 
+                        String inputPriceText = priceBox.getText().toString();
+
                         if(!inputDurationText.isEmpty()) {
                             int inputDuration = Integer.parseInt(inputDurationText);
                             toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
@@ -328,6 +331,10 @@ public class SearchResults extends AppCompatActivity {
                         if(!inputCapacityText.isEmpty()) {
                             int inputCapacity = Integer.parseInt(inputCapacityText);
                             toursCopy.removeIf((Tour tour) -> tour.getCapacity() != inputCapacity);
+                        }
+
+                        if(!inputPriceText.isEmpty()) {
+                            double inputPrice = Double.parseDouble(inputPriceText);
                         }
 
                         if(!inputTagsText.isEmpty()) {

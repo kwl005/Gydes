@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import java.util.Calendar;
 import gydes.gyde.R;
 import gydes.gyde.controllers.Login;
 import gydes.gyde.controllers.MyBookings;
+import gydes.gyde.controllers.TourMode;
 
 public class BookingDetailsDialogFragment extends DialogFragment {
 
@@ -49,7 +51,6 @@ public class BookingDetailsDialogFragment extends DialogFragment {
 
     public static BookingDetailsDialogFragment newInstance(Tour t, String id, String nam, String phone, String mail,
                                                            String side, int day, int hour) {
-        Log.d("AAAAA", "side: " + side);
         BookingDetailsDialogFragment frag = new BookingDetailsDialogFragment();
         Bundle b = new Bundle();
         b.putParcelable("tour", t);
@@ -77,8 +78,6 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         email = email == null ? "None" : email;
         thisSideStr = getArguments().getString("side");
         otherSideStr = thisSideStr.equals("traveler") ? "guide" : "traveler";
-        Log.d("AAAAA", "thisSideStr: " + thisSideStr);
-        Log.d("AAAAA", "otherSideStr: " + otherSideStr);
         day = getArguments().getInt("day");
         hour = getArguments().getInt("hour");
     }
@@ -107,14 +106,44 @@ public class BookingDetailsDialogFragment extends DialogFragment {
 
         builder.setView(view);
 
-        builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+        if(!Login.isGuide) {
+            builder.setPositiveButton(R.string.start_tour_txt, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final Activity act = BookingDetailsDialogFragment.this.getActivity();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(act);
+                    builder.setMessage(R.string.start_tour_confirmation);
+                    builder.setPositiveButton(R.string.yes_txt, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Login.currentUserRef.child("activeTour").child("thisID").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            Login.currentUserRef.child("activeTour").child("otherID").setValue(otherUserID);
+                            Login.currentUserRef.child("activeTour").child("thisSide").setValue(thisSideStr);
+                            Login.currentUserRef.child("activeTour").child("otherSide").setValue(otherSideStr);
+                            Login.currentUserRef.child("activeTour").child("hour").setValue(hour);
+                            Login.currentUserRef.child("activeTour").child("day").setValue(day);
+                            startActivity(new Intent(act, TourMode.class));
+                        }
+                    });
+                    builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Do nothing
+                        }
+                    });
+                    builder.create().show();
+                }
+            });
+        }
+
+        builder.setNeutralButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Do nothing
             }
         });
 
-        builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel_booking_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final Activity act = BookingDetailsDialogFragment.this.getActivity();
@@ -123,7 +152,10 @@ public class BookingDetailsDialogFragment extends DialogFragment {
                 builder.setPositiveButton(R.string.yes_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteBooking((MyBookings)act);
+                        Toast toast = Toast.makeText(act, R.string.cancel_booking_toast, Toast.LENGTH_SHORT);
+                        toast.show();
+                        deleteBooking((MyBookings)act, FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                otherUserID, thisSideStr, otherSideStr, hour, day);
                     }
                 });
                 builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
@@ -139,23 +171,13 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    void deleteBooking(MyBookings act) {
-        final String thisID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final String otherID = otherUserID;
-        final String thisSide = thisSideStr;
-        final String otherSide = otherSideStr;
-        final int startHour = hour;
-        final int startDay = day;
-
-        Toast toast = Toast.makeText(act, R.string.cancel_booking_toast, Toast.LENGTH_SHORT);
-        toast.show();
+    public static void deleteBooking(MyBookings act, final String thisID, final String otherID,
+                       final String thisSide, final String otherSide, final int startHour, final int startDay) {
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot users) {
-                Log.d("AAAAA", "thisSide: " + thisSide);
-                Log.d("AAAAA", "otherSide: " + otherSide);
                 DataSnapshot thisBookings = users.child(thisID).child(thisSide).child("bookings");
                 DataSnapshot otherBookings = users.child(otherID).child(otherSide).child("bookings");
 
@@ -193,7 +215,9 @@ public class BookingDetailsDialogFragment extends DialogFragment {
                 } while ((boolean) thisBookings.child(dayStr).child(hourStr).child("sameAsPrev").getValue() &&
                         (boolean) otherBookings.child(dayStr).child(hourStr).child("sameAsPrev").getValue());
 
-                act.updateBookingsList(day);
+                if(act != null) {
+                    act.updateBookingsList(startDay);
+                }
             }
 
             @Override

@@ -82,6 +82,8 @@
     <string name="delete_txt">Delete</string>
     <string name="yes_txt">Yes</string>
     <string name="no_txt">No</string>
+    <string name="close_txt">Close</string>
+
     <string name="cancel_booking_txt">Cancel Booking</string>
     <string name="start_tour_txt">Start Tour</string>
     <string name="end_tour_txt">End Tour</string>

@@ -136,7 +136,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
             });
         }
 
-        builder.setNeutralButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.close_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Do nothing
@@ -161,7 +161,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
                 builder.setNegativeButton(R.string.no_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Do nothing
+                        //Do nothing, go back to booking page
                     }
                 });
                 builder.create().show();
@@ -169,6 +169,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
         });
 
         return builder.create();
+
     }
 
     public static void deleteBooking(MyBookings act, final String thisID, final String otherID,

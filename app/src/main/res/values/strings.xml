@@ -71,6 +71,8 @@
     <string name="delete_tour_confirmation">Are you sure you want to delete this tour?</string>
     <string name="cancel_tour_confirmation">Are you sure you want to cancel this tour?</string>
     <string name="start_tour_confirmation">Start this tour?</string>
+    <string name="guide_busy_msg">Sorry, the guide is busy during that time</string>
+    <string name="trav_busy_msg">You already have a booking during that time</string>
 
     <string name="cancel_booking_toast">Cancelling booking...</string>
 

@@ -1,18 +1,22 @@
 package gydes.gyde.models;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -25,13 +29,22 @@ public class DateTimePickerDialogFragment extends DialogFragment {
     final static String TITLE_STR = "Pick a time to meet";
     final static int MIN_HOUR = 0;
     final static int MAX_HOUR = 11;
-    final static String[] hours = {"12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00"};
+    final static String[] hourStrs = {"12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00"};
     final static int AM = 0;
     final static int PM = 1;
     final static String[] periods = {"AM", "PM"};
     final static int HOURS_IN_HALF_DAY = 12;
     final static int HOURS_IN_FULL_DAY = 24;
     final static int DOUBLE_DIGITS = 10;
+
+    final String USERS = "users";
+    final String TRAVELER = "traveler";
+    final String GUIDE = "guide";
+    final String BOOKINGS = "bookings";
+    final String TOUR = "tour";
+    final String GUIDEID = "guideID";
+    final String TRAVID = "travelerID";
+    final String SAMEASPREV = "sameAsPrev";
 
     Tour tour;
 
@@ -62,7 +75,7 @@ public class DateTimePickerDialogFragment extends DialogFragment {
         datePicker.setMinDate(System.currentTimeMillis());
         datePicker.setMaxDate(datePicker.getMinDate() + MILLIS_IN_SIX_DAYS);
 
-        hourPicker.setDisplayedValues(hours);
+        hourPicker.setDisplayedValues(hourStrs);
         hourPicker.setMinValue(MIN_HOUR);
         hourPicker.setMaxValue(MAX_HOUR);
 
@@ -74,46 +87,100 @@ public class DateTimePickerDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setPositiveButton(R.string.book_txt, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                final Activity act = DateTimePickerDialogFragment.this.getActivity();
 
-                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-                String dayStr = Login.dayToStr(dayOfWeek);
+                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child(USERS);
+                usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot users) {
+                        DataSnapshot guideBookings = users.child(tour.getCreatorID()).child(GUIDE).child(BOOKINGS);
+                        DataSnapshot travBookings = users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child(TRAVELER).child(BOOKINGS);
 
-                String timeStr;
-                int startHour = hourPicker.getValue();
-                if(periodPicker.getValue() == PM) startHour += HOURS_IN_HALF_DAY;
-                int currHour = startHour;
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
-                for(int i = 0; i < tour.getDuration(); i++) {
-                    timeStr = Login.hourToStr(currHour);
+                        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                        String dayStr = Login.dayToStr(dayOfWeek);
 
-                    DatabaseReference travBookSpot = Login.currentUserRef.child(getString(R.string.firebase_trav_path))
-                            .child(getString(R.string.firebase_book_path)).child(dayStr).child(timeStr);
-                    travBookSpot.child(getString(R.string.firebase_gID_path)).setValue(tour.getCreatorID());
-                    travBookSpot.child(getString(R.string.firebase_tour_path)).setValue(tour);
-                    if(currHour == startHour) travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
-                    else travBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
+                        String hourStr;
+                        int startHour = hourPicker.getValue();
+                        if(periodPicker.getValue() == PM) startHour += HOURS_IN_HALF_DAY;
+                        int currHour = startHour;
 
-                    DatabaseReference guideBookSpot = FirebaseDatabase.getInstance().getReference()
-                            .child(getString(R.string.firebase_users_path)).child(tour.getCreatorID())
-                            .child(getString(R.string.firebase_guide_path)).child(getString(R.string.firebase_book_path))
-                            .child(dayStr).child(timeStr);
-                    guideBookSpot.child(getString(R.string.firebase_tID_path)).setValue(Login.currentUserRef.getKey());
-                    guideBookSpot.child(getString(R.string.firebase_tour_path)).setValue(tour);
-                    if(currHour == startHour) guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(false);
-                    else guideBookSpot.child(getString(R.string.firebase_sameasprev_path)).setValue(true);
+                        int checkDay = dayOfWeek;
+                        int checkHour = currHour;
+                        for(int i = 0; i < tour.getDuration(); i++) {
+                            hourStr = Login.hourToStr(checkHour);
 
-                    currHour++;
-                    if(currHour == HOURS_IN_FULL_DAY) {
-                        currHour = 0;
-                        dayOfWeek++;
-                        if(dayOfWeek > Calendar.SATURDAY) dayOfWeek = Calendar.SUNDAY;
-                        dayStr = Login.dayToStr(dayOfWeek);
+                            if(guideBookings.child(dayStr).child(hourStr).hasChild(TOUR)) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(act);
+                                builder.setMessage(R.string.guide_busy_msg);
+                                builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //Do nothing
+                                    }
+                                });
+                                builder.create().show();
+                                return;
+                            } else if(travBookings.child(dayStr).child(hourStr).hasChild("tour")) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(act);
+                                builder.setMessage(R.string.trav_busy_msg);
+                                builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //Do nothing
+                                    }
+                                });
+                                builder.create().show();
+                                return;
+                            }
+
+                            checkHour++;
+                            if(checkHour == HOURS_IN_FULL_DAY) {
+                                checkHour = 0;
+                                checkDay++;
+                                if(checkDay > Calendar.SATURDAY) dayOfWeek = Calendar.SUNDAY;
+                                dayStr = Login.dayToStr(dayOfWeek);
+                            }
+                        }
+
+                        for(int i = 0; i < tour.getDuration(); i++) {
+                            hourStr = Login.hourToStr(currHour);
+
+                            DatabaseReference travBookSpot = Login.currentUserRef.child(TRAVELER)
+                                    .child(BOOKINGS).child(dayStr).child(hourStr);
+                            travBookSpot.child(GUIDEID).setValue(tour.getCreatorID());
+                            travBookSpot.child(TOUR).setValue(tour);
+                            if(currHour == startHour) travBookSpot.child(SAMEASPREV).setValue(false);
+                            else travBookSpot.child(SAMEASPREV).setValue(true);
+
+                            DatabaseReference guideBookSpot = FirebaseDatabase.getInstance().getReference()
+                                    .child(USERS).child(tour.getCreatorID()).child(GUIDE)
+                                    .child(BOOKINGS).child(dayStr).child(hourStr);
+                            guideBookSpot.child(TRAVID).setValue(Login.currentUserRef.getKey());
+                            guideBookSpot.child(TOUR).setValue(tour);
+                            if(currHour == startHour) guideBookSpot.child(SAMEASPREV).setValue(false);
+                            else guideBookSpot.child(SAMEASPREV).setValue(true);
+
+                            currHour++;
+                            if(currHour == HOURS_IN_FULL_DAY) {
+                                currHour = 0;
+                                dayOfWeek++;
+                                if(dayOfWeek > Calendar.SATURDAY) dayOfWeek = Calendar.SUNDAY;
+                                dayStr = Login.dayToStr(dayOfWeek);
+                            }
+                        }
+                        Toast toast = Toast.makeText(act, "Tour booked", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
-                }
-                Toast toast = Toast.makeText(getActivity(), "Tour booked", Toast.LENGTH_SHORT);
-                toast.show();
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
         builder.setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {

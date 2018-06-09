@@ -52,7 +52,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         android:textColor="@color/gydeBlue"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/stops_text"
+        app:layout_constraintBottom_toTopOf="@+id/price_text"
         app:layout_constraintStart_toStartOf="@+id/name_text"
         app:layout_constraintTop_toBottomOf="@+id/name_text" />
 
@@ -69,6 +69,31 @@
         app:layout_constraintEnd_toEndOf="@+id/name_box" />
 
     <TextView
+        android:id="@+id/price_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/price_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textColor="@color/gydeBlue"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/stops_text"
+        app:layout_constraintStart_toStartOf="@+id/location_text"
+        app:layout_constraintTop_toBottomOf="@+id/location_text"/>
+
+    <EditText
+        android:id="@+id/price_box"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textColor="@color/gydeBlue"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/price_text"
+        app:layout_constraintEnd_toEndOf="@+id/location_box"/>
+
+    <TextView
         android:id="@+id/stops_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,19 +106,19 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/duration_text"
         app:layout_constraintStart_toStartOf="@+id/name_text"
-        app:layout_constraintTop_toBottomOf="@+id/location_text" />
+        app:layout_constraintTop_toBottomOf="@+id/price_text" />
 
     <EditText
         android:id="@+id/stops_box"
         android:layout_width="192dp"
-        android:layout_height="49dp"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
         android:labelFor="@+id/stops_text"
         android:textColor="@color/gydeBlue"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/stops_text"
-        app:layout_constraintEnd_toEndOf="@+id/location_box" />
+        app:layout_constraintEnd_toEndOf="@+id/price_box" />
 
     <TextView
         android:id="@+id/duration_text"

@@ -128,6 +128,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
 
+        /* Not enough time to implement before delivery
         // Set up tour pin
         homeFrame = (FrameLayout) findViewById(R.id.home_frame);
         homeFrame.setOnDragListener(new TourPinDragListener());
@@ -137,7 +138,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
         homeFrame.addView(imageView);
         tourPinButton = (FloatingActionButton) findViewById(R.id.tour_pin_button);
-        tourPinButton.setOnTouchListener(new TourPinTouchListener());
+        tourPinButton.setOnTouchListener(new TourPinTouchListener());*/
 
         // Check GPS is enabled
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -258,7 +259,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 20));
     }
-
+  
     private final class TourPinDragListener implements View.OnDragListener {
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {

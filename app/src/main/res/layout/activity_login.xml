@@ -21,15 +21,14 @@
             android:layout_height="338dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="129dp"
+            android:layout_marginTop="51dp"
             android:src="@drawable/gyde_logo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="77dp"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/guide_your_day_of_exploration"
             android:textAlignment="center"
@@ -37,28 +36,25 @@
             android:textSize="20sp"
             android:textStyle="bold"
             tools:textColor="@color/gydeYellow" />
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-82dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Please log in with your Google account "
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="12sp" />
 
     </RelativeLayout>
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="125dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="23dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Please log in with your Google account "
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="12sp" />
-
 
 </RelativeLayout>

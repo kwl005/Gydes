@@ -29,13 +29,22 @@
     <string name="firebase_uid_path" translatable="false">uid</string>
     <string name="firebase_isguide_path" translatable="false">isGuide</string>
     <string name="firebase_bio_path" translatable="false">bio</string>
+    <string name="firebase_loc_path" translatable="false">location</string>
     <string name="firebase_tourIDs_path" translatable="false">tourIDs</string>
+    <string name="firebase_activetour_path" translatable="false">activeTour</string>
+    <string name="firebase_thisID_path" translatable="false">thisID</string>
+    <string name="firebase_otherID_path" translatable="false">otherID</string>
+    <string name="firebase_thisside_path" translatable="false">thisSide</string>
+    <string name="firebase_otherside_path" translatable="false">otherSide</string>
+    <string name="firebase_day_path" translatable="false">day</string>
+    <string name="firebase_hour_path" translatable="false">hour</string>
 
     <string name="tracking_notification_text">Tracking, tap to cancel</string>
 
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
 
     <string name="design_tour_button_text">Design A Tour</string>
+    <string name="my_tours_button_text">My Tours</string>
     <string name="pick_day_button_text">Pick a day</string>
 
     <string name="todo">TODO</string>
@@ -48,6 +57,7 @@
 
     <string name="name_txt">Name:</string>
     <string name="location_txt">Location:</string>
+    <string name="price_txt">Price:</string>
     <string name="stops_txt">Stops:</string>
     <string name="duration_txt">Duration:</string>
     <string name="transport_txt">Transport:</string>
@@ -59,10 +69,14 @@
 
     <string name="name_prompt">Please enter a name for the tour</string>
     <string name="location_prompt">Please enter a location for the tour</string>
+    <string name="price_prompt">Please enter a price for the tour</string>
     <string name="duration_prompt">Please enter a duration for the tour</string>
     <string name="transport_prompt">Please enter a mode of transportation for the tour</string>
     <string name="delete_tour_confirmation">Are you sure you want to delete this tour?</string>
-    <string name="cancel_booking_confirmation">Are you sure you want to cancel this booking?</string>
+    <string name="cancel_tour_confirmation">Are you sure you want to cancel this tour?</string>
+    <string name="start_tour_confirmation">Start this tour?</string>
+    <string name="guide_busy_msg">Sorry, the guide is busy during that time</string>
+    <string name="trav_busy_msg">You already have a booking during that time</string>
 
     <string name="cancel_booking_toast">Cancelling booking...</string>
 
@@ -74,6 +88,11 @@
     <string name="delete_txt">Delete</string>
     <string name="yes_txt">Yes</string>
     <string name="no_txt">No</string>
+    <string name="close_txt">Close</string>
+
+    <string name="cancel_tour_txt">Cancel Tour</string>
+    <string name="start_tour_txt">Start Tour</string>
+    <string name="end_tour_txt">End Tour</string>
 
     <string name="traveler_txt">Traveler</string>
     <string name="guide_txt">Guide</string>
@@ -81,5 +100,6 @@
     <string name="title_activity_book_tour">BookTour</string>
     <string name="title_activity_edit_profile">EditProfile</string>
     <string name="title_activity_my_bookings">MyBookings</string>
+    <string name="title_activity_tour_mode">TourMode</string>
 
 </resources>

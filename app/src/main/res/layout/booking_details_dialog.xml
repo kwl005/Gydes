@@ -7,6 +7,20 @@
     android:background="@color/gydeYellow">
 
     <TextView
+        android:id="@+id/tour_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/price_txt"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tour_stops"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/tour_stops"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +32,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tour_tags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tour_price" />
 
     <TextView
         android:id="@+id/tour_tags"

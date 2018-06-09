@@ -138,7 +138,9 @@ public class Login extends AppCompatActivity {
 
                 Login.currentUserRef = usersRef.child(currentUser.getUid());
 
-                if (Login.isGuide) {
+                if(dataSnapshot.child(currentUser.getUid()).hasChild(getString(R.string.firebase_activetour_path))) {
+                    startActivity(new Intent(Login.this, TourMode.class));
+                } else if (Login.isGuide) {
                     startActivity(new Intent(Login.this, GuideHome.class));
                 } else {
                     startActivity(new Intent(Login.this, HomeActivity.class));

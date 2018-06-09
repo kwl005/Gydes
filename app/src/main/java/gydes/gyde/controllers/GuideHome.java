@@ -1,8 +1,19 @@
 package gydes.gyde.controllers;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -10,14 +21,20 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,7 +53,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import gydes.gyde.R;
@@ -138,11 +158,6 @@ public class GuideHome extends AppCompatActivity implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.setMaxZoomPreference(16);
         subscribeToUpdates();
-
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private void subscribeToUpdates() {
@@ -194,4 +209,284 @@ public class GuideHome extends AppCompatActivity implements OnMapReadyCallback {
         }
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
     }
+
+    /* Not enough time to fully implement, commented out for delivery
+    private final class TourPinDragListener implements View.OnDragListener {
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            int action = dragEvent.getAction();
+            switch (action) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    break;
+                case DragEvent.ACTION_DROP:
+                    int x = (int)dragEvent.getX();
+                    int y = (int)dragEvent.getY();
+                    LatLng latLng = map.getProjection().fromScreenLocation(new Point(x, y));
+                    CreateTourDialogSequence sequence = new CreateTourDialogSequence(latLng);
+                    sequence.begin();
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    break;
+            }
+
+            return true;
+        }
+    }
+
+    private final class TourPinTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(imageView);
+                imageView.startDragAndDrop(data, shadowBuilder, null, 0);
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private class CreateTourDialogSequence {
+        private final LatLng startingPoint;
+        private Tour newTour;
+
+        private CreateTourDialogSequence(final LatLng startingPoint) {
+            this.startingPoint = startingPoint;
+            newTour = new Tour();
+        }
+
+        private void begin() {
+            Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(startingPoint.latitude, startingPoint.longitude, 1);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+            final String location = addresses == null ? "Unknown" : addresses.get(0).getLocality();
+            newTour.setLocation(location);
+
+            final String dialogMessage = "Do you want to create a tour starting at " + addresses.get(0).getAddressLine(0) + "?";
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setMessage(dialogMessage)
+                    .setTitle("Confirmation")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            displayDialogToGetName();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        private void displayDialogToGetName() {
+            final EditText editText = new EditText(HomeActivity.this);
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(20)});
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setView(editText)
+                    .setTitle("Enter name of the tour")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(editText.getText().length() == 0) {
+                                Toast.makeText(HomeActivity.this, "Can not leave name empty. Please try again.", Toast.LENGTH_LONG).show();
+                                displayDialogToGetName();
+                                return;
+                            }
+
+                            newTour.setName(editText.getText().toString());
+                            displayDialogToGetCapacity();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            KeyboardManager.hideKeyboard(HomeActivity.this);
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+            KeyboardManager.showKeyboard(HomeActivity.this);
+        }
+
+        private void displayDialogToGetCapacity() {
+            final EditText editText = new EditText(HomeActivity.this);
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(20)});
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setView(editText)
+                    .setTitle("How many people are coming (include yourself)?")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(editText.getText().length() == 0) {
+                                Toast.makeText(HomeActivity.this, "Can not leave capacity empty. Please try again.", Toast.LENGTH_LONG).show();
+                                displayDialogToGetCapacity();
+                                return;
+                            }
+
+                            newTour.setCapacity(Integer.parseInt(editText.getText().toString()));
+                            displayDialogToGetDuration();
+                        }
+                    })
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetName();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+            KeyboardManager.showKeyboard(HomeActivity.this);
+        }
+
+        private void displayDialogToGetDuration() {
+            final EditText editText = new EditText(HomeActivity.this);
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(20)});
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setView(editText)
+                    .setTitle("How many hours would you like to spend?")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(editText.getText().length() == 0) {
+                                Toast.makeText(HomeActivity.this, "Can not leave duration empty. Please try again.", Toast.LENGTH_LONG).show();
+                                displayDialogToGetDuration();
+                                return;
+                            }
+
+                            final int hours = Integer.parseInt(editText.getText().toString());
+                            if(hours < 1) {
+                                Toast.makeText(HomeActivity.this, "Hours must be greater or equal to 1. Please try again.", Toast.LENGTH_LONG).show();
+                            }
+
+                            newTour.setDuration(Integer.parseInt(editText.getText().toString()));
+                            displayDialogToGetMethod();
+                        }
+                    })
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetCapacity();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+            KeyboardManager.showKeyboard(HomeActivity.this);
+        }
+
+        private void displayDialogToGetMethod() {
+            KeyboardManager.hideKeyboard(HomeActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            final CharSequence[] methods = {"Walking", "Driving"};
+            builder.setItems(methods, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    newTour.setWalking(i == 0);
+                    displayDialogToGetTags();
+                }
+            })
+                    .setTitle("What is your preferred exploration method?")
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetDuration();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        private void displayDialogToGetTags() {
+            final EditText editText = new EditText(HomeActivity.this);
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(20)});
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setView(editText)
+                    .setTitle("Do you want to type in any tags for your tour?")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            newTour.setTags(editText.getText().toString());
+                            displayDialogToPickDestination();
+                        }
+                    })
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetMethod();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+            KeyboardManager.showKeyboard(HomeActivity.this);
+        }
+
+        private void displayDialogToPickDestination() {
+            KeyboardManager.hideKeyboard(HomeActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Please pick a destination on the map")
+                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            Toast.makeText(getBaseContext(), "Work in Progress", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            displayDialogToGetTags();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+    }
+
+    private class BlackView extends View {
+        private Paint paint = new Paint();
+        private Paint transparentPaint = new Paint();
+        private BlackView(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            paint.setColor(0xff);
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+            transparentPaint.setAlpha(0xFF);
+            transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            Rect rect = new Rect(20, 20, 40, 40);//make this your rect!
+            canvas.drawRect(rect,transparentPaint);
+        }
+    }*/
 }

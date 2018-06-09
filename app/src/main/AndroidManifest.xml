@@ -57,7 +57,8 @@
         <activity
             android:name=".controllers.DesignTour"
             android:label="@string/title_activity_design_tour" />
-        <activity android:name=".controllers.EditProfile"
+        <activity
+            android:name=".controllers.EditProfile"
             android:label="@string/title_activity_edit_profile" />
         <activity
             android:name=".controllers.Login"
@@ -82,8 +83,10 @@
         </activity>
         <activity
             android:name=".controllers.MyBookings"
-            android:label="@string/title_activity_my_bookings">
-        </activity>
+            android:label="@string/title_activity_my_bookings"></activity>
+        <activity
+            android:name=".controllers.TourMode"
+            android:label="@string/title_activity_tour_mode"></activity>
     </application>
 
 </manifest>

@@ -20,6 +20,7 @@ public class Tour implements Parcelable {
     final static int tID_IND = 4;
     final static int cID_IND = 5;
 
+    private double startLng, startLat, endLat, endLng;
     String name;
     String location;
     private int price;
@@ -86,7 +87,24 @@ public class Tour implements Parcelable {
         dest.writeIntArray(new int[] {this.price, this.duration, this.capacity});
         dest.writeBooleanArray(new boolean[] {this.walking});
     }
+    public boolean checkAvailable(int day, int time) { return schedule[day][time]; }
+    public void setAvailability(int day, int time, boolean avail) { schedule[day][time] = avail; }
 
+    public void setStartLng(double startLng) {
+        this.startLng = startLng;
+    }
+
+    public void setStartLat(double startLat) {
+        this.startLat = startLat;
+    }
+
+    public void setEndLat(double endLat) {
+        this.endLat = endLat;
+    }
+
+    public void setEndLng(double endLng) {
+        this.endLng = endLng;
+    }
     public String getName() { return name; }
     public void setName(String n) { name = n; }
     public String getLocation() { return location; }

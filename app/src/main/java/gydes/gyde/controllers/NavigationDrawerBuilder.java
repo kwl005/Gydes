@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -188,6 +189,7 @@ public class NavigationDrawerBuilder {
                 case BOOKINGS:
                     break;
                 case REPORT:
+                    
                     break;
                 case TOGGLE:
                     if (!Login.isGuide) {
@@ -203,8 +205,20 @@ public class NavigationDrawerBuilder {
                     break;
                 case LOGOUT:
                     User.INSTANCE.logout();
-                    activity.startActivity(new Intent(activity, Login.class));
-                    activity.finish();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle("Are you sure to logout?")
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                dialogInterface.dismiss();
+                                activity.startActivity(new Intent(activity, Login.class));
+                                activity.finish();
+                            })
+                            .setNegativeButton("Cancel", ((dialogInterface, i) -> {
+                                dialogInterface.dismiss();
+                            }));
+                    AlertDialog dialog = builder.create();
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    break;
                 default:
                     break;
             }

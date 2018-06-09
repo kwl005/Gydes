@@ -306,9 +306,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (int i = 0; i < childCount; i++) {
             View view = viewGroup.getChildAt(i);
 
-            // Do not disable tour pin button
-            if(view.getId() == R.id.tour_pin_button) { continue; }
-
             view.setEnabled(enabled);
             if (view instanceof ViewGroup) {
                 setViewGroupStatus((ViewGroup) view, enabled);

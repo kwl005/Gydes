@@ -55,6 +55,7 @@
                 android:layout_height="match_parent"
                 tools:context="gydes.gyde.controllers.HomeActivity" />
 
+            <!--
             <android.support.design.widget.FloatingActionButton
                 android:layout_gravity="bottom|start"
                 android:id="@+id/tour_pin_button"
@@ -65,6 +66,7 @@
                 android:src="@drawable/tour_pin"
                 app:borderWidth="0dp"
                 />
+                -->
         </FrameLayout>
     </LinearLayout>
 

@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,44 +23,33 @@
             android:theme="@style/MaterialDrawerTheme.ActionBar"
             app:popupTheme="@style/MaterialDrawerTheme.ActionBar" />
 
-        <android.support.constraint.ConstraintLayout
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:context="gydes.gyde.controllers.GuideHome" />
 
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:map="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                tools:context="gydes.gyde.controllers.GuideHome" />
+        <Button
+            android:id="@+id/tours_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:background="#ffffff"
+            android:padding="8dp"
+            android:text="@string/my_tours_button_text"
+            android:textColor="#000000" />
 
-            <Button
-                android:id="@+id/tours_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/design_tour_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="24dp"
-                android:background="#ffffff"
-                android:padding="8dp"
-                android:text="My Tours"
-                android:textColor="#000000" />
-
-            <Button
-                android:id="@+id/design_tour_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/tours_button"
-                app:layout_constraintBottom_toBottomOf="@+id/tours_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="@string/design_tour_button_text"
-                android:background="#ffffff"
-                android:padding="8dp"
-                android:textColor="#000000" />
-        </android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/design_tour_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:padding="8dp"
+            android:text="@string/design_tour_button_text"
+            android:textColor="#000000" />
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

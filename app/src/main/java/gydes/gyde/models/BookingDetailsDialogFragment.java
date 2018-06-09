@@ -30,6 +30,7 @@ import gydes.gyde.controllers.TourMode;
 public class BookingDetailsDialogFragment extends DialogFragment {
 
     final static int LAST_HOUR_OF_DAY = 23;
+    final static String price_prefix = "Price: $%s";
     final static String stops_prefix = "Stops: %s";
     final static String tags_prefix = "Tags: %s";
     final static String duration_prefix = "Duration: %s";
@@ -90,6 +91,7 @@ public class BookingDetailsDialogFragment extends DialogFragment {
 
         builder.setTitle(tour.getName());
 
+        ((TextView) view.findViewById(R.id.tour_price)).setText(String.format(price_prefix, tour.getPrice()));
         ((TextView) view.findViewById(R.id.tour_stops)).setText(String.format(stops_prefix, tour.getStops()));
         ((TextView) view.findViewById(R.id.tour_tags)).setText(String.format(tags_prefix, tour.getTags()));
         ((TextView) view.findViewById(R.id.tour_duration)).setText(String.format(duration_prefix, tour.getDuration()));

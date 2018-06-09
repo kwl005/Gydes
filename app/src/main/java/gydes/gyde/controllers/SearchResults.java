@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -54,14 +55,24 @@ import gydes.gyde.models.TourListAdapter;
 public class SearchResults extends AppCompatActivity {
     Context context = this;
     SearchView searchView;
-    EditText startTime;
-
-//    final ArrayList<Tour> tours;
 
     final ArrayList<Tour> tours = new ArrayList<Tour>();
-//    ButtonAdapter adapter;
 
     public static final int SEARCH_RESULTS_BUTTON_OPT = 1;
+    private static final String MAX_DURATION = "10000";
+    private static final String MIN_DURATION = "0";
+    final static int MIN_HOUR = 0;
+    final static int MAX_HOUR = 11;
+    final static String[] hourStrs = {"12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00"};
+    final static int AM = 0;
+    final static int PM = 1;
+    final static String[] periods = {"AM", "PM"};
+    final static String SEPARATOR = "/";
+    final static int MONTH_IND = 0;
+    final static int DAY_IND = 1;
+    final static int YEAR_IND = 2;
+    final static int HOURS_IN_HALF_DAY = 12;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,17 +110,7 @@ public class SearchResults extends AppCompatActivity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = SearchResults.toCamelCase(intent.getStringExtra(SearchManager.QUERY).trim());
-//            final ArrayList<Tour> tours = new ArrayList<Tour>();
-//            tours = new ArrayList<Tour>();
-
-            /*
-<<<<<<< HEAD
-            final ButtonAdapter adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
-//            adapter = new ButtonAdapter(this, R.layout.tour_list_item, tours);
-
-=======*/
             final TourListAdapter adapter = new TourListAdapter(this, R.layout.tour_list_item, tours, SEARCH_RESULTS_BUTTON_OPT);
-//>>>>>>> master
             ListView listView = findViewById(android.R.id.list);
             listView.setAdapter(adapter);
 
@@ -145,48 +146,6 @@ public class SearchResults extends AppCompatActivity {
         return camelCaseStr;
     }
 
-//    class ButtonAdapter extends ArrayAdapter<Tour> {
-//        private Context context;
-//        private int resourceID;
-//        private ArrayList<Tour> tourList;
-//
-//        public ButtonAdapter(@NonNull Context c, int rID, ArrayList<Tour> list) {
-//            super(c, 0, list);
-//            context = c;
-//            resourceID = rID;
-//            tourList = list;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            View listItem = convertView;
-//            if (listItem == null) {
-//                listItem = LayoutInflater.from(context).inflate(resourceID, parent, false);
-//            }
-//
-//            final Tour currTour = tourList.get(position);
-//
-//            TextView name = listItem.findViewById(R.id.textView_name);
-//            name.setText(currTour.getName());
-//
-//            TextView stops = listItem.findViewById(R.id.textView_stops);
-//            stops.setText(currTour.getStops());
-//
-//            TextView tags = listItem.findViewById(R.id.textView_tags);
-//            tags.setText(currTour.getTags());
-//
-//            Button viewButton = listItem.findViewById(R.id.view_button);
-//            viewButton.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    TourDetailsDialogFragment frag = TourDetailsDialogFragment.newInstance(currTour, SEARCH_RESULTS_BUTTON_OPT);
-//                    frag.show(getFragmentManager(), "tour details");
-//                }
-//            });
-//
-//            return listItem;
-//        }
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -198,7 +157,6 @@ public class SearchResults extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.filter:
-                Toast.makeText(this, "filter clicked", Toast.LENGTH_SHORT).show();
                 openDialog();
                 return true;
             default:
@@ -208,12 +166,6 @@ public class SearchResults extends AppCompatActivity {
     }
 
     public void openDialog() {
-        /*
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.filter_dialog);
-
-        dialog.show();*/
-
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
         View view = getLayoutInflater().inflate(R.layout.tour_filter_layout_dialog, null);
 
@@ -227,18 +179,28 @@ public class SearchResults extends AppCompatActivity {
                     @Override
                     public boolean onTouch(View view, MotionEvent motionEvent) {
                         if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                            Calendar mcurrentTime = Calendar.getInstance();
-                            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                            int minute = mcurrentTime.get(Calendar.MINUTE);
-                            TimePickerDialog mTimePicker;
-                            mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
+                            builder.setTitle("Select Time");
+                            View layout = SearchResults.this.getLayoutInflater().inflate(R.layout.hour_picker, null);
+                            final NumberPicker hourPicker = layout.findViewById(R.id.hour_picker);
+                            final NumberPicker periodPicker = layout.findViewById(R.id.period_picker);
+
+                            hourPicker.setDisplayedValues(hourStrs);
+                            hourPicker.setMinValue(MIN_HOUR);
+                            hourPicker.setMaxValue(MAX_HOUR);
+
+                            periodPicker.setDisplayedValues(periods);
+                            periodPicker.setMinValue(AM);
+                            periodPicker.setMaxValue(PM);
+                            builder.setView(layout);
+                            builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                    startTime.setText(selectedHour + ":" + selectedMinute);
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startTime.setText(hourPicker.getValue() + ":00 " + periods[periodPicker.getValue()]);
                                 }
-                            }, hour, minute, false);//Yes 24 hour time
-                            mTimePicker.setTitle("Select Time");
-                            mTimePicker.show();
+                            });
+
+                            builder.create().show();
                         }
                         return false;
                     }
@@ -251,18 +213,28 @@ public class SearchResults extends AppCompatActivity {
                     @Override
                     public boolean onTouch(View view, MotionEvent motionEvent) {
                         if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                            Calendar mcurrentTime = Calendar.getInstance();
-                            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                            int minute = mcurrentTime.get(Calendar.MINUTE);
-                            TimePickerDialog mTimePicker;
-                            mTimePicker = new TimePickerDialog(SearchResults.this, new TimePickerDialog.OnTimeSetListener() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SearchResults.this);
+                            builder.setTitle("Select Time");
+                            View layout = SearchResults.this.getLayoutInflater().inflate(R.layout.hour_picker, null);
+                            final NumberPicker hourPicker = layout.findViewById(R.id.hour_picker);
+                            final NumberPicker periodPicker = layout.findViewById(R.id.period_picker);
+
+                            hourPicker.setDisplayedValues(hourStrs);
+                            hourPicker.setMinValue(MIN_HOUR);
+                            hourPicker.setMaxValue(MAX_HOUR);
+
+                            periodPicker.setDisplayedValues(periods);
+                            periodPicker.setMinValue(AM);
+                            periodPicker.setMaxValue(PM);
+                            builder.setView(layout);
+                            builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                    endTime.setText(selectedHour + ":" + selectedMinute);
+                                public void onClick(DialogInterface dialog, int which) {
+                                    endTime.setText(hourPicker.getValue() + ":00 " + periods[periodPicker.getValue()]);
                                 }
-                            }, hour, minute, false);//Yes 24 hour time
-                            mTimePicker.setTitle("Select Time");
-                            mTimePicker.show();
+                            });
+
+                            builder.create().show();
                         }
                         return false;
                     }
@@ -283,7 +255,7 @@ public class SearchResults extends AppCompatActivity {
                             DatePickerDialog mDatePicker = new DatePickerDialog(SearchResults.this, new DatePickerDialog.OnDateSetListener() {
                                 @Override
                                 public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-                                    date.setText(m + "/" + d + "/" + y);
+                                    date.setText((m+1) + SEPARATOR + d + SEPARATOR + y);
                                 }
                             }, year, month, day);
                             mDatePicker.setTitle("Select Date");
@@ -298,131 +270,113 @@ public class SearchResults extends AppCompatActivity {
 
         builder.setView(view)
                 .setTitle("Filter")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setPositiveButton("filter", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Filter", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText durationBoxMin = (EditText) view.findViewById(R.id.duration_box_min);
-                        EditText durationBoxMax = (EditText) view.findViewById(R.id.duration_box_max);
-                        EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
-                        EditText capacityBox = (EditText) view.findViewById(R.id.capacity_box);
-                        EditText priceBox = (EditText) view.findViewById(R.id.price_box);
+                        Toast.makeText(SearchResults.this, "Filtering...", Toast.LENGTH_SHORT).show();
+                        Login.currentUserRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot users) {
+                                boolean filterTime = false;
+                                int startHour = 0;
+                                int endHour = 0;
+                                int dayOfWeek = 0;
+                                if(!date.getText().toString().equals("") && !startTime.getText().toString().equals("") && !endTime.getText().toString().equals("")) {
+                                    filterTime = true;
+                                    String[] dayInfo = date.getText().toString().split(SEPARATOR);
+                                    int month = Integer.parseInt(dayInfo[MONTH_IND])-1;
+                                    int day = Integer.parseInt(dayInfo[DAY_IND]);
+                                    int year = Integer.parseInt(dayInfo[YEAR_IND]);
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.set(year, month, day);
+                                    dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 
-                        final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
-                        final TourListAdapter adapter2 = new TourListAdapter(context, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
-                        ListView listView2 = findViewById(android.R.id.list);
-                        listView2.setAdapter(adapter2);
+                                    String[] startHourInfo = startTime.getText().toString().split(" ");
+                                    startHour = Integer.parseInt(startHourInfo[0].split(":")[0]);
+                                    if (startHourInfo[1].equals(periods[1]))
+                                        startHour += HOURS_IN_HALF_DAY;
 
+                                    String[] endHourInfo = endTime.getText().toString().split(" ");
+                                    endHour = Integer.parseInt(endHourInfo[0].split(":")[0]);
+                                    if (endHourInfo[1].equals(periods[1]))
+                                        endHour += HOURS_IN_HALF_DAY;
+                                }
 
-                        String inputDurationMinText = durationBoxMin.getText().toString().trim();
-                        String inputDurationMaxText = durationBoxMax.getText().toString().trim();
-                        String inputCapacityText = capacityBox.getText().toString().trim();
-                        String inputTagsText = tagsBox.getText().toString().trim();
+                                EditText durationBoxMin = (EditText) view.findViewById(R.id.duration_box_min);
+                                EditText durationBoxMax = (EditText) view.findViewById(R.id.duration_box_max);
+                                EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
+                                EditText capacityBox = (EditText) view.findViewById(R.id.capacity_box);
+                                EditText priceBox = (EditText) view.findViewById(R.id.price_box);
 
-                        String inputPriceText = priceBox.getText().toString().trim();
+                                final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
+                                final TourListAdapter adapter2 = new TourListAdapter(context, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
+                                ListView listView2 = findViewById(android.R.id.list);
+                                listView2.setAdapter(adapter2);
 
-                        if(!inputDurationMinText.isEmpty() && !inputDurationMaxText.isEmpty()) {
-                            int inputDurationMin = Integer.parseInt(inputDurationMinText);
-                            int inputDurationMax = Integer.parseInt(inputDurationMaxText);
-                            toursCopy.removeIf((Tour tour) -> tour.getDuration() < inputDurationMin
-                            || tour.getDuration() > inputDurationMax);
-                        }
+                                if(filterTime) {
+                                    for (int hour = startHour; hour < endHour; hour++) {
+                                        String dayStr = Login.dayToStr(dayOfWeek);
+                                        String hourStr = Login.hourToStr(hour);
+                                        toursCopy.removeIf((Tour tour) ->
+                                                users.child(tour.getCreatorID()).child(getString(R.string.firebase_guide_path))
+                                                        .child(getString(R.string.firebase_book_path)).child(dayStr).child(hourStr)
+                                                        .hasChild(getString(R.string.firebase_tour_path)));
+                                    }
+                                }
 
-                        if(!inputCapacityText.isEmpty()) {
-                            int inputCapacity = Integer.parseInt(inputCapacityText);
-                            toursCopy.removeIf((Tour tour) -> tour.getCapacity() < inputCapacity);
-                        }
+                                String inputDurationMinText = durationBoxMin.getText().toString().trim();
+                                String inputDurationMaxText = durationBoxMax.getText().toString().trim();
+                                String inputCapacityText = capacityBox.getText().toString().trim();
+                                String inputTagsText = tagsBox.getText().toString().trim();
+                                String inputPriceText = priceBox.getText().toString().trim();
 
-//                        if(!inputPriceText.isEmpty()) {
-//                            double inputPrice = Double.parseDouble(inputPriceText);
-//                            toursCopy.removeIf((Tour tour) -> tour.getPrice() > inputPrice);
-//                        }
+                                if(!inputDurationMinText.isEmpty() || !inputDurationMaxText.isEmpty()) {
+                                    if(inputDurationMinText.equals("")) inputDurationMinText = MIN_DURATION;
+                                    if(inputDurationMaxText.equals("")) inputDurationMaxText = MAX_DURATION;
+                                    int inputDurationMin = Integer.parseInt(inputDurationMinText);
+                                    int inputDurationMax = Integer.parseInt(inputDurationMaxText);
+                                    toursCopy.removeIf((Tour tour) -> tour.getDuration() < inputDurationMin
+                                            || tour.getDuration() > inputDurationMax);
+                                }
 
-                        if(!inputTagsText.isEmpty()) {
-                            String[] tags = inputTagsText.toLowerCase().split(",");
+                                if(!inputCapacityText.isEmpty()) {
+                                    int inputCapacity = Integer.parseInt(inputCapacityText);
+                                    toursCopy.removeIf((Tour tour) -> tour.getCapacity() < inputCapacity);
+                                }
 
-                            for(int i=0; i<tags.length; i++) {
-                                String tag = tags[i].trim();
-                                toursCopy.removeIf((Tour tour) -> !tour.getTags().toLowerCase().contains(tag));
+                                if(!inputPriceText.isEmpty()) {
+                                    double inputPrice = Double.parseDouble(inputPriceText);
+                                    toursCopy.removeIf((Tour tour) -> tour.getPrice() > inputPrice);
+                                }
+
+                                if(!inputTagsText.isEmpty()) {
+                                    String[] tags = inputTagsText.toLowerCase().split(",");
+
+                                    for(int i=0; i<tags.length; i++) {
+                                        String tag = tags[i].trim();
+                                        toursCopy.removeIf((Tour tour) -> !tour.getTags().toLowerCase().contains(tag));
+                                    }
+                                }
+
+                                adapter2.notifyDataSetChanged();
                             }
-                        }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        adapter2.notifyDataSetChanged();
-
+                            }
+                        });
                     }
                 });
-
-        /*
-        startTime = (EditText) view.findViewById(R.id.startTime_box);
-        startTime.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Calendar mcurrentTime = Calendar.getInstance();
-                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                        int minute = mcurrentTime.get(Calendar.MINUTE);
-                        TimePickerDialog mTimePicker;
-                        mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                startTime.setText(selectedHour + ":" + selectedMinute);
-                            }
-                        }, hour, minute, false);//Yes 24 hour time
-                        mTimePicker.setTitle("Select Time");
-                        mTimePicker.show();
-                    }
-                }
-        );*/
 
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
-        /*
-
-        Button filterButton = (Button) view.findViewById(R.id.filter_button);
-        EditText durationBox = (EditText) view.findViewById(R.id.duration_box);
-        EditText tagsBox = (EditText) view.findViewById(R.id.tags_box);
-
-        final ArrayList<Tour> toursCopy = new ArrayList<>(tours);
-        final TourListAdapter adapter2 = new TourListAdapter(this, R.layout.tour_list_item, toursCopy, SEARCH_RESULTS_BUTTON_OPT);
-        ListView listView2 = findViewById(android.R.id.list);
-        listView2.setAdapter(adapter2);
-
-        filterButton.setOnClickListener(
-                new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-
-                        String inputDurationText = durationBox.getText().toString();
-                        String inputTagsText = tagsBox.getText().toString();
-
-                        if(!inputDurationText.isEmpty()) {
-                            int inputDuration = Integer.parseInt(inputDurationText);
-                            toursCopy.removeIf((Tour tour) -> tour.getDuration() != inputDuration);
-
-                        }
-
-                        if(!inputTagsText.isEmpty()) {
-                            String[] tags = inputTagsText.split(", ");
-
-                            for(int i=0; i<tags.length; i++) {
-                                String tag = tags[i];
-                                toursCopy.removeIf((Tour tour) -> !tour.getTags().contains(tag));
-                            }
-                        }
-
-
-                        adapter2.notifyDataSetChanged();
-                    }
-                }
-        );*/
 
     }
 }

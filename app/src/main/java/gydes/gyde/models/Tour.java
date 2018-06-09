@@ -6,21 +6,23 @@ import android.os.Parcelable;
 public class Tour implements Parcelable {
 
     final static int NUM_STRING_ARGS = 6;
-    final static int NUM_INT_ARGS = 2;
+    final static int NUM_INT_ARGS = 3;
     final static int NUM_BOOL_ARGS = 1;
 
     final static int NAME_IND = 0;
     final static int LOC_IND = 1;
-    final static int DUR_IND = 0;
+    final static int PRICE_IND = 0;
+    final static int DUR_IND = 1;
     final static int STOPS_IND = 2;
     final static int WALK_IND = 0;
-    final static int CAP_IND = 1;
+    final static int CAP_IND = 2;
     final static int TAGS_IND = 3;
     final static int tID_IND = 4;
     final static int cID_IND = 5;
 
     String name;
     String location;
+    private int price;
     private int duration; //hours
     String stops;
     private boolean walking;
@@ -28,16 +30,16 @@ public class Tour implements Parcelable {
     String tags;
     private String tourID;
     private String creatorID;
-    private boolean[][] schedule;
 
     public Tour() {
-        schedule = new boolean[7][24];
+
     }
 
-    public Tour(String Name, String Location, int Duration, String Stops,
+    public Tour(String Name, String Location, int Price, int Duration, String Stops,
                 boolean Walking, int Capacity, String Tags, String TourID, String CreatorID) {
         name = Name;
         location = Location;
+        price = Price;
         duration = Duration;
         stops = Stops;
         walking = Walking;
@@ -58,6 +60,7 @@ public class Tour implements Parcelable {
 
         name = strings[NAME_IND];
         location = strings[LOC_IND];
+        price = ints[PRICE_IND];
         duration = ints[DUR_IND];
         stops = strings[STOPS_IND];
         walking = bools[WALK_IND];
@@ -80,17 +83,16 @@ public class Tour implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[] {this.name, this.location, this.stops, this.tags, this.tourID, this.creatorID});
-        dest.writeIntArray(new int[] {this.duration, this.capacity});
+        dest.writeIntArray(new int[] {this.price, this.duration, this.capacity});
         dest.writeBooleanArray(new boolean[] {this.walking});
     }
-
-    public boolean checkAvailable(int day, int time) { return schedule[day][time]; }
-    public void setAvailability(int day, int time, boolean avail) { schedule[day][time] = avail; }
 
     public String getName() { return name; }
     public void setName(String n) { name = n; }
     public String getLocation() { return location; }
     public void setLocation(String l) { location = l; }
+    public int getPrice() { return price; }
+    public void setPrice(int p) { price = p; }
     public int getDuration() { return duration; }
     public void setDuration(int d) { duration = d; }
     public String getStops() { return stops; }

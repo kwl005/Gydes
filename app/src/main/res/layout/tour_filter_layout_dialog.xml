@@ -24,11 +24,11 @@
 
     <EditText
         android:id="@+id/startTime_box"
-        android:textColor="@color/md_white_1000"
-        android:fontFamily="@font/roboto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/roboto"
+        android:inputType="none"
+        android:textColor="@color/md_white_1000" />
 
     <TextView
         android:layout_width="match_parent"
@@ -42,9 +42,10 @@
     <EditText
         android:id="@+id/endTime_box"
         android:layout_width="match_parent"
-        android:textColor="@color/md_white_1000"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
-        android:layout_height="wrap_content" />
+        android:inputType="none"
+        android:textColor="@color/md_white_1000" />
 
     <TextView
         android:layout_width="match_parent"
@@ -58,9 +59,10 @@
     <EditText
         android:id="@+id/dates_box"
         android:layout_width="match_parent"
-        android:textColor="@color/md_white_1000"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
-        android:layout_height="wrap_content" />
+        android:inputType="none"
+        android:textColor="@color/md_white_1000" />
 
     <TextView
         android:layout_width="match_parent"

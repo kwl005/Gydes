@@ -15,9 +15,20 @@
         android:textColor="@color/gydeYellow"
         android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView_stops"
+        app:layout_constraintBottom_toTopOf="@+id/textView_price"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textColor="@color/gydeYellow"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_stops"
+        app:layout_constraintStart_toStartOf="@+id/textView_name"
+        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
 
     <TextView
         android:id="@+id/textView_stops"
@@ -26,20 +37,9 @@
         android:text="Stops"
         android:textColor="@color/gydeYellow"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_tags"
-        app:layout_constraintStart_toStartOf="@+id/textView_name"
-        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
-
-    <TextView
-        android:id="@+id/textView_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tags"
-        android:textColor="@color/gydeYellow"
-        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView_stops"
-        app:layout_constraintTop_toBottomOf="@+id/textView_stops" />
+        app:layout_constraintStart_toStartOf="@+id/textView_price"
+        app:layout_constraintTop_toBottomOf="@+id/textView_price" />
 
     <Button
         android:id="@+id/view_button"

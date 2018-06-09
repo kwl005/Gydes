@@ -35,7 +35,6 @@ public class DateTimePickerDialogFragment extends DialogFragment {
     final static String[] periods = {"AM", "PM"};
     final static int HOURS_IN_HALF_DAY = 12;
     final static int HOURS_IN_FULL_DAY = 24;
-    final static int DOUBLE_DIGITS = 10;
 
     final String USERS = "users";
     final String TRAVELER = "traveler";

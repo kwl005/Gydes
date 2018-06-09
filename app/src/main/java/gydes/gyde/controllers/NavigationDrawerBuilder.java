@@ -246,7 +246,7 @@ public class NavigationDrawerBuilder {
                 case LOGOUT:
                     User.INSTANCE.logout();
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle("Are you sure to logout?")
+                    builder.setTitle("Are you sure to log out?")
                             .setPositiveButton("Ok", (dialogInterface, i) -> {
                                 dialogInterface.dismiss();
                                 activity.startActivity(new Intent(activity, Login.class));

@@ -84,7 +84,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_home);
 
         isSelectingDestination = false;
-        inactivateDarkView();
         Toast.makeText(this, "Welcome! " + User.INSTANCE.getDisplayName(), Toast.LENGTH_SHORT).show();
 
         // Setup navigation drawer, action bar and status bar
@@ -128,8 +127,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
 
-        /* Not enough time to implement before delivery
-        // Set up tour pin
         homeFrame = (FrameLayout) findViewById(R.id.home_frame);
         homeFrame.setOnDragListener(new TourPinDragListener());
         imageView = new ImageView(this);
@@ -138,7 +135,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
         homeFrame.addView(imageView);
         tourPinButton = (FloatingActionButton) findViewById(R.id.tour_pin_button);
-        tourPinButton.setOnTouchListener(new TourPinTouchListener());*/
+        tourPinButton.setOnTouchListener(new TourPinTouchListener());
 
         // Check GPS is enabled
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -278,7 +275,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if(!isSelectingDestination) {
                         LatLng latLng = getLatLngFromScreenPos((int) dragEvent.getX(), (int) dragEvent.getY());
                         CreateTourDialogSequence sequence = new CreateTourDialogSequence(latLng, (tour) -> {
-                            activateDarkView();
                             DrawerLayout homeLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                             setViewGroupStatus(homeLayout, false);
                         });
@@ -318,16 +314,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private LatLng getLatLngFromScreenPos(int x, int y) {
         return map.getProjection().fromScreenLocation(new Point(x, y));
-    }
-
-    private void activateDarkView() {
-        View darkView = (View) findViewById(R.id.dark_view);
-        darkView.getForeground().setAlpha(200);
-    }
-
-    private void inactivateDarkView() {
-        View darkView = (View) findViewById(R.id.dark_view);
-        darkView.getForeground().setAlpha(0);
     }
 
     private final class TourPinTouchListener implements View.OnTouchListener {
@@ -374,8 +360,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             final String location = addresses == null ? "Unknown" : addresses.get(0).getLocality();
             newTour.setLocation(location);
-            newTour.setStartLat(startingPoint.latitude);
-            newTour.setStartLng(startingPoint.longitude);
+//            newTour.setStartLat(startingPoint.latitude);
+//            newTour.setStartLng(startingPoint.longitude);
 
             final String dialogMessage = "Do you want to create a tour starting at " + addresses.get(0).getAddressLine(0) + "?";
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);

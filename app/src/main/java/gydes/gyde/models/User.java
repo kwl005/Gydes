@@ -1,9 +1,14 @@
 package gydes.gyde.models;
 
+import android.view.View;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 /**
  * Created by kelvinlui1 on 5/28/18.
@@ -56,6 +61,11 @@ public enum User {
 
         if(this.displayName != null) {
             userRef.child("displayName").setValue(displayName);
+
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(displayName)
+                    .build();
+            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
         }
 
         this.displayName = displayName;
@@ -68,6 +78,12 @@ public enum User {
 
         // TODO: check email format
         if(this.email != null) {
+            FirebaseAuth.getInstance().getCurrentUser().updateEmail(email)
+                .addOnCompleteListener((task) -> {
+                    if (task.isSuccessful()) {
+                        // TODO
+                    }
+                });
             userRef.child("email").setValue(email);
         }
         this.email = email;

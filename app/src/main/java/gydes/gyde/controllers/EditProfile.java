@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import gydes.gyde.R;
+import gydes.gyde.models.User;
 
 public class EditProfile extends Activity {
 
@@ -42,9 +43,12 @@ public class EditProfile extends Activity {
 
                 findViewById(R.id.save_profile_button).setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Login.currentUserRef.child(getString(R.string.firebase_displayname_path)).setValue(displayNameBox.getText().toString());
-                        Login.currentUserRef.child(getString(R.string.firebase_email_path)).setValue(emailBox.getText().toString());
-                        Login.currentUserRef.child(getString(R.string.firebase_phonenumber_path)).setValue(phoneNumBox.getText().toString());
+                        User.INSTANCE.setDisplayName(displayNameBox.getText().toString());
+                        User.INSTANCE.setEmail(emailBox.getText().toString());
+                        User.INSTANCE.setPhoneNumber(phoneNumBox.getText().toString());
+//                        Login.currentUserRef.child(getString(R.string.firebase_displayname_path)).setValue(displayNameBox.getText().toString());
+//                        Login.currentUserRef.child(getString(R.string.firebase_email_path)).setValue(emailBox.getText().toString());
+//                        Login.currentUserRef.child(getString(R.string.firebase_phonenumber_path)).setValue(phoneNumBox.getText().toString());
                         if(Login.isGuide) {
                             Login.currentUserRef.child(getString(R.string.firebase_guide_path)).child(getString(R.string.firebase_bio_path)).setValue(bioBox.getText().toString());
                         }

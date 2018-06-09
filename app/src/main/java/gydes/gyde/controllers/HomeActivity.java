@@ -127,6 +127,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
 
+        /* Comment this seciton because it could not be completely finished by delievery
+
         homeFrame = (FrameLayout) findViewById(R.id.home_frame);
         homeFrame.setOnDragListener(new TourPinDragListener());
         imageView = new ImageView(this);
@@ -136,6 +138,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         homeFrame.addView(imageView);
         tourPinButton = (FloatingActionButton) findViewById(R.id.tour_pin_button);
         tourPinButton.setOnTouchListener(new TourPinTouchListener());
+
+        */
 
         // Check GPS is enabled
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

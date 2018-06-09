@@ -84,7 +84,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_home);
 
         isSelectingDestination = false;
-        inactivateDarkView();
         Toast.makeText(this, "Welcome! " + User.INSTANCE.getDisplayName(), Toast.LENGTH_SHORT).show();
 
         // Setup navigation drawer, action bar and status bar
@@ -278,7 +277,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if(!isSelectingDestination) {
                         LatLng latLng = getLatLngFromScreenPos((int) dragEvent.getX(), (int) dragEvent.getY());
                         CreateTourDialogSequence sequence = new CreateTourDialogSequence(latLng, (tour) -> {
-                            activateDarkView();
                             DrawerLayout homeLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                             setViewGroupStatus(homeLayout, false);
                         });
@@ -318,16 +316,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private LatLng getLatLngFromScreenPos(int x, int y) {
         return map.getProjection().fromScreenLocation(new Point(x, y));
-    }
-
-    private void activateDarkView() {
-        View darkView = (View) findViewById(R.id.dark_view);
-        darkView.getForeground().setAlpha(200);
-    }
-
-    private void inactivateDarkView() {
-        View darkView = (View) findViewById(R.id.dark_view);
-        darkView.getForeground().setAlpha(0);
     }
 
     private final class TourPinTouchListener implements View.OnTouchListener {

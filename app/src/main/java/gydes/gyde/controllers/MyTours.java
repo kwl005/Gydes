@@ -78,12 +78,12 @@ public class MyTours extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot root) {
                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                DataSnapshot idList = root.child(getString(R.string.firebase_users_path)).child(uid).child(getString(R.string.firebase_guide_path)).child("tourIDs");
+                DataSnapshot idList = root.child(getString(R.string.firebase_users_path)).child(uid).child(getString(R.string.firebase_guide_path)).child(getString(R.string.firebase_tourIDs_path));
 
                 for (DataSnapshot child : idList.getChildren()) {
 
                     final String id = child.getKey();
-                    final String location = (String)child.child("location").getValue();
+                    final String location = (String)child.child(getString(R.string.firebase_loc_path)).getValue();
                     DataSnapshot locTourList = root.child(getString(R.string.firebase_tours_path)).child(location);
 
                     if(locTourList.hasChild(id)) {

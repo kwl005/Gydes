@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import gydes.gyde.R;
 
 public class TourListAdapter extends ArrayAdapter<Tour> {
+    private static final String PRICE_FORMAT_STR = "$%d";
+
     private Context context;
     private int resourceID;
     private ArrayList<Tour> tourList;
@@ -40,11 +42,11 @@ public class TourListAdapter extends ArrayAdapter<Tour> {
         TextView name = listItem.findViewById(R.id.textView_name);
         name.setText(currTour.getName());
 
+        TextView price = listItem.findViewById(R.id.textView_price);
+        price.setText(String.format(PRICE_FORMAT_STR,currTour.getPrice()));
+
         TextView stops = listItem.findViewById(R.id.textView_stops);
         stops.setText(currTour.getStops());
-
-        TextView tags = listItem.findViewById(R.id.textView_tags);
-        tags.setText(currTour.getTags());
 
         Button viewButton = listItem.findViewById(R.id.view_button);
         viewButton.setOnClickListener(new View.OnClickListener() {

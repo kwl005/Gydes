@@ -29,6 +29,7 @@
     <string name="firebase_uid_path" translatable="false">uid</string>
     <string name="firebase_isguide_path" translatable="false">isGuide</string>
     <string name="firebase_bio_path" translatable="false">bio</string>
+    <string name="firebase_loc_path" translatable="false">location</string>
     <string name="firebase_tourIDs_path" translatable="false">tourIDs</string>
     <string name="firebase_activetour_path" translatable="false">activeTour</string>
     <string name="firebase_thisID_path" translatable="false">thisID</string>
@@ -43,6 +44,7 @@
     <string name="guide_your_day_of_exploration">Guide Your Day of Exploration</string>
 
     <string name="design_tour_button_text">Design A Tour</string>
+    <string name="my_tours_button_text">My Tours</string>
     <string name="pick_day_button_text">Pick a day</string>
 
     <string name="todo">TODO</string>
@@ -55,6 +57,7 @@
 
     <string name="name_txt">Name:</string>
     <string name="location_txt">Location:</string>
+    <string name="price_txt">Price:</string>
     <string name="stops_txt">Stops:</string>
     <string name="duration_txt">Duration:</string>
     <string name="transport_txt">Transport:</string>
@@ -66,6 +69,7 @@
 
     <string name="name_prompt">Please enter a name for the tour</string>
     <string name="location_prompt">Please enter a location for the tour</string>
+    <string name="price_prompt">Please enter a price for the tour</string>
     <string name="duration_prompt">Please enter a duration for the tour</string>
     <string name="transport_prompt">Please enter a mode of transportation for the tour</string>
     <string name="delete_tour_confirmation">Are you sure you want to delete this tour?</string>

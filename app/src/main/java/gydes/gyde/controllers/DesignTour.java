@@ -40,6 +40,7 @@ public class DesignTour extends AppCompatActivity {
             public void onClick(View v) {
                 EditText nameBox = findViewById(R.id.name_box);
                 EditText locBox = findViewById(R.id.location_box);
+                EditText priceBox = findViewById(R.id.price_box);
                 EditText stopsBox = findViewById(R.id.stops_box);
                 EditText durBox = findViewById(R.id.duration_box);
                 RadioGroup transportButtons = findViewById(R.id.transport_buttons);
@@ -59,6 +60,16 @@ public class DesignTour extends AppCompatActivity {
                 if(locBox.getText().toString().trim().equals("")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(DesignTour.this);
                     builder.setMessage(R.string.location_prompt);
+                    builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    });
+                    builder.create().show();
+                    return;
+                }
+                if(priceBox.getText().toString().trim().equals("")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DesignTour.this);
+                    builder.setMessage(R.string.price_prompt);
                     builder.setPositiveButton(R.string.ok_txt, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {}
@@ -91,6 +102,7 @@ public class DesignTour extends AppCompatActivity {
 
                 String name = nameBox.getText().toString().trim();
                 String location = SearchResults.toCamelCase(locBox.getText().toString().trim());
+                int price = Integer.parseInt(priceBox.getText().toString());
                 String stops = stopsBox.getText().toString().trim();
                 int duration = Integer.parseInt(durBox.getText().toString());
                 boolean walking = transportButtons.getCheckedRadioButtonId() == R.id.walk_button;
@@ -99,11 +111,11 @@ public class DesignTour extends AppCompatActivity {
                 String tourID = toursRef.push().getKey();
                 String creatorID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                Tour t = new Tour(name, location, duration, stops, walking, capacity, tags, tourID, creatorID);
+                Tour t = new Tour(name, location, price, duration, stops, walking, capacity, tags, tourID, creatorID);
                 toursRef.child(location).child(tourID).setValue(t);
 
-                Login.currentUserRef.child("guide").child("tourIDs").child(tourID).setValue(tourID);
-                Login.currentUserRef.child("guide").child("tourIDs").child(tourID).child("location").setValue(location);
+                Login.currentUserRef.child(getString(R.string.firebase_guide_path)).child(getString(R.string.firebase_tourIDs_path)).child(tourID).setValue(tourID);
+                Login.currentUserRef.child(getString(R.string.firebase_guide_path)).child(getString(R.string.firebase_tourIDs_path)).child(tourID).child(getString(R.string.firebase_loc_path)).setValue(location);
                 setResult(RESULT_OK);
                 finish();
             }

@@ -258,6 +258,7 @@ public class SearchResults extends AppCompatActivity {
                                     date.setText((m+1) + SEPARATOR + d + SEPARATOR + y);
                                 }
                             }, year, month, day);
+                            mDatePicker.getDatePicker().setBackgroundColor(getColor(R.color.gydeBlue));
                             mDatePicker.setTitle("Select Date");
                             mDatePicker.show();
                         }

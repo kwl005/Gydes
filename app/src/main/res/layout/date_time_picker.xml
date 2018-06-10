@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/gydeBlue">
 
     <DatePicker
         android:id="@+id/date_picker"
@@ -11,30 +13,27 @@
         app:layout_constraintBottom_toTopOf="@+id/hour_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </DatePicker>
+        app:layout_constraintTop_toTopOf="parent"></DatePicker>
 
     <NumberPicker
         android:id="@+id/hour_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/NumberPickerStyle"
         android:descendantFocusability="blocksDescendants"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker"
+        android:theme="@style/NumberPickerStyle"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/period_picker"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/period_picker">
-    </NumberPicker>
+        app:layout_constraintTop_toBottomOf="@+id/date_picker"></NumberPicker>
 
     <NumberPicker
         android:id="@+id/period_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/NumberPickerStyle"
         android:descendantFocusability="blocksDescendants"
-        app:layout_constraintTop_toTopOf="@+id/hour_picker"
+        android:theme="@style/NumberPickerStyle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/hour_picker"
-        app:layout_constraintEnd_toEndOf="parent">
-    </NumberPicker>
+        app:layout_constraintTop_toTopOf="@+id/hour_picker"></NumberPicker>
 
 </android.support.constraint.ConstraintLayout>

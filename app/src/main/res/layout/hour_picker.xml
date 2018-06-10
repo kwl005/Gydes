@@ -2,29 +2,28 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gydeBlue">
 
     <NumberPicker
         android:id="@+id/hour_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/NumberPickerStyle"
         android:descendantFocusability="blocksDescendants"
-        app:layout_constraintStart_toStartOf="parent"
+        android:theme="@style/NumberPickerStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/period_picker"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-    </NumberPicker>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></NumberPicker>
 
     <NumberPicker
         android:id="@+id/period_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/NumberPickerStyle"
         android:descendantFocusability="blocksDescendants"
+        android:theme="@style/NumberPickerStyle"
         app:layout_constraintBottom_toBottomOf="@+id/hour_picker"
-        app:layout_constraintStart_toEndOf="@+id/hour_picker"
-        app:layout_constraintEnd_toEndOf="parent">
-    </NumberPicker>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/hour_picker"></NumberPicker>
 
 </android.support.constraint.ConstraintLayout>

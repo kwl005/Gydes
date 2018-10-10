@@ -77,7 +77,7 @@ Vince Li
 <img src="https://github.com/kwl005/Gydes/raw/master/media/add_card.png" width="360" height="640" />
 
 ## Scan Card Screen
-<img src="https://github.com/kwl005/Gydes/raw/master/media/scan_card.png" width="360" height="640" />
+<img src="https://github.com/kwl005/Gydes/raw/master/media/scan_card.jpg" width="360" height="640" />
 
 ## Report Issue Screen
 <img src="https://github.com/kwl005/Gydes/raw/master/media/report.png" width="360" height="640" />

@@ -4,15 +4,25 @@
 Gyde is a mobile app that allows travelers to connect with local guides and book personal tours immediately with major logistics already planned. This was created by a team of 10 students in CSE 110.
 
 ## Members:
+
 Kayla Tran
+
 Alex Mao
+
 Andy Li
+
 Andy Ruan
+
 Charles Li
+
 Duy Nguyen Le
+
 Phan Huynh
+
 Kin Man “Kelvin” Lui
+
 Kwan-Ting “Rix” Lai
+
 Vince Li
 
 ## Welcome Screen
